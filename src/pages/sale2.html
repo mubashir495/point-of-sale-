@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Completed Orders - MARKING BOOSTER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: "class" };</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* same styles as delivery.html */
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+        .status-complete { background: #e0e7ff; color: #3730a3; }
+        .dark .status-complete { background: #312e81; color: #a5b4fc; }
+        .action-dropdown { position: absolute; right: 0; top: 100%; min-width: 180px; z-index: 50; background: white; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .dark .action-dropdown { background: #1f2937; }
+        .action-dropdown-item { transition: all 0.2s; padding: 8px 16px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .action-dropdown-item:hover { background-color: #f3f4f6; }
+        .dark .action-dropdown-item:hover { background-color: #374151; }
+        #toast { transition: opacity 0.3s ease, transform 0.3s ease; opacity: 0; transform: translateY(-10px); }
+        #toast.show { opacity: 1; transform: translateY(0); }
+    </style>
+    <script src="../js/auth_check.js"></script>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-gray-200 min-h-screen">
+
+    <!-- Top Navbar (same as before) -->
+        <!-- Top Navbar -->
+    <header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+      <div class="flex items-center gap-4">
+        <button id="menuToggle" type="button" class="text-white text-xl hover:text-amber-400 transition-colors">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Logo" />
+        <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+      </div>
+      <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+        <i class="fa-regular fa-clock mr-1"></i>
+        <span id="currentDate"></span>
+      </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar (same as delivery.html) -->
+              <!-- Sidebar -->
+      <aside id="main-sidebar" class="w-[320px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300 flex flex-col justify-between h-[calc(100vh-64px)] overflow-y-auto shadow-xl border-r border-slate-800 transition-all duration-300 z-40 transform -translate-x-full lg:translate-x-0">
+        <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative">
+          <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm">
+            <span class="text-[#051E3D] font-black text-xl tracking-wider"><img src="../../assets/images/logo.png" class="rounded-full" alt="Logo" /></span>
+            <button class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+          <h2 class="mt-3 text-lg font-bold text-white tracking-wide">MARKING BOOSTER</h2>
+          <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scrollbar px-3 py-4 space-y-1" id="sidebarNav">
+          <a href="./dashboard.html" class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+            <i class="fa-solid fa-gauge-high text-lg"></i>
+            <span class="font-medium text-sm">Dashboard</span>
+          </a>
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-user-gear text-lg"></i>
+                <span class="font-medium text-sm">Administration</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+              <a href="./employees.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+              <a href="./cities.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+              <a href="./area-zones.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+              <a href="./branch-users.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Branch Users</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-boxes-stacked text-lg"></i>
+                <span class="font-medium text-sm">Inventory</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+              <a href="./category.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Category</a>
+              <a href="./product.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Products</a>
+              <a href="./stock-audit-report.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit &amp; Report</a>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
+                <span class="font-medium text-sm">Billing &amp; Payments</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+
+              <a href="./counter-sale.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+              <a href="./orders.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Orders</a>
+              <a href="./sale-invoices.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoice History</a>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-users-viewfinder text-lg"></i>
+                <span class="font-medium text-sm">HR &amp; Payroll</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+              <a href="./attendance.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+              <a href="./generate-salary.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+              <a href="./salary-sheet.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+                <span class="font-medium text-sm">Reports</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+              <a href="./monthly-sale-repot.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sales Report</a>
+              <a href="./invoice-report.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoice Report</a>
+              <a href="./stock-audit-report.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-700/40 space-y-4">
+          <div class="flex items-center justify-between px-2">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                <i class="fa-solid fa-palette text-sm"></i>
+              </div>
+              <span class="text-sm font-medium text-white">Theme</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="theme-toggle" class="sr-only peer" checked />
+              <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+            </label>
+          </div>
+          <button id="logoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+            <i class="fa-solid fa-power-off text-sm"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+        <!-- Main Content -->
+        <main class="w-full px-4 py-5 lg:px-6">
+            <div id="toast" class="hidden fixed top-20 right-6 z-[60] px-4 py-3 rounded-lg shadow-lg text-sm font-semibold text-white"></div>
+
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-4 md:p-5 mb-6">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Completed Orders</h2>
+                    <div class="flex gap-2">
+                        <button onclick="exportExcel()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-file-excel"></i> Export Excel
+                        </button>
+                        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-print"></i> Print
+                        </button>
+                        <button onclick="refreshOrders()" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                <!-- Filters -->
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 mt-4">
+                    <input type="text" id="searchInput" placeholder="Search Invoice, Order, Customer..." class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 outline-none" />
+                    <input type="date" id="dateFilter" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 outline-none" />
+                    <select id="customerFilter" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2">
+                        <option value="">All Customers</option>
+                    </select>
+                    <input type="text" id="invoiceFilter" placeholder="Invoice No" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 outline-none" />
+                    <select id="paymentFilter" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2">
+                        <option value="">All Payment Methods</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Bank">Bank</option>
+                        <option value="Online">Online</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
+                <div class="px-5 py-4 border-b dark:border-gray-700 flex items-center justify-between">
+                    <h3 class="font-bold text-lg text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                        <i class="fa-solid fa-check-circle text-emerald-500"></i> Completed Orders
+                    </h3>
+                    <span id="order-count" class="text-xs font-semibold text-slate-400"></span>
+                </div>
+                <div class="overflow-x-auto p-4">
+                    <table class="w-full border dark:border-gray-700 text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Invoice #</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Order #</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Customer</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Products</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-right">Grand Total</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-right">Paid</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-right">Discount</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-right">Net Amount</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Payment Method</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Delivery Date</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Completed Date</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Status</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="completedTableBody" class="dark:text-gray-300"></tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div class="px-5 py-3 border-t dark:border-gray-700 flex justify-between items-center">
+                    <button id="prevPage" class="px-4 py-2 border rounded disabled:opacity-50">Previous</button>
+                    <span id="pageInfo" class="text-sm text-gray-500">Page 1 of 1</span>
+                    <button id="nextPage" class="px-4 py-2 border rounded disabled:opacity-50">Next</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- View Order Modal (same as delivery) -->
+    <div id="viewModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm z-10 rounded-t-xl">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Order Details</h2>
+                <button id="closeViewModal" class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none">×</button>
+            </div>
+            <div id="viewContent" class="p-6"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const now = new Date();
+            document.getElementById("currentDate").textContent = now.toLocaleDateString("en-US", {
+                weekday: "short", year: "numeric", month: "short", day: "numeric"
+            });
+
+            document.getElementById("theme-toggle").addEventListener("change", function() {
+                document.documentElement.classList.toggle("dark");
+            });
+
+            const menuToggle = document.getElementById("menuToggle");
+            const sidebar = document.getElementById("main-sidebar");
+            menuToggle.addEventListener("click", function() {
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.toggle("-translate-x-full");
+                } else {
+                    sidebar.classList.toggle("w-[320px]");
+                    sidebar.classList.toggle("w-0");
+                    sidebar.classList.toggle("overflow-hidden");
+                }
+            });
+
+            // Dropdowns
+            document.querySelectorAll(".dropdown-toggle").forEach(btn => {
+                btn.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    const menu = this.nextElementSibling;
+                    const icon = this.querySelector(".fa-chevron-right");
+                    document.querySelectorAll(".dropdown-menu").forEach(m => {
+                        if (m !== menu) m.classList.add("hidden");
+                    });
+                    document.querySelectorAll(".dropdown-toggle .fa-chevron-right").forEach(i => {
+                        if (i !== icon) i.classList.remove("rotate-90");
+                    });
+                    menu.classList.toggle("hidden");
+                    if (icon) icon.classList.toggle("rotate-90");
+                });
+            });
+            document.addEventListener("click", function() {
+                document.querySelectorAll(".dropdown-menu").forEach(m => m.classList.add("hidden"));
+                document.querySelectorAll(".dropdown-toggle .fa-chevron-right").forEach(i => i.classList.remove("rotate-90"));
+            });
+
+            loadCustomerFilter();
+            loadCompletedOrders();
+
+            document.getElementById("searchInput").addEventListener("input", loadCompletedOrders);
+            document.getElementById("dateFilter").addEventListener("change", loadCompletedOrders);
+            document.getElementById("customerFilter").addEventListener("change", loadCompletedOrders);
+            document.getElementById("invoiceFilter").addEventListener("input", loadCompletedOrders);
+            document.getElementById("paymentFilter").addEventListener("change", loadCompletedOrders);
+
+            let currentPage = 1;
+            const limit = 10;
+            document.getElementById("prevPage").addEventListener("click", function() {
+                if (currentPage > 1) { currentPage--; loadCompletedOrders(); }
+            });
+            document.getElementById("nextPage").addEventListener("click", function() {
+                currentPage++; loadCompletedOrders();
+            });
+
+            document.getElementById("closeViewModal").addEventListener("click", function() {
+                document.getElementById("viewModal").classList.add("hidden");
+                document.getElementById("viewModal").classList.remove("flex");
+            });
+        });
+
+        const API_BASE = "../../action";
+
+        function showToast(message, type = "success") {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = "fixed top-20 right-6 z-[60] px-4 py-3 rounded-lg shadow-lg text-sm font-semibold text-white show " +
+                (type === "success" ? "bg-emerald-600" : "bg-red-600");
+            toast.classList.remove("hidden");
+            setTimeout(() => {
+                toast.classList.remove("show");
+                setTimeout(() => toast.classList.add("hidden"), 300);
+            }, 3000);
+        }
+
+        async function loadCustomerFilter() {
+            try {
+                const res = await fetch(`${API_BASE}/customers/get_customers.php`);
+                const data = await res.json();
+                const select = document.getElementById("customerFilter");
+                select.innerHTML = '<option value="">All Customers</option>';
+                if (data && data.length) {
+                    data.forEach(c => {
+                        const opt = document.createElement("option");
+                        opt.value = c.id;
+                        opt.textContent = c.name + " (" + c.phone + ")";
+                        select.appendChild(opt);
+                    });
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadCompletedOrders() {
+            const search = document.getElementById("searchInput").value.trim();
+            const date = document.getElementById("dateFilter").value;
+            const customer = document.getElementById("customerFilter").value;
+            const invoice = document.getElementById("invoiceFilter").value.trim();
+            const payment = document.getElementById("paymentFilter").value;
+            const offset = (currentPage - 1) * limit;
+
+            let url = `${API_BASE}/order/get_orders.php?status=Complete&payment_status=Paid&limit=${limit}&offset=${offset}`;
+            if (search) url += `&search=${encodeURIComponent(search)}`;
+            if (date) url += `&delivery_date=${date}`;
+            if (customer) url += `&customer=${customer}`;
+            if (invoice) url += `&invoice_no=${encodeURIComponent(invoice)}`;
+            if (payment) url += `&payment_method=${payment}`;
+
+            try {
+                const res = await fetch(url);
+                const result = await res.json();
+                const orders = result.data || [];
+                renderCompletedTable(orders);
+                updatePagination(result.total || orders.length);
+            } catch (e) {
+                showToast("Error loading orders", "error");
+            }
+        }
+
+        function renderCompletedTable(orders) {
+            const tbody = document.getElementById("completedTableBody");
+            tbody.innerHTML = "";
+            document.getElementById("order-count").textContent = orders.length + " order(s)";
+
+            if (!orders.length) {
+                tbody.innerHTML = `<tr><td colspan="13" class="py-8 text-center text-gray-500">No completed orders found</td></tr>`;
+                return;
+            }
+
+            orders.forEach((o, idx) => {
+                const total = parseFloat(o.grand_total || o.total || 0).toFixed(2);
+                const paid = parseFloat(o.paid || 0).toFixed(2);
+                const discount = parseFloat(o.discount || 0).toFixed(2);
+                const net = (total - discount).toFixed(2);
+                const products = o.product_names || "-";
+
+                const tr = document.createElement("tr");
+                tr.setAttribute("data-order-id", o.id);
+                tr.innerHTML = `
+                    <td class="border dark:border-gray-700 px-2 py-2">${o.invoice_no || "-"}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2">${o.order_no || o.id}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2">${o.customer_name || "-"}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2">${products}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2 text-right">${total}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2 text-right">${paid}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2 text-right">${discount}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2 text-right">${net}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2">${o.payment_method || "-"}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2">${o.delivery_date || "-"}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2">${o.completed_date || o.updated_at || "-"}</td>
+                    <td class="border dark:border-gray-700 px-2 py-2">
+                        <span class="status-badge status-complete">Complete</span>
+                    </td>
+                    <td class="border dark:border-gray-700 px-2 py-2 relative">
+                        <button class="action-btn border dark:border-gray-600 rounded px-3 py-1 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-1" data-id="${o.id}">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <div class="action-dropdown hidden min-w-[180px]">
+                            <button class="action-dropdown-item w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3" data-action="view" data-id="${o.id}">
+                                <i class="fa-solid fa-eye text-blue-500 w-4"></i> View Order
+                            </button>
+                            <button class="action-dropdown-item w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3" data-action="invoice" data-id="${o.id}">
+                                <i class="fa-solid fa-file-invoice text-purple-500 w-4"></i> View Invoice
+                            </button>
+                            <button class="action-dropdown-item w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3" data-action="print" data-id="${o.id}">
+                                <i class="fa-solid fa-print text-green-500 w-4"></i> Print Invoice
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Action dropdown toggles
+            document.querySelectorAll(".action-btn").forEach(btn => {
+                btn.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.nextElementSibling;
+                    document.querySelectorAll(".action-dropdown").forEach(d => {
+                        if (d !== dropdown) d.classList.add("hidden");
+                    });
+                    dropdown.classList.toggle("hidden");
+                });
+            });
+            document.querySelectorAll(".action-dropdown-item").forEach(item => {
+                item.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    const action = this.dataset.action;
+                    const id = this.dataset.id;
+                    const dropdown = this.closest(".action-dropdown");
+                    if (dropdown) dropdown.classList.add("hidden");
+
+                    switch(action) {
+                        case "view": viewOrder(id); break;
+                        case "invoice": viewInvoice(id); break;
+                        case "print": printInvoice(id); break;
+                    }
+                });
+            });
+            document.addEventListener("click", function(e) {
+                if (!e.target.closest(".action-btn") && !e.target.closest(".action-dropdown")) {
+                    document.querySelectorAll(".action-dropdown").forEach(d => d.classList.add("hidden"));
+                }
+            });
+        }
+
+        function updatePagination(total) {
+            const totalPages = Math.ceil(total / limit) || 1;
+            document.getElementById("pageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById("prevPage").disabled = (currentPage <= 1);
+            document.getElementById("nextPage").disabled = (currentPage >= totalPages);
+        }
+
+        async function viewOrder(id) {
+            // same as delivery viewOrder
+            try {
+                const res = await fetch(`${API_BASE}/order/get_order.php?id=${id}`);
+                const data = await res.json();
+                if (!data.success) throw new Error("Order not found");
+                const o = data.order;
+                const c = data.customer || {};
+                let html = `
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div><strong>Order #:</strong> ${o.order_no || o.id}</div>
+                        <div><strong>Invoice #:</strong> ${o.invoice_no || "-"}</div>
+                        <div><strong>Customer:</strong> ${c.name || "-"}</div>
+                        <div><strong>Phone:</strong> ${c.phone || "-"}</div>
+                        <div><strong>Address:</strong> ${c.address || "-"}</div>
+                        <div><strong>Order Date:</strong> ${o.order_date || "-"}</div>
+                        <div><strong>Delivery Date:</strong> ${o.delivery_date || "-"}</div>
+                        <div><strong>Shift:</strong> ${o.shift || "-"}</div>
+                        <div><strong>Employee:</strong> ${o.employee_name || "-"}</div>
+                        <div><strong>Status:</strong> <span class="status-badge status-complete">Complete</span></div>
+                    </div>
+                    <table class="w-full border dark:border-gray-700 text-sm mb-4">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-left">Product</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-right">Qty</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-right">Price</th>
+                                <th class="border dark:border-gray-600 px-2 py-2 text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                (data.items || []).forEach(item => {
+                    html += `
+                        <tr>
+                            <td class="border dark:border-gray-600 px-2 py-1">${item.product_name}</td>
+                            <td class="border dark:border-gray-600 px-2 py-1 text-right">${item.quantity}</td>
+                            <td class="border dark:border-gray-600 px-2 py-1 text-right">${parseFloat(item.unit_price).toFixed(2)}</td>
+                            <td class="border dark:border-gray-600 px-2 py-1 text-right">${parseFloat(item.total).toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table>
+                    <div class="flex justify-end">
+                        <div class="w-64 text-sm space-y-1">
+                            <div class="flex justify-between"><span>Subtotal:</span><span>${parseFloat(o.subtotal || 0).toFixed(2)}</span></div>
+                            <div class="flex justify-between"><span>Discount:</span><span>${parseFloat(o.discount || 0).toFixed(2)}</span></div>
+                            <div class="flex justify-between font-bold text-base"><span>Total:</span><span>${parseFloat(o.grand_total || o.total || 0).toFixed(2)}</span></div>
+                            <div class="flex justify-between"><span>Paid:</span><span>${parseFloat(o.paid || 0).toFixed(2)}</span></div>
+                            <div class="flex justify-between"><span>Remaining:</span><span>${parseFloat(o.grand_total - (o.paid || 0)).toFixed(2)}</span></div>
+                        </div>
+                    </div>
+                    ${o.remarks ? `<div class="mt-4"><strong>Remarks:</strong> ${o.remarks}</div>` : ""}
+                `;
+                document.getElementById("viewContent").innerHTML = html;
+                document.getElementById("viewModal").classList.remove("hidden");
+                document.getElementById("viewModal").classList.add("flex");
+            } catch(e) {
+                showToast(e.message || "Error loading order", "error");
+            }
+        }
+
+        function viewInvoice(id) {
+            window.open(`invoice.html?order_id=${id}`, "_blank");
+        }
+
+        function printInvoice(id) {
+            window.open(`invoice.html?order_id=${id}&print=1`, "_blank");
+        }
+
+        function exportExcel() {
+            // Simple CSV export based on current filtered data
+            const rows = document.querySelectorAll("#completedTableBody tr");
+            let csv = "Invoice #,Order #,Customer,Products,Grand Total,Paid,Discount,Net Amount,Payment Method,Delivery Date,Completed Date,Status\n";
+            rows.forEach(row => {
+                const cols = row.querySelectorAll("td");
+                if (cols.length > 0) {
+                    const data = Array.from(cols).map(cell => cell.textContent.trim());
+                    csv += data.join(",") + "\n";
+                }
+            });
+            const blob = new Blob([csv], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "completed_orders.csv";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function refreshOrders() {
+            currentPage = 1;
+            loadCompletedOrders();
+            showToast("Refreshed", "success");
+        }
+    </script>
+</body>
+</html>

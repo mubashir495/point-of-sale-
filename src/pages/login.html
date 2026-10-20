@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MARKING BOOSTER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .login-bg {
+            background: linear-gradient(135deg, #001F4D 0%, #051E3D 100%);
+        }
+    </style>
+</head>
+<body class="login-bg min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-slate-900/80 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700">
+        <div class="text-center mb-8">
+            <div class="inline-block p-2 rounded-full bg-white mb-4">
+                <img src="../../assets/images/logo.png" alt="Logo" class="w-16 h-16 rounded-full object-cover">
+            </div>
+            <h1 class="text-2xl font-bold text-white tracking-wide">MARKING BOOSTER</h1>
+            <p class="text-gray-400 mt-2 text-sm">Sign in to your account</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div id="errorMsg" class="hidden bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg text-sm text-center"></div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2" for="username">Username</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-user text-gray-500"></i>
+                    </div>
+                    <input type="text" id="username" name="username" required
+                        class="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                        placeholder="Enter your username">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2" for="password">Password</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-lock text-gray-500"></i>
+                    </div>
+                    <input type="password" id="password" name="password" required
+                        class="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                        placeholder="••••••••">
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
+                <span>Sign In</span>
+                <i class="fa-solid fa-arrow-right text-sm"></i>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Ordered list of "module -> landing page" fallbacks. After login we
+        // walk this list top to bottom and send the user to the first page
+        // they actually have View permission for - so a role that doesn't
+        // have Dashboard access (e.g. Supplier) lands straight on the page
+        // that IS meant for them instead of hitting a 403 immediately.
+        const LANDING_PAGES = [
+            ['dashboard', 'dashboard.html'],
+            
+            ['sales', 'counter-sale.html'],
+            ['customers', 'customers.html'],
+            ['products', 'product.html'],
+            ['stock', 'stock-report.html'],
+            ['purchase', 'purchase.html'],
+            ['employees', 'employees.html'],
+            ['ledger', 'accounting-system.html'],
+            ['expenses', 'expenses.html'],
+            ['attendance', 'attendance.html'],
+            ['reports', 'balance-sheet.html'],
+            ['suppliers', 'parties.html'],
+            ['users', 'branch-users.html'],
+            ['settings', 'roles.html'],
+        ];
+
+        function resolveLandingPage(user) {
+            // Super Admin / Admin (full access) always go to the dashboard.
+            if (user && user.is_super) return 'dashboard.html';
+
+            const permissions = (user && user.permissions) || {};
+            for (const [moduleKey, page] of LANDING_PAGES) {
+                if (permissions[moduleKey] && permissions[moduleKey].view) {
+                    return page;
+                }
+            }
+            // No module permission at all (misconfigured account) - dashboard
+            // is still the safest default; it will show its own 403 if truly
+            // nothing is allowed, rather than silently failing here.
+            return 'dashboard.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i><span>Signing in...</span>';
+            btn.disabled = true;
+            errorMsg.classList.add('hidden');
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            try {
+                const response = await fetch('../../action/auth/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    window.location.href = './' + resolveLandingPage(result.user);
+                } else {
+                    throw new Error(result.message || 'Login failed');
+                }
+            } catch (err) {
+                errorMsg.textContent = err.message;
+                errorMsg.classList.remove('hidden');
+                btn.innerHTML = '<span>Sign In</span><i class="fa-solid fa-arrow-right text-sm"></i>';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

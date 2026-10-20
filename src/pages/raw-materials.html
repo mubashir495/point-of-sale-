@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Raw Materials</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+      <script src="../js/auth_check.js"></script>
+      <script src="../js/sidebar.js" defer></script>
+</head>
+
+  <body class="bg-slate-100 dark:bg-slate-900">
+    <!-- Top Navbar -->
+    <header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+      <div class="flex items-center gap-4">
+        <button id="menuToggle" type="button" class="text-white text-xl hover:text-amber-400 transition-colors">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Logo" />
+        <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+      </div>
+      <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+        <i class="fa-regular fa-clock mr-1"></i>
+        <span id="currentDate"></span>
+      </div>
+    </header>
+
+    <div class="flex">
+      <!-- Sidebar -->
+      <aside id="main-sidebar" class="w-[320px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300 flex flex-col justify-between h-[calc(100vh-64px)] overflow-y-auto shadow-xl border-r border-slate-800 transition-all duration-300 z-40 transform -translate-x-full lg:translate-x-0">
+        <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative">
+          <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm">
+            <span class="text-[#051E3D] font-black text-xl tracking-wider"><img src="../../assets/images/logo.png" class="rounded-full" alt="Logo" /></span>
+            <button class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+          <h2 class="mt-3 text-lg font-bold text-white tracking-wide">MARKING BOOSTER</h2>
+          <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scrollbar px-3 py-4 space-y-1" id="sidebarNav">
+          <a href="./dashboard.html" data-nav-link class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+            <i class="fa-solid fa-gauge-high text-lg"></i>
+            <span class="font-medium text-sm">Dashboard</span>
+          </a>
+<!-- Administration -->
+          <div class="relative">
+            <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-administration"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+              <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+                <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+                <span class="font-medium text-sm">Administration</span>
+              </span>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+            </button>
+            <div id="menu-administration" data-dropdown-menu role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+              <a href="./employees.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+              <a href="./cities.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+              <a href="./area-zones.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+              <a href="./branch-users.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Branch Users</a>
+              <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+            </div>
+          </div>
+
+          <!-- Inventory -->
+          <div class="relative">
+            <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-inventory"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+              <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+                <i class="fa-solid fa-boxes-stacked text-lg w-5 text-center"></i>
+                <span class="font-medium text-sm">Inventory</span>
+              </span>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+            </button>
+            <div id="menu-inventory" data-dropdown-menu role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+              <a href="./brands.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Brands</a>
+              <a href="./category.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Category</a>
+              <a href="./product.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Products</a>
+              <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit &amp; Report</a>
+              <a href="./raw-materials.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Materials</a>
+              <a href="./raw-material-purchase.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Material Purchase</a>
+            </div>
+          </div>
+
+          <!-- Billing & Payments -->
+          <div class="relative">
+            <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-billing"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+              <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+                <i class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"></i>
+                <span class="font-medium text-sm">Billing &amp; Payments</span>
+              </span>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+            </button>
+            <div id="menu-billing" data-dropdown-menu role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+
+              <a href="./counter-sale.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+              <a href="./orders.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Orders</a>
+              <a href="./sale-invoices.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoice History</a>
+            </div>
+          </div>
+
+          <!-- HR & Payroll -->
+          <div class="relative">
+            <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-hr"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+              <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+                <i class="fa-solid fa-users-viewfinder text-lg w-5 text-center"></i>
+                <span class="font-medium text-sm">HR &amp; Payroll</span>
+              </span>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+            </button>
+            <div id="menu-hr" data-dropdown-menu role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+              <a href="./attendance.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+              <a href="./generate-salary.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+              <a href="./salary-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+            </div>
+          </div>
+
+          <!-- Reports -->
+          <div class="relative">
+            <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-reports"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+              <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+                <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+                <span class="font-medium text-sm">Reports</span>
+              </span>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+            </button>
+            <div id="menu-reports" data-dropdown-menu role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+              <a href="./monthly-sale-repot.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sales Report</a>
+              <a href="./invoice-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoice Report</a>
+              <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-700/40 space-y-4">
+          <div class="flex items-center justify-between px-2">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                <i class="fa-solid fa-palette text-sm"></i>
+              </div>
+              <span class="text-sm font-medium text-white">Theme</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="theme-toggle" class="sr-only peer" checked />
+              <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+            </label>
+          </div>
+          <button id="logoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+            <i class="fa-solid fa-power-off text-sm"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="w-full px-4 py-5">
+        <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm">
+          <div class="flex flex-wrap justify-between items-center p-5 gap-3">
+            <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
+              Raw Materials <span class="text-sm font-normal text-gray-500">(Packing Bags / Material)</span>
+            </h2>
+            <div class="flex gap-2">
+              <input id="searchInput" type="text" placeholder="Search material..." class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 text-sm" />
+              <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded font-medium text-sm inline-flex items-center gap-2">
+                <i class="fa-solid fa-plus"></i> Add Raw Material
+              </button>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="px-5 pb-5 overflow-x-auto">
+            <table class="w-full border dark:border-gray-700 text-sm">
+              <thead class="bg-gray-50 dark:bg-gray-700 dark:text-white">
+                <tr>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-left">#</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-left">Material Name</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-left">Unit</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-right">Current Stock</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-right">Reorder Level</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-right">Last Purchase Rate</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-left">Status</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-left">Action</th>
+                </tr>
+              </thead>
+              <tbody id="materialsTableBody" class="dark:text-gray-300"></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="materialModal" class="hidden fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md p-6">
+        <h3 id="modalTitle" class="text-lg font-semibold mb-4 dark:text-white">Add Raw Material</h3>
+        <input type="hidden" id="materialId" />
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">Material Name</label>
+            <input id="materialName" type="text" placeholder="e.g. Milk Pouch 1L" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">Unit</label>
+            <select id="materialUnit" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 text-sm">
+              <option value="piece">Piece</option>
+              <option value="kg">Kg</option>
+              <option value="roll">Roll</option>
+              <option value="box">Box</option>
+              <option value="packet">Packet</option>
+            </select>
+          </div>
+          <div id="openingStockWrap">
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">Opening Stock</label>
+            <input id="openingStock" type="number" step="0.01" value="0" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">Reorder Level (Low Stock Alert)</label>
+            <input id="reorderLevel" type="number" step="0.01" value="0" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 text-sm" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 mt-5">
+          <button onclick="closeAddModal()" class="px-4 py-2 rounded border dark:border-gray-600 dark:text-gray-300 text-sm">Cancel</button>
+          <button onclick="saveMaterial()" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white text-sm">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== JAVASCRIPT ======================== -->
+    <script src="../js/raw-materials.js"></script>
+  </body>
+</html>

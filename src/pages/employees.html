@@ -1,0 +1,1689 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MARKING BOOSTER - Employees</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: { inter: ["Inter", "sans-serif"] },
+            colors: { navy: "#0d1b3e", "navy-light": "#122050" },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .stat-card {
+        border-left: 4px solid;
+      }
+      .stat-blue {
+        border-color: #3b82f6;
+      }
+      .stat-green {
+        border-color: #22c55e;
+      }
+      .stat-red {
+        border-color: #ef4444;
+      }
+      .stat-yellow {
+        border-color: #eab308;
+      }
+      tr:hover td {
+        background: #f8fafc;
+      }
+      .dark tr:hover td {
+        background: #1e293b;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 9999px;
+        border: 1px solid #d1d5db;
+        font-size: 12px;
+        color: #374151;
+        background: #fff;
+      }
+      .dark .badge {
+        border-color: #475569;
+        color: #cbd5e1;
+        background: #1e293b;
+      }
+      .tag-username {
+        display: inline-block;
+        padding: 1px 8px;
+        border-radius: 9999px;
+        background: #dcfce7;
+        color: #16a34a;
+        font-size: 11px;
+        margin-top: 2px;
+      }
+      .dark .tag-username {
+        background: #064e3b;
+        color: #6ee7b7;
+      }
+      /* IMPORTANT: modal visibility is controlled ONLY by this class, no Tailwind "hidden" on modal-wrap elements */
+      .modal-wrap {
+        display: none;
+      }
+      .modal-wrap.open {
+        display: flex;
+      }
+      input,
+      textarea,
+      select {
+        outline: none;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        box-shadow: 0 0 0 2px #93c5fd;
+        border-color: #3b82f6;
+      }
+      .info-item .label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        #printArea,
+        #printArea * {
+          visibility: visible;
+        }
+        #printArea {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          padding: 32px;
+        }
+      }
+    </style>
+    <script src="../js/auth_check.js"></script>
+  </head>
+  <body
+    class="bg-gray-100 dark:bg-slate-900 min-h-screen overflow-x-hidden transition-colors duration-200"
+  >
+    <header
+      class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50"
+    >
+      <div class="flex items-center gap-4">
+        <button
+          id="menuToggle"
+          type="button"
+          aria-label="Toggle sidebar"
+          aria-controls="main-sidebar"
+          aria-expanded="false"
+          class="text-white text-xl hover:text-amber-400 transition-colors lg:hidden"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <img
+          src="../../assets/images/logo.png"
+          class="w-10 h-10 rounded-full"
+          alt="Marking Booster Logo"
+        />
+        <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+      </div>
+      <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+        <i class="fa-regular fa-clock mr-1"></i>
+        <span id="currentDate"></span>
+      </div>
+    </header>
+
+    <!-- Mobile overlay (click to close sidebar) -->
+    <div class="flex">
+      <!-- Sidebar -->
+      <div
+        id="sidebarOverlay"
+        class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"
+      ></div>
+
+      <aside
+        id="main-sidebar"
+        aria-label="Primary"
+        class="w-[280px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300 flex flex-col justify-between h-[calc(100vh-64px)] overflow-hidden shadow-xl border-r border-slate-800 transition-transform duration-300 ease-in-out z-40 -translate-x-full lg:translate-x-0"
+      >
+        <!-- Brand block -->
+        <div
+          class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative shrink-0"
+        >
+          <div
+            class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm overflow-hidden"
+          >
+            <img
+              src="../../assets/images/logo.png"
+              class="w-full h-full rounded-full object-cover"
+              alt="Marking Booster Logo"
+            />
+            <button
+              type="button"
+              class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]"
+            >
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+          <h2 class="mt-3 text-lg font-bold text-white tracking-wide">
+            Marking Booster
+          </h2>
+          <span
+            class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md"
+            >Branch</span
+          >
+        </div>
+
+        <!-- Scrollable nav (only this element scrolls; aside itself stays overflow-hidden) -->
+        <nav
+          id="sidebarNav"
+          class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1 [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded dark:[&::-webkit-scrollbar-thumb]:bg-slate-800"
+        >
+          <a
+            href="./dashboard.html"
+            data-nav-link
+            class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors"
+          >
+            <i class="fa-solid fa-gauge-high text-lg w-5 text-center"></i>
+            <span class="font-medium text-sm">Dashboard</span>
+          </a>
+          <!-- Administration -->
+          <div class="relative">
+            <button
+              type="button"
+              data-dropdown-toggle
+              aria-expanded="false"
+              aria-controls="menu-administration"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors"
+            >
+              <span
+                class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400"
+              >
+                <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+                <span class="font-medium text-sm">Administration</span>
+              </span>
+              <i
+                class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"
+              ></i>
+            </button>
+            <div
+              id="menu-administration"
+              data-dropdown-menu
+              role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6"
+            >
+              <a
+                href="./employees.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Employees</a
+              >
+              <a
+                href="./branch-users.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Users&amp;Areas</a
+              >
+              <a
+                href="./roles.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Roles &amp; Permissions</a
+              >
+              <a
+                href="./parties.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Parties</a
+              >
+              <a
+                href="./area-zones.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Area/Zones</a
+              >
+              <a
+                href="./delivery_schedule.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Delivery Schedule</a
+              >
+            </div>
+          </div>
+
+          <!-- Inventory -->
+          <div class="relative">
+            <button
+              type="button"
+              data-dropdown-toggle
+              aria-expanded="false"
+              aria-controls="menu-inventory"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors"
+            >
+              <span
+                class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400"
+              >
+                <i
+                  class="fa-solid fa-boxes-stacked text-lg w-5 text-center"
+                ></i>
+                <span class="font-medium text-sm">Inventory</span>
+              </span>
+              <i
+                class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"
+              ></i>
+            </button>
+            <div
+              id="menu-inventory"
+              data-dropdown-menu
+              role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6"
+            >
+              <a
+                href="./brands.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Brands</a
+              >
+              <a
+                href="./category.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Categories</a
+              >
+              <a
+                href="./product.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Items</a
+              >
+              <a
+                href="./raw-materials.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Raw Materials</a
+              >
+            </div>
+          </div>
+
+          <!-- Billing & Payments -->
+          <div class="relative">
+            <button
+              type="button"
+              data-dropdown-toggle
+              aria-expanded="false"
+              aria-controls="menu-billing"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors"
+            >
+              <span
+                class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400"
+              >
+                <i
+                  class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"
+                ></i>
+                <span class="font-medium text-sm">Billing &amp; Payments</span>
+              </span>
+              <i
+                class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"
+              ></i>
+            </button>
+            <div
+              id="menu-billing"
+              data-dropdown-menu
+              role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6"
+            >
+              <a
+                href="./counter-sale.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Sale</a
+              >
+              <a
+                href="./delivery.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Delivery</a
+              >
+              <a
+                href="./order_delivery.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Sale 2</a
+              >
+              <a
+                href="./purchase.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Purchase</a
+              >
+              <a
+                href="./party_payment.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Party Payment</a
+              >
+              <a
+                href="./delete-invoice.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Delete Invoice</a
+              >
+            </div>
+          </div>
+
+          <!-- Reports -->
+          <div class="relative">
+            <button
+              type="button"
+              data-dropdown-toggle
+              aria-expanded="false"
+              aria-controls="menu-reports"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors"
+            >
+              <span
+                class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400"
+              >
+                <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+                <span class="font-medium text-sm">Reports</span>
+              </span>
+              <i
+                class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"
+              ></i>
+            </button>
+            <div
+              id="menu-reports"
+              data-dropdown-menu
+              role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6"
+            >
+              <a
+                href="./party-invoices-detail.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Party Invoices Detail</a
+              >
+              <a
+                href="./monthly-sale-repot.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Monthly Sale Report</a
+              >
+              <a
+                href="./invoice-report.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Invoices Report</a
+              >
+              <a
+                href="./stock-audit-report.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Stock Audit</a
+              >
+              <a
+                href="./stock-report.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Stock Report</a
+              >
+              <a
+                href="./customers-report.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Customers Report</a
+              >
+              <a
+                href="./suppliers-report.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Suppliers Report</a
+              >
+            </div>
+          </div>
+
+          <!-- Payroll & Accounts -->
+          <div class="relative">
+            <button
+              type="button"
+              data-dropdown-toggle
+              aria-expanded="false"
+              aria-controls="menu-payroll"
+              class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors"
+            >
+              <span
+                class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400"
+              >
+                <i
+                  class="fa-solid fa-users-viewfinder text-lg w-5 text-center"
+                ></i>
+                <span class="font-medium text-sm">Payroll &amp; Accounts</span>
+              </span>
+              <i
+                class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"
+              ></i>
+            </button>
+            <div
+              id="menu-payroll"
+              data-dropdown-menu
+              role="group"
+              class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6"
+            >
+              <a
+                href="./expenses.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Expenses</a
+              >
+              <a
+                href="./accounting-system.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Accounting System</a
+              >
+              <a
+                href="./balance-sheet.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Balance Sheet</a
+              >
+              <a
+                href="./generate-salary.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Generate Salary</a
+              >
+              <a
+                href="./salary-sheet.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Salary Sheet</a
+              >
+              <a
+                href="./attendance.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Attendance</a
+              >
+              <a
+                href="./attendance-report.html"
+                data-nav-link
+                class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200"
+                >Attendance Report</a
+              >
+            </div>
+          </div>
+        </nav>
+
+        <!-- Bottom controls -->
+        <div class="p-4 border-t border-slate-700/40 space-y-4 shrink-0">
+          <div class="flex items-center justify-between px-2">
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center"
+              >
+                <i class="fa-solid fa-palette text-sm"></i>
+              </div>
+              <span class="text-sm font-medium text-white">Theme</span>
+            </div>
+            <!-- Pure Tailwind switch: peer-checked drives the knob + track color -->
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                id="theme-toggle"
+                class="sr-only peer"
+                aria-label="Toggle dark theme"
+              />
+              <div
+                class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"
+              ></div>
+            </label>
+          </div>
+          <button
+            id="logoutBtn"
+            type="button"
+            class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors"
+          >
+            <i class="fa-solid fa-power-off text-sm"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+      <!-- MAIN -->
+      <main class="flex-1 min-w-0 overflow-x-hidden px-5 py-6">
+        <!-- STAT CARDS -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div
+            class="stat-card stat-blue bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm"
+          >
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Total Staff
+            </p>
+            <p
+              id="totalStaff"
+              class="text-3xl font-bold text-gray-800 dark:text-white"
+            >
+              0
+            </p>
+          </div>
+          <div
+            class="stat-card stat-green bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm"
+          >
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Monthly Salary
+            </p>
+            <p
+              id="totalSalary"
+              class="text-3xl font-bold text-gray-800 dark:text-white"
+            >
+              0
+            </p>
+          </div>
+          <div
+            class="stat-card stat-red bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm"
+          >
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Pending Balance
+            </p>
+            <p
+              id="totalPending"
+              class="text-3xl font-bold text-gray-800 dark:text-white"
+            >
+              0
+            </p>
+          </div>
+          <div
+            class="stat-card stat-yellow bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm"
+          >
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Active Users
+            </p>
+            <p
+              id="activeUsers"
+              class="text-3xl font-bold text-gray-800 dark:text-white"
+            >
+              0
+            </p>
+          </div>
+        </div>
+
+        <!-- TABLE CARD -->
+        <div
+          class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden"
+        >
+          <div
+            class="flex flex-col sm:flex-row items-start sm:items-center justify-between px-5 py-4 gap-3"
+          >
+            <h2
+              class="text-lg font-bold text-blue-700 dark:text-blue-400 flex items-center gap-2"
+            >
+              <i class="fas fa-users"></i> Staff Directory
+            </h2>
+            <button
+              onclick="openAddModal()"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg flex items-center gap-2 transition"
+            >
+              <i class="fas fa-plus"></i> Add Employee
+            </button>
+          </div>
+          <div class="px-5 pb-3">
+            <div class="relative max-w-xs">
+              <i
+                class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
+              ></i>
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Search staff..."
+                onkeyup="filterTable()"
+                class="w-full pl-9 pr-3 py-2 border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 rounded-lg text-sm"
+              />
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm hidden sm:table">
+              <thead>
+                <tr
+                  class="border-t border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold text-left"
+                >
+                  <th class="px-5 py-3">ID</th>
+                  <th class="px-5 py-3">Photo</th>
+                  <th class="px-5 py-3">Name & Access</th>
+                  <th class="px-5 py-3">Designation</th>
+                  <th class="px-5 py-3 text-right">Salary</th>
+                  <th class="px-5 py-3 text-right">Balance</th>
+                  <th class="px-5 py-3 text-right">Shift</th>
+                  <th class="px-5 py-3 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="dark:text-gray-200"></tbody>
+            </table>
+            <div
+              id="mobileCards"
+              class="sm:hidden divide-y divide-gray-100 dark:divide-gray-700"
+            ></div>
+          </div>
+          <p
+            id="noResults"
+            class="hidden text-center text-gray-400 dark:text-gray-500 py-8 text-sm"
+          >
+            No staff found.
+          </p>
+        </div>
+      </main>
+    </div>
+    <footer class="text-center text-xs text-gray-400 dark:text-gray-500 py-5">
+      © 2026 | Powered by:
+      <span class="text-blue-500">MarkingBosster.com</span>
+    </footer>
+
+    <!-- ══════════════ ADD MODAL ══════════════ -->
+    <div
+      id="addModal"
+      class="modal-wrap fixed inset-0 bg-black/50 z-50 hidden items-start justify-center p-4 pt-10 overflow-y-auto"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl my-4"
+      >
+        <div
+          class="flex items-center justify-between px-6 py-4 rounded-t-2xl"
+          style="background: linear-gradient(135deg, #3b5bdb, #4dabf7)"
+        >
+          <h3 class="font-bold text-white text-base flex items-center gap-2">
+            <i class="fas fa-user-plus"></i> Employee Entry
+          </h3>
+          <button
+            type="button"
+            onclick="closeModal('addModal')"
+            class="text-white text-xl"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form id="addEmployeeForm">
+          <div class="px-6 py-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  name="full_name"
+                  required
+                  class="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >CNIC Number</label
+                >
+                <input
+                  type="text"
+                  name="cnic"
+                  placeholder="xxxxx-xxxxxxx-x"
+                  maxlength="13"
+                  inputmode="numeric"
+                  oninput="
+                    this.value = this.value.replace(/\D/g, '').slice(0, 13)
+                  "
+                  class="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Designation</label
+                >
+                <select
+                  name="designation"
+                  id="designation"
+                  required
+                  class="w-full border rounded-lg px-3 py-2 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                >
+                  <option value="">Select Designation</option>
+                </select>
+                <input type="hidden" name="role_id" id="roleId" />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Contact</label
+                >
+                <input
+                  type="number"
+                  name="contact"
+                  placeholder="03xx-xxxxxxx"
+                  maxlength="13"
+                  inputmode="numeric"
+                  oninput="
+                    this.value = this.value.replace(/\D/g, '').slice(0, 11)
+                  "
+                  class="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Salary</label
+                >
+                <input
+                  type="number"
+                  name="salary"
+                  class="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Qualification</label
+                >
+                <input
+                  type="text"
+                  name="qualification"
+                  class="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Shift</label
+                >
+                <select
+                  name="shift"
+                  required
+                  class="w-full border rounded-lg px-3 py-2 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                >
+                  <option value="">Select shift</option>
+                  <option value="Morning">Morning</option>
+                  <option value="Evening">Evening</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Hire Date</label
+                >
+                <input
+                  type="date"
+                  name="hire_date"
+                  class="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+            </div>
+            <div class="mb-4">
+              <label
+                class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                >Address</label
+              >
+              <textarea
+                name="address"
+                rows="3"
+                class="w-full border rounded-lg px-3 py-2 resize-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              ></textarea>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Photo</label
+                >
+                <input
+                  type="file"
+                  name="photo"
+                  accept="image/*"
+                  onchange="previewPhoto(this, 'previewImage')"
+                  class="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+                <img
+                  id="previewImage"
+                  class="hidden mt-3 w-20 h-20 rounded-full object-cover border"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="@username"
+                  class="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+                  >Login Password</label
+                >
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Leave blank for no login access"
+                  autocomplete="new-password"
+                  class="w-full border rounded-lg px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+                <p class="text-xs text-gray-400 mt-1">
+                  Set a username + password to let this employee log in. Their
+                  <b>Designation</b> above decides what they can access (e.g.
+                  "Supplier" → can only see &amp; update their own delivery
+                  orders).
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="px-6 pb-5">
+            <p id="addFormMsg" class="hidden text-sm text-red-500 mb-2"></p>
+            <button
+              type="submit"
+              class="w-full py-3 rounded-xl text-white font-bold"
+              style="background: linear-gradient(135deg, #3b5bdb, #4dabf7)"
+            >
+              <i class="fas fa-save mr-2"></i> SAVE RECORD
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ══════════════ EDIT MODAL (no photo field in form grid; designation as dropdown) ══════════════ -->
+    <div
+      id="editModal"
+      class="modal-wrap fixed inset-0 bg-black/50 z-50 items-center justify-center p-4 overflow-y-auto"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl my-4"
+      >
+        <div
+          class="flex items-center justify-between px-6 py-4 rounded-t-2xl"
+          style="background: linear-gradient(135deg, #2563eb, #38bdf8)"
+        >
+          <h3 class="font-bold text-white text-base flex items-center gap-2">
+            <i class="fas fa-pen-to-square"></i> Edit Employee
+          </h3>
+          <button
+            onclick="closeModal('editModal')"
+            class="text-white/80 hover:text-white text-xl"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="px-6 py-5">
+          <input type="hidden" id="eId" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >Full Name</label
+              >
+              <input
+                id="eName"
+                type="text"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >CNIC Number</label
+              >
+              <input
+                id="eCnic"
+                type="text"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >Designation</label
+              >
+              <select
+                id="eDesignation"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm bg-white"
+              >
+                <option value="">Select Designation</option>
+              </select>
+              <input type="hidden" id="eRoleId" />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >Contact</label
+              >
+              <input
+                id="eContact"
+                type="text"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >Salary</label
+              >
+              <input
+                id="eSalary"
+                type="number"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >Qualification</label
+              >
+              <input
+                id="eQualification"
+                type="text"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >Shift</label
+              >
+              <select
+                id="eShift"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm bg-white"
+              >
+                <option value="">Select shift</option>
+                <option value="Morning">Morning</option>
+                <option value="Evening">Evening</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >Hire Date</label
+              >
+              <input
+                id="eHireDate"
+                type="date"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
+          </div>
+          <div class="mb-4">
+            <label
+              class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+              >Address</label
+            >
+            <textarea
+              id="eAddress"
+              rows="3"
+              class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm resize-none"
+            ></textarea>
+          </div>
+
+          <!-- FIX: was a broken 2-col row (Username 1/2 width + orphan col-span-2 Photo
+               field with no grid parent). Now a clean 2-col grid: Username + Password
+               on top row, Photo full-width below — consistent spacing & dark mode. -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >Username</label
+              >
+              <input
+                id="eUsername"
+                type="text"
+                placeholder="@username"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                >Login Password</label
+              >
+              <input
+                id="ePassword"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Leave blank to keep unchanged"
+                class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label
+              class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+              >Employee Photo</label
+            >
+            <input
+              type="file"
+              id="ePhoto"
+              accept="image/*"
+              class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm"
+            />
+            <img
+              id="ePhotoPreview"
+              src=""
+              class="w-24 h-24 mt-3 rounded-lg border object-cover hidden"
+            />
+          </div>
+        </div>
+        <div class="px-6 pb-5 flex gap-3">
+          <button
+            onclick="closeModal('editModal')"
+            class="flex-1 py-3 rounded-xl font-bold text-gray-600 dark:text-gray-300 text-sm border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+          >
+            Cancel
+          </button>
+          <button
+            onclick="updateEmployee()"
+            class="flex-1 py-3 rounded-xl font-bold text-white text-sm tracking-widest uppercase transition"
+            style="background: linear-gradient(135deg, #2563eb, #38bdf8)"
+          >
+            <i class="fas fa-rotate mr-2"></i> UPDATE RECORD
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="viewModal"
+      class="modal-wrap fixed inset-0 bg-black/50 z-50 items-center justify-center p-4 overflow-y-auto"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-3xl my-4"
+      >
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700"
+        >
+          <h3 class="font-bold text-gray-800 dark:text-white text-lg">
+            Employee Full Profile
+          </h3>
+          <button
+            onclick="closeModal('viewModal')"
+            class="text-gray-400 hover:text-gray-700 dark:hover:text-white text-xl"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div
+          id="viewContent"
+          class="grid grid-cols-1 sm:grid-cols-[240px_1fr] gap-6 px-6 py-6 dark:text-gray-200"
+        ></div>
+        <div
+          class="px-6 pb-6 flex justify-end gap-3 border-t border-gray-100 dark:border-gray-700 pt-4"
+        >
+          <button
+            onclick="printCard()"
+            class="px-5 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-900 text-white text-sm font-semibold transition"
+          >
+            <i class="fas fa-id-card mr-2"></i>Print Card
+          </button>
+          <button
+            onclick="printFullForm()"
+            class="px-5 py-2.5 rounded-lg text-white text-sm font-semibold transition"
+            style="background: #2563eb"
+          >
+            <i class="fas fa-print mr-2"></i>Print Full Form
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ DELETE MODAL ══════════════ -->
+    <div
+      id="deleteModal"
+      class="modal-wrap fixed inset-0 bg-black/50 z-50 items-center justify-center p-4"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md"
+      >
+        <div
+          class="flex items-center justify-between px-6 py-4 rounded-t-2xl bg-red-500"
+        >
+          <h3 class="font-bold text-white text-base flex items-center gap-2">
+            <i class="fas fa-trash"></i> Delete Employee
+          </h3>
+          <button
+            onclick="closeModal('deleteModal')"
+            class="text-white/80 hover:text-white text-xl"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="deleteContent" class="px-6 py-5 dark:text-gray-200"></div>
+        <div class="px-6 pb-5 flex gap-3">
+          <button
+            onclick="confirmDelete()"
+            class="flex-1 py-2.5 rounded-xl font-bold text-white text-sm bg-red-500 hover:bg-red-600 flex items-center justify-center gap-2 transition"
+          >
+            <i class="fas fa-trash"></i> Delete
+          </button>
+          <button
+            onclick="closeModal('deleteModal')"
+            class="flex-1 py-2.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 text-sm border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="printArea" style="display: none"></div>
+
+    <script>
+      const PHOTO_BASE = "../../uploads/";
+
+      // ── Data (loaded from backend) ──
+      let employees = [];
+      let pendingDeleteId = null;
+      let designationRoles = []; // [{id, name, slug}, ...] from Roles & Permissions
+
+      // ── Designation dropdown: always reflects the real roles that
+      // exist in Roles & Permissions (including custom ones), instead
+      // of a hardcoded list that can drift out of sync or miss a role
+      // someone just created. ──
+      function populateDesignationSelect(selectEl) {
+        if (!selectEl) return;
+        const current = selectEl.value;
+        selectEl.innerHTML = '<option value="">Select Designation</option>';
+        designationRoles.forEach((role) => {
+          const opt = document.createElement("option");
+          opt.value = role.name;
+          opt.textContent = role.name;
+          opt.dataset.roleId = role.id;
+          selectEl.appendChild(opt);
+        });
+        if (current) selectEl.value = current;
+      }
+
+      function loadDesignationRoles() {
+        return fetch("../../action/employees/list_roles.php")
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              designationRoles = data.data || [];
+              populateDesignationSelect(document.getElementById("designation"));
+              populateDesignationSelect(
+                document.getElementById("eDesignation"),
+              );
+            }
+          })
+          .catch((err) => console.error("Failed to load roles:", err));
+      }
+
+      // Keep the hidden role_id in sync whenever a designation is picked.
+      const designationSelect = document.getElementById("designation");
+      if (designationSelect) {
+        designationSelect.addEventListener("change", function () {
+          const opt = this.selectedOptions[0];
+          document.getElementById("roleId").value = opt
+            ? opt.dataset.roleId || ""
+            : "";
+        });
+      }
+      const eDesignationSelect = document.getElementById("eDesignation");
+      if (eDesignationSelect) {
+        eDesignationSelect.addEventListener("change", function () {
+          const opt = this.selectedOptions[0];
+          document.getElementById("eRoleId").value = opt
+            ? opt.dataset.roleId || ""
+            : "";
+        });
+      }
+
+      function loadEmployees() {
+        fetch("../../action/employees/get_employees.php")
+          .then((res) => res.json())
+          .then((data) => {
+            employees = data;
+            updateStats();
+            renderTable(employees);
+          })
+          .catch((err) => {
+            console.error(err);
+            document.getElementById("noResults").classList.remove("hidden");
+          });
+      }
+
+      // ── Stats ──
+      function updateStats() {
+        document.getElementById("totalStaff").textContent = employees.length;
+        document.getElementById("totalSalary").textContent = employees
+          .reduce((s, e) => s + Number(e.salary || 0), 0)
+          .toLocaleString();
+        document.getElementById("totalPending").textContent = employees
+          .reduce((s, e) => s + Number(e.balance || 0), 0)
+          .toLocaleString();
+        document.getElementById("activeUsers").textContent = employees.filter(
+          (e) => e.username,
+        ).length;
+      }
+
+      // ── Modal helpers ──
+      function openModal(id) {
+        document.getElementById(id).classList.add("open");
+      }
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("open");
+      }
+
+      // ── Photo preview (used only in Add modal now) ──
+      function previewPhoto(input, previewId) {
+        const el =
+          typeof input === "string" ? document.getElementById(input) : input;
+        const file = el && el.files && el.files[0];
+        const preview = document.getElementById(previewId);
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.classList.remove("hidden");
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      // ── Avatar HTML ──
+      function avatarHtml(emp, size = "w-12 h-12", textSize = "text-3xl") {
+        if (emp.photo)
+          return `<img src="${PHOTO_BASE}${emp.photo}" class="${size} rounded-full object-cover border-2 border-blue-200"/>`;
+        return `<div class="${size} rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-400"><i class="fas fa-user-circle ${textSize}"></i></div>`;
+      }
+
+      // ── Render Table ──
+      function renderTable(data) {
+        const tbody = document.getElementById("tableBody");
+        const mobile = document.getElementById("mobileCards");
+        tbody.innerHTML = "";
+        mobile.innerHTML = "";
+        if (!data.length) {
+          document.getElementById("noResults").classList.remove("hidden");
+          return;
+        }
+        document.getElementById("noResults").classList.add("hidden");
+        data.forEach((emp) => {
+          const salary = Number(emp.salary || 0),
+            balance = Number(emp.balance || 0);
+          const tr = document.createElement("tr");
+          tr.className =
+            "border-b border-gray-50 dark:border-gray-700 transition";
+          tr.innerHTML = `
+      <td class="px-5 py-3 text-gray-500 dark:text-gray-400 font-medium">#${emp.id}</td>
+      <td class="px-5 py-3">${avatarHtml(emp, "w-9 h-9", "text-2xl")}</td>
+      <td class="px-5 py-3">
+        <p class="font-semibold text-gray-800 dark:text-white">${emp.full_name}</p>
+        ${emp.username ? `<span class="tag-username">${emp.username}</span>` : ""}
+      </td>
+      <td class="px-5 py-3"><span class="badge">${emp.designation}</span></td>
+      <td class="px-5 py-3 text-right font-semibold text-gray-800 dark:text-white">${salary.toLocaleString()}</td>
+      <td class="px-5 py-3 text-right font-semibold ${balance ? "text-red-500" : "text-red-400"}">${balance.toLocaleString()}</td>
+      <td class="px-5 py-3 text-gray-600 dark:text-gray-300 text-center">${emp.shift || "N/A"}</td>
+      <td class="px-5 py-3 text-center">
+        <div class="flex items-center justify-center gap-3">
+          <button onclick="viewEmployee(${emp.id})" class="text-cyan-500 hover:text-cyan-700 text-lg" title="View"><i class="fas fa-eye"></i></button>
+          <button onclick="openEditModal(${emp.id})" class="text-blue-500 hover:text-blue-700 text-lg" title="Edit"><i class="fas fa-pen-to-square"></i></button>
+          <button onclick="openDeleteModal(${emp.id})" class="text-red-400 hover:text-red-600 text-lg" title="Delete"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>`;
+          tbody.appendChild(tr);
+
+          // ── Mobile card: full detail view ──
+          const card = document.createElement("div");
+          card.className = "p-4 bg-white dark:bg-gray-800";
+          card.innerHTML = `
+      <div class="flex items-start gap-3 mb-3">
+        <div class="flex-shrink-0">${avatarHtml(emp, "w-14 h-14", "text-3xl")}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <p class="font-bold text-gray-800 dark:text-white text-base">${emp.full_name}</p>
+            <span class="text-gray-400 dark:text-gray-500 text-xs">#${emp.id}</span>
+          </div>
+          ${emp.username ? `<span class="tag-username">${emp.username}</span>` : ""}
+          <span class="badge text-xs ml-1">${emp.designation}</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-x-3 gap-y-2 text-xs bg-gray-50 dark:bg-gray-900/40 rounded-lg p-3">
+        <div class="info-item">
+          <p class="label text-gray-400 dark:text-gray-500">Phone</p>
+          <p class="font-semibold text-gray-700 dark:text-gray-200">${emp.contact || "N/A"}</p>
+        </div>
+        <div class="info-item">
+          <p class="label text-gray-400 dark:text-gray-500">CNIC</p>
+          <p class="font-semibold text-gray-700 dark:text-gray-200">${emp.cnic || "N/A"}</p>
+        </div>
+        <div class="info-item">
+          <p class="label text-gray-400 dark:text-gray-500">Salary</p>
+          <p class="font-semibold text-gray-700 dark:text-gray-200">PKR ${salary.toLocaleString()}</p>
+        </div>
+        <div class="info-item">
+          <p class="label text-gray-400 dark:text-gray-500">Balance</p>
+          <p class="font-semibold text-red-500 dark:text-red-400">PKR ${balance.toLocaleString()}</p>
+        </div>
+        <div class="info-item">
+          <p class="label text-gray-400 dark:text-gray-500">Shift</p>
+          <p class="font-semibold text-gray-700 dark:text-gray-200">${emp.shift || "N/A"}</p>
+        </div>
+        <div class="info-item">
+          <p class="label text-gray-400 dark:text-gray-500">Qualification</p>
+          <p class="font-semibold text-gray-700 dark:text-gray-200">${emp.qualification || "N/A"}</p>
+        </div>
+        <div class="info-item col-span-2">
+          <p class="label text-gray-400 dark:text-gray-500">Address</p>
+          <p class="font-semibold text-gray-700 dark:text-gray-200">${emp.address || "N/A"}</p>
+        </div>
+      </div>
+      <div class="flex gap-4 mt-3 justify-end">
+        <button onclick="viewEmployee(${emp.id})" class="text-cyan-500 text-base" title="View"><i class="fas fa-eye"></i></button>
+        <button onclick="openEditModal(${emp.id})" class="text-blue-500 text-base" title="Edit"><i class="fas fa-pen-to-square"></i></button>
+        <button onclick="openDeleteModal(${emp.id})" class="text-red-400 text-base" title="Delete"><i class="fas fa-trash"></i></button>
+      </div>`;
+          mobile.appendChild(card);
+        });
+      }
+
+      function filterTable() {
+        const q = document.getElementById("searchInput").value.toLowerCase();
+        renderTable(
+          employees.filter(
+            (e) =>
+              e.full_name.toLowerCase().includes(q) ||
+              e.designation.toLowerCase().includes(q) ||
+              (e.username || "").toLowerCase().includes(q),
+          ),
+        );
+      }
+
+      // ── ADD ──
+      function openAddModal() {
+        document.getElementById("addEmployeeForm").reset();
+        document.getElementById("previewImage").classList.add("hidden");
+        document.getElementById("addFormMsg").classList.add("hidden");
+        openModal("addModal");
+      }
+
+      document
+        .getElementById("addEmployeeForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const form = e.target;
+          const msg = document.getElementById("addFormMsg");
+          const formData = new FormData(form);
+          fetch("../../action/employees/add_employee.php", {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.status) {
+                closeModal("addModal");
+                loadEmployees();
+              } else {
+                msg.textContent = data.message || "Something went wrong";
+                msg.classList.remove("hidden");
+              }
+            })
+            .catch(() => {
+              msg.textContent = "Network error, please try again";
+              msg.classList.remove("hidden");
+            });
+        });
+
+      // ── EDIT (photo field lives in its own row below username/password;
+      // designation is a dropdown) ──
+      function openEditModal(id) {
+        const emp = employees.find((e) => e.id == id);
+        if (!emp) return;
+        document.getElementById("eId").value = emp.id;
+        document.getElementById("eName").value = emp.full_name;
+        document.getElementById("eCnic").value = emp.cnic || "";
+        document.getElementById("eDesignation").value = emp.designation || "";
+        const matchedRole = designationRoles.find(
+          (r) => r.name === emp.designation,
+        );
+        document.getElementById("eRoleId").value = matchedRole
+          ? matchedRole.id
+          : "";
+        document.getElementById("eContact").value = emp.contact || "";
+        document.getElementById("eSalary").value = emp.salary || 0;
+        document.getElementById("eQualification").value =
+          emp.qualification || "";
+        document.getElementById("eShift").value = emp.shift || "";
+        document.getElementById("eHireDate").value = emp.hire_date || "";
+        document.getElementById("eAddress").value = emp.address || "";
+        document.getElementById("eUsername").value = emp.username || "";
+        document.getElementById("ePassword").value = "";
+        document.getElementById("ePhoto").value = "";
+        const preview = document.getElementById("ePhotoPreview");
+        if (emp.photo) {
+          preview.src = PHOTO_BASE + emp.photo;
+          preview.classList.remove("hidden");
+        } else {
+          preview.src = "";
+          preview.classList.add("hidden");
+        }
+        openModal("editModal");
+      }
+
+      // Live preview when a new photo is chosen in the Edit modal.
+      const ePhotoInput = document.getElementById("ePhoto");
+      if (ePhotoInput) {
+        ePhotoInput.addEventListener("change", function () {
+          previewPhoto(this, "ePhotoPreview");
+        });
+      }
+
+      function updateEmployee() {
+        const fd = new FormData();
+
+        fd.append("id", document.getElementById("eId").value);
+        fd.append("full_name", document.getElementById("eName").value.trim());
+        fd.append("cnic", document.getElementById("eCnic").value.trim());
+        fd.append("designation", document.getElementById("eDesignation").value);
+        fd.append("role_id", document.getElementById("eRoleId").value);
+        fd.append("contact", document.getElementById("eContact").value.trim());
+        fd.append("salary", document.getElementById("eSalary").value || 0);
+        fd.append(
+          "qualification",
+          document.getElementById("eQualification").value.trim(),
+        );
+        fd.append("shift", document.getElementById("eShift").value);
+        fd.append("hire_date", document.getElementById("eHireDate").value);
+        fd.append("address", document.getElementById("eAddress").value.trim());
+        fd.append(
+          "username",
+          document.getElementById("eUsername").value.trim(),
+        );
+        fd.append("password", document.getElementById("ePassword").value);
+
+        // Optional image upload
+        const photo = document.getElementById("ePhoto").files[0];
+
+        if (photo) {
+          fd.append("photo", photo);
+        }
+
+        fetch("../../action/employees/update_employee.php", {
+          method: "POST",
+          body: fd,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status) {
+              closeModal("editModal");
+
+              loadEmployees();
+
+              alert(data.message);
+            } else {
+              alert(data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+
+            alert("Network Error");
+          });
+      }
+      // ── VIEW (Employee Full Profile / ID card style) ──
+      function viewEmployee(id) {
+        const emp = employees.find((e) => e.id == id);
+        if (!emp) return;
+        const photoSrc = emp.photo ? PHOTO_BASE + emp.photo : "";
+        const hiDate = emp.hire_date
+          ? new Date(emp.hire_date).toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
+          : "N/A";
+        const salary = Number(emp.salary || 0),
+          balance = Number(emp.balance || 0);
+
+        document.getElementById("viewContent").innerHTML = `
+    <div id="idCardArea" class="rounded-xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm h-fit">
+      <div class="text-center text-white py-4" style="background:linear-gradient(135deg,#3b5bdb,#4dabf7)">
+        <p class="font-bold tracking-wide">MARKING BOOSTER</p>
+        <p class="text-[11px] tracking-widest opacity-80">OFFICIAL ID CARD</p>
+      </div>
+      <div class="flex flex-col items-center py-5 px-4 dark:bg-gray-800">
+        ${
+          photoSrc
+            ? `<img src="${photoSrc}" class="w-24 h-24 rounded-xl object-cover border mb-3"/>`
+            : `<div class="w-24 h-24 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-300 mb-3"><i class="fas fa-user text-4xl"></i></div>`
+        }
+        <p class="font-bold text-blue-600 dark:text-blue-400 text-lg text-center">${emp.full_name}</p>
+        <span class="mt-1 px-3 py-1 bg-gray-600 text-white text-xs font-semibold rounded-full">${emp.designation}</span>
+        <div class="mt-4 w-full bg-gray-50 dark:bg-gray-900/40 rounded-lg py-2 text-center">
+          <p class="text-xs text-gray-400 dark:text-gray-500">Employee ID</p>
+          <p class="font-bold text-gray-800 dark:text-white">#${emp.id}</p>
+        </div>
+      </div>
+    </div>
+    <div id="fullFormArea">
+      <p class="text-xs font-bold text-gray-400 dark:text-gray-500 tracking-widest mb-2">DETAILED RECORD</p>
+      <hr class="mb-4 dark:border-gray-700"/>
+      <div class="grid grid-cols-2 gap-y-4 gap-x-6 text-sm">
+        <div><p class="text-gray-400 dark:text-gray-500 text-xs">Username</p><p class="font-bold text-gray-800 dark:text-white">${emp.username || "N/A"}</p></div>
+        <div><p class="text-gray-400 dark:text-gray-500 text-xs">CNIC Number</p><p class="font-bold text-gray-800 dark:text-white">${emp.cnic || "N/A"}</p></div>
+        <div><p class="text-gray-400 dark:text-gray-500 text-xs">Contact No.</p><p class="font-bold text-gray-800 dark:text-white">${emp.contact || "N/A"}</p></div>
+        <div><p class="text-gray-400 dark:text-gray-500 text-xs">Qualification</p><p class="font-bold text-gray-800 dark:text-white">${emp.qualification || "N/A"}</p></div>
+        <div><p class="text-gray-400 dark:text-gray-500 text-xs">Shift</p><p class="font-bold text-gray-800 dark:text-white">${emp.shift || "N/A"}</p></div>
+        <div><p class="text-gray-400 dark:text-gray-500 text-xs">Hire Date</p><p class="font-bold text-gray-800 dark:text-white">${hiDate}</p></div>
+        <div><p class="text-gray-400 dark:text-gray-500 text-xs">Monthly Salary</p><p class="font-bold text-gray-800 dark:text-white">Rs. ${salary.toLocaleString()}</p></div>
+        <div><p class="text-gray-400 dark:text-gray-500 text-xs">Current Balance</p><p class="font-bold text-red-500">Rs. ${balance.toLocaleString()}</p></div>
+        <div class="col-span-2"><p class="text-gray-400 dark:text-gray-500 text-xs">Residential Address</p><p class="font-bold text-gray-800 dark:text-white">${emp.address || "N/A"}</p></div>
+      </div>
+    </div>`;
+        openModal("viewModal");
+      }
+
+      function printCard() {
+        doPrint(document.getElementById("idCardArea").innerHTML);
+      }
+      function printFullForm() {
+        const html =
+          document.getElementById("idCardArea").outerHTML +
+          document.getElementById("fullFormArea").outerHTML;
+        doPrint(html);
+      }
+      function doPrint(html) {
+        const pa = document.getElementById("printArea");
+        pa.innerHTML = html;
+        pa.style.display = "block";
+        window.print();
+        pa.style.display = "none";
+      }
+
+      // ── DELETE ──
+      function openDeleteModal(id) {
+        const emp = employees.find((e) => e.id == id);
+        if (!emp) return;
+        pendingDeleteId = id;
+        const salary = Number(emp.salary || 0),
+          balance = Number(emp.balance || 0);
+        document.getElementById("deleteContent").innerHTML = `
+    <div class="flex items-center gap-3 mb-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800">
+      ${avatarHtml(emp, "w-12 h-12", "text-3xl")}
+      <div>
+        <p class="font-bold text-gray-800 dark:text-white">${emp.full_name}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">${emp.designation} &bull; #${emp.id}</p>
+      </div>
+    </div>
+    <div class="space-y-2 text-sm">
+      <div class="flex justify-between py-1.5 border-b dark:border-gray-700"><span class="text-gray-500 dark:text-gray-400">CNIC</span><span class="font-medium">${emp.cnic || "—"}</span></div>
+      <div class="flex justify-between py-1.5 border-b dark:border-gray-700"><span class="text-gray-500 dark:text-gray-400">Contact</span><span class="font-medium">${emp.contact || "—"}</span></div>
+      <div class="flex justify-between py-1.5 border-b dark:border-gray-700"><span class="text-gray-500 dark:text-gray-400">Salary</span><span class="font-medium">PKR ${salary.toLocaleString()}</span></div>
+      <div class="flex justify-between py-1.5"><span class="text-gray-500 dark:text-gray-400">Balance</span><span class="font-medium text-red-400">${balance.toLocaleString()}</span></div>
+    </div>
+    <div class="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+      <p class="text-red-600 dark:text-red-400 text-xs font-semibold text-center"><i class="fas fa-triangle-exclamation mr-1"></i>This action cannot be undone!</p>
+    </div>`;
+        openModal("deleteModal");
+      }
+
+      function confirmDelete() {
+        const fd = new FormData();
+        fd.append("id", pendingDeleteId);
+        fetch("../../action/employees/delete_employee.php", {
+          method: "POST",
+          body: fd,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status) {
+              closeModal("deleteModal");
+              loadEmployees();
+            } else alert(data.message || "Delete failed");
+            pendingDeleteId = null;
+          })
+          .catch(() => {
+            alert("Network error, please try again");
+            pendingDeleteId = null;
+          });
+      }
+
+      // close modal on backdrop click
+      ["addModal", "editModal", "viewModal", "deleteModal"].forEach((id) => {
+        document.getElementById(id).addEventListener("click", function (e) {
+          if (e.target === this) closeModal(id);
+        });
+      });
+
+      loadDesignationRoles();
+      loadEmployees();
+    </script>
+    <script src="../js/sidebar.js"></script>
+  </body>
+</html>

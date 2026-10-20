@@ -1,0 +1,657 @@
+<?php
+/**
+ * sale.php
+ * POS Layout - Re-designed to match target Point-of-Sale reference.
+ */
+?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sale | MARKING BOOSTER</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+      <script src="../js/auth_check.js"></script>
+      <script src="../js/sidebar.js"></script>
+</head>
+
+  <body class="bg-slate-100 dark:bg-slate-900 font-sans antialiased">
+    <!-- Top Navbar -->
+        <!-- Top Navbar -->
+<header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+  <div class="flex items-center gap-4">
+    <button id="menuToggle" type="button" aria-label="Toggle sidebar" aria-controls="main-sidebar" aria-expanded="false"
+      class="text-white text-xl hover:text-amber-400 transition-colors lg:hidden">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Marking Booster Logo" />
+    <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+  </div>
+  <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+    <i class="fa-regular fa-clock mr-1"></i>
+    <span id="currentDate"></span>
+  </div>
+</header>
+
+<!-- Mobile overlay (click to close sidebar) -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+<div class="flex">
+  <!-- Sidebar -->
+
+<aside
+  id="main-sidebar"
+  aria-label="Primary"
+  class="w-[280px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300
+         flex flex-col justify-between h-[calc(100vh-64px)] overflow-hidden shadow-xl
+         border-r border-slate-800 transition-transform duration-300 ease-in-out z-40
+         -translate-x-full lg:translate-x-0"
+>
+  <!-- Brand block -->
+  <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative shrink-0">
+    <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm overflow-hidden">
+      <img src="../../assets/images/logo.png" class="w-full h-full rounded-full object-cover" alt="Marking Booster Logo" />
+      <button type="button" class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+        <i class="fa-solid fa-camera"></i>
+      </button>
+    </div>
+    <h2 class="mt-3 text-lg font-bold text-white tracking-wide">Marking Booster</h2>
+    <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+  </div>
+ 
+  <!-- Scrollable nav (only this element scrolls; aside itself stays overflow-hidden) -->
+  <nav
+    id="sidebarNav"
+    class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1
+           [&::-webkit-scrollbar]:w-[5px]
+           [&::-webkit-scrollbar-track]:bg-transparent
+           [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded
+           dark:[&::-webkit-scrollbar-thumb]:bg-slate-800"
+  >
+ 
+    <a href="./dashboard.html" data-nav-link
+      class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+      <i class="fa-solid fa-gauge-high text-lg w-5 text-center"></i>
+      <span class="font-medium text-sm">Dashboard</span>
+    </a>
+<!-- Administration -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-administration"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Administration</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-administration" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./employees.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+        <a href="./branch-users.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+        <a href="./parties.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Parties</a>
+        <a href="./area-zones.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+
+      </div>
+    </div>
+ 
+    <!-- Inventory -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-inventory"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-boxes-stacked text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Inventory</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-inventory" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./brands.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Brands</a>
+        <a href="./category.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Categories</a>
+        <a href="./product.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Items</a>
+        <a href="./raw-materials.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Materials</a>
+      </div>
+    </div>
+ 
+    <!-- Billing & Payments -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-billing"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Billing &amp; Payments</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-billing" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./counter-sale.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+        <a href="./sale-history.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale History</a>
+
+
+        <a href="./purchase.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Purchase</a>
+        <a href="./party_payment.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Payment</a>
+        <a href="./delete-invoice.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Delete Invoice</a>
+      </div>
+    </div>
+ 
+    <!-- Reports -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-reports"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Reports</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-reports" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./party-invoices-detail.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Invoices Detail</a>
+        <a href="./monthly-sale-repot.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Monthly Sale Report</a>
+        <a href="./invoice-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoices Report</a>
+        <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit</a>
+        <a href="./stock-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+        <a href="./customers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Customers Report</a>
+        <a href="./suppliers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Suppliers Report</a>
+      </div>
+    </div>
+ 
+    <!-- Payroll & Accounts -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-payroll"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-users-viewfinder text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Payroll &amp; Accounts</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-payroll" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./expenses.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Expenses</a>
+        <a href="./accounting-system.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Accounting System</a>
+        <a href="./balance-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Balance Sheet</a>
+        <a href="./generate-salary.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+        <a href="./salary-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+        <a href="./attendance.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+        <a href="./attendance-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance Report</a>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- Bottom controls -->
+  <div class="p-4 border-t border-slate-700/40 space-y-4 shrink-0">
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <i class="fa-solid fa-palette text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-white">Theme</span>
+      </div>
+      <!-- Pure Tailwind switch: peer-checked drives the knob + track color -->
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="theme-toggle" class="sr-only peer" aria-label="Toggle dark theme" />
+        <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white
+                    after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
+                    after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+      </label>
+    </div>
+    <button id="logoutBtn" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+      <i class="fa-solid fa-power-off text-sm"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
+
+      <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+        .dropdown-menu.show, .dropdown-menu.open { display: block !important; }
+      </style>
+
+      <!-- Main Counter Sale Workspace -->
+      <main class="flex-1 min-w-0 p-4 md:p-6 pb-24 xl:pb-6 space-y-4">
+
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-extrabold text-[#001F4D] dark:text-white">Counter Sale</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Panaflex &amp; Pamphlets &middot; prices are calculated by the server from your product rates</p>
+          </div>
+          <div class="flex gap-2 flex-wrap">
+            <button id="salesSummaryBtn" type="button" class="bg-[#0C3B73] hover:bg-[#0a2f5c] text-white font-bold px-4 py-2 rounded-lg shadow-sm text-xs uppercase tracking-wide flex items-center gap-2">
+              <i class="fa-solid fa-chart-column"></i><span>Sales Summary</span>
+            </button>
+            <button id="lastInvoiceBtn" type="button" class="hidden bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-bold px-4 py-2 rounded-lg shadow-sm text-xs uppercase tracking-wide items-center gap-2">
+              <i class="fa-solid fa-file-invoice"></i><span>Last Invoice</span>
+            </button>
+            <button id="openReturnBtn" type="button" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2 rounded-lg shadow-sm text-xs uppercase tracking-wide flex items-center gap-2">
+              <i class="fa-solid fa-rotate-left"></i><span>Return</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="pageAlert" class="hidden rounded-lg border px-4 py-3 text-sm font-semibold" role="alert" aria-live="polite"></div>
+        <div id="permNotice" class="hidden rounded-lg border border-amber-300 bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 px-4 py-3 text-sm font-semibold"></div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-4 items-start">
+
+          <!-- ===== LEFT: customer + product picker + item form ===== -->
+          <section class="xl:col-span-7 space-y-4">
+
+            <!-- Customer -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+              <h3 class="text-xs font-bold uppercase text-gray-500 dark:text-gray-400 mb-3"><i class="fa-solid fa-user mr-1"></i> Customer</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="sm:col-span-1">
+                  <label for="invoiceNoDisplay" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Invoice #</label>
+                  <input type="text" id="invoiceNoDisplay" readonly placeholder="Assigned on save" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-sm font-semibold text-center text-gray-800 dark:text-white outline-none" />
+                </div>
+                <div class="sm:col-span-2">
+                  <label for="salePartySelect" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Customer</label>
+                  <select id="salePartySelect" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm font-medium text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="walk-in">Walk-in Customer</option>
+                  </select>
+                </div>
+                <div class="sm:col-span-3">
+                  <input type="text" id="customerFilter" placeholder="Type to filter customers by name, phone or code..." class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-xs text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div id="walkInFields" class="sm:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label for="walkInName" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Walk-in name (optional)</label>
+                    <input type="text" id="walkInName" maxlength="100" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label for="walkInPhone" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Walk-in phone (optional)</label>
+                    <input type="tel" id="walkInPhone" maxlength="20" placeholder="03XXXXXXXXX" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product picker -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h3 class="text-xs font-bold uppercase text-gray-500 dark:text-gray-400"><i class="fa-solid fa-box mr-1"></i> Select Product</h3>
+                <input type="text" id="productSearchInput" placeholder="Search product..." class="w-full sm:w-64 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              <div id="categoryContainer" class="flex flex-wrap gap-2 mb-3"></div>
+              <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-64 overflow-y-auto pr-1">
+                <div class="col-span-full text-center text-gray-400 py-6 text-sm">Loading products...</div>
+              </div>
+            </div>
+
+            <!-- Item form -->
+            <div id="itemFormCard" class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-xs font-bold uppercase text-gray-500 dark:text-gray-400"><i class="fa-solid fa-ruler-combined mr-1"></i> Item Details</h3>
+                <span id="itemMethodBadge" class="hidden px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"></span>
+              </div>
+              <div id="itemFormEmpty" class="text-sm text-gray-400 py-4 text-center">Select a product above to configure it.</div>
+              <form id="itemForm" class="hidden space-y-3" novalidate>
+                <div>
+                  <div id="itemProductName" class="font-bold text-gray-800 dark:text-white text-sm"></div>
+                  <div id="itemRateInfo" class="text-xs text-gray-500 dark:text-gray-400"></div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div>
+                    <label for="itemQty" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Quantity</label>
+                    <input type="number" id="itemQty" min="1" step="1" value="1" class="item-input w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div class="dim-field">
+                    <label for="itemWidth" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Width</label>
+                    <input type="number" id="itemWidth" min="0" step="any" class="item-input w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div class="dim-field">
+                    <label for="itemHeight" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Height</label>
+                    <input type="number" id="itemHeight" min="0" step="any" class="item-input w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div class="dim-field">
+                    <label for="itemUnit" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Unit</label>
+                    <select id="itemUnit" class="item-input w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="feet">Feet</option>
+                      <option value="inches">Inches</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                  <div>
+                    <label for="specSize" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Size</label>
+                    <input type="text" id="specSize" maxlength="100" list="sizeList" placeholder="e.g. A4" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                    <datalist id="sizeList"><option value="A3"><option value="A4"><option value="A5"><option value="A6"><option value="Letter"></datalist>
+                  </div>
+                  <div>
+                    <label for="specMaterial" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Material / Paper</label>
+                    <input type="text" id="specMaterial" maxlength="100" placeholder="e.g. Flex 13oz / 130gsm" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div id="sidesField">
+                    <label for="specSides" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Sides</label>
+                    <select id="specSides" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="">-</option><option value="Single side">Single side</option><option value="Double side">Double side</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="specFinish" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Finish</label>
+                    <input type="text" id="specFinish" maxlength="100" placeholder="e.g. Eyelets, Matt lamination" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label for="itemDesign" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Design charges (Rs)</label>
+                    <input type="number" id="itemDesign" min="0" step="any" value="0" class="item-input w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label for="itemExtra" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Additional charges (Rs)</label>
+                    <input type="number" id="itemExtra" min="0" step="any" value="0" class="item-input w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label for="specNotes" class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Notes</label>
+                    <input type="text" id="specNotes" maxlength="300" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t dark:border-gray-700">
+                  <div class="text-sm">
+                    <span class="text-gray-500 dark:text-gray-400 text-xs uppercase font-bold">Line total</span>
+                    <span id="itemPreviewTotal" class="ml-2 text-lg font-black text-[#001F4D] dark:text-blue-400">-</span>
+                    <div id="itemPreviewDetail" class="text-[11px] text-gray-500 dark:text-gray-400"></div>
+                    <div id="itemFormError" class="text-xs font-semibold text-red-500 hidden"></div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button type="button" id="itemCancelBtn" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-700">Clear</button>
+                    <button type="submit" id="itemAddBtn" class="px-5 py-2 rounded-lg bg-[#0C3B73] hover:bg-[#0a2f5c] text-white text-sm font-bold flex items-center gap-2">
+                      <i class="fa-solid fa-plus"></i><span id="itemAddBtnLabel">Add to Sale</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <!-- ===== RIGHT: current sale ===== -->
+          <section id="currentSaleCard" class="xl:col-span-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden xl:sticky xl:top-20">
+            <div class="bg-[#001F4D] text-white px-4 py-3 flex justify-between items-center">
+              <h2 class="font-bold text-sm">Current Sale</h2>
+              <span id="cartCountBadge" class="bg-white text-[#001F4D] text-xs font-black px-2.5 py-0.5 rounded-md">0 Items</span>
+            </div>
+            <div class="p-3 overflow-x-auto">
+              <table class="w-full text-xs">
+                <thead>
+                  <tr class="text-gray-800 dark:text-gray-200 font-bold border-b dark:border-gray-700">
+                    <th class="text-left py-2">Item</th>
+                    <th class="text-center py-2">Qty</th>
+                    <th class="text-right py-2">Total</th>
+                    <th class="py-2 w-16"></th>
+                  </tr>
+                </thead>
+                <tbody id="saleItemsTableBody" class="divide-y dark:divide-gray-700 text-gray-700 dark:text-gray-300"></tbody>
+              </table>
+              <div id="cartEmpty" class="text-center text-sm text-gray-400 py-8">No items yet. Pick a product to start the sale.</div>
+            </div>
+            <div class="border-t dark:border-gray-700 p-4 space-y-2 text-sm">
+              <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Subtotal</span><span id="summarySubtotal" class="font-bold text-gray-800 dark:text-white">0.00</span></div>
+              <div class="flex justify-between items-center gap-3">
+                <label for="summaryDiscount" class="text-gray-500 dark:text-gray-400">Discount (Rs)</label>
+                <input type="number" id="summaryDiscount" min="0" step="any" value="0" class="w-28 text-right bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 text-sm font-bold text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              <div class="flex justify-between border-t dark:border-gray-700 pt-2 text-base"><span class="font-bold text-gray-800 dark:text-white">Grand Total</span><span id="summaryGrand" class="font-black text-[#108954]">0.00</span></div>
+              <!-- Payment (Task 2A) -->
+              <div class="border-t dark:border-gray-700 pt-3 mt-1 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">Payment</span>
+                  <span id="payStatusBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-600">-</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label for="payAmount" class="block text-[11px] font-bold text-gray-500 dark:text-gray-400 mb-1">Paid Amount (Rs)</label>
+                    <input type="number" id="payAmount" min="0" step="0.01" value="0" class="w-full text-right bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 text-sm font-bold text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label for="payMethod" class="block text-[11px] font-bold text-gray-500 dark:text-gray-400 mb-1">Payment Method</label>
+                    <select id="payMethod" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 text-sm text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                      <option>Cash</option><option>Bank Transfer</option><option>Card</option><option>Cheque</option><option>JazzCash</option><option>Easypaisa</option><option>Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div id="payRefWrap" class="hidden">
+                  <input type="text" id="payRef" maxlength="60" placeholder="Reference / cheque / transaction no. (optional)" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 text-xs text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div class="flex gap-2">
+                  <button type="button" id="payFullBtn" class="flex-1 text-[11px] font-bold border border-gray-300 dark:border-gray-600 rounded-lg py-1 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">Full payment</button>
+                  <button type="button" id="payNoneBtn" class="flex-1 text-[11px] font-bold border border-gray-300 dark:border-gray-600 rounded-lg py-1 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">Unpaid</button>
+                </div>
+                <div class="flex justify-between text-sm"><span class="text-gray-500 dark:text-gray-400">Remaining Balance</span><span id="payBalance" class="font-black text-red-600">0.00</span></div>
+                <div id="payError" class="text-xs font-semibold text-red-500 hidden"></div>
+              </div>
+              <div id="cartError" class="text-xs font-semibold text-red-500 hidden"></div>
+              <button id="saveSaleBtn" type="button" class="w-full mt-2 bg-[#108954] hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg shadow-sm text-sm uppercase tracking-wide flex items-center justify-center gap-2">
+                <i class="fa-solid fa-check"></i><span id="saveSaleBtnLabel">Save Sale (F2)</span>
+              </button>
+              <button id="clearSaleBtn" type="button" class="w-full text-xs font-bold text-gray-500 hover:text-red-500 py-1">Clear sale</button>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+
+    <!-- ============ Sale Saved Modal ============ -->
+    <div id="saleSavedModal" role="dialog" aria-modal="true" aria-label="Sale saved" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div class="px-6 py-5 text-center border-b dark:border-gray-700">
+          <div class="mx-auto w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-2"><i class="fa-solid fa-check"></i></div>
+          <h2 class="text-lg font-bold text-gray-800 dark:text-white">Sale saved</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Invoice <span id="savedInvoiceNo" class="font-bold text-gray-800 dark:text-white"></span> &middot; <span id="savedCustomer"></span></p>
+        </div>
+        <div class="p-5">
+          <div id="savedLines" class="text-xs divide-y dark:divide-gray-700 text-gray-700 dark:text-gray-300"></div>
+          <div class="mt-3 space-y-1 text-sm">
+            <div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span id="savedSubtotal" class="font-bold"></span></div>
+            <div class="flex justify-between"><span class="text-gray-500">Discount</span><span id="savedDiscount" class="font-bold"></span></div>
+            <div class="flex justify-between text-base border-t dark:border-gray-700 pt-1"><span class="font-bold">Grand Total</span><span id="savedTotal" class="font-black text-[#108954]"></span></div>
+            <div class="flex justify-between"><span class="text-gray-500">Paid</span><span id="savedPaid" class="font-bold"></span></div>
+            <div class="flex justify-between"><span class="text-gray-500">Balance</span><span id="savedBalance" class="font-bold text-red-600"></span></div>
+            <div class="flex justify-between"><span class="text-gray-500">Status</span><span id="savedStatus" class="font-bold"></span></div>
+          </div>
+          <div id="savedInvoiceActions" class="mt-4 grid grid-cols-2 gap-2">
+            <button id="savedViewInvoiceBtn" type="button" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-100 font-bold py-2 rounded-lg text-sm flex items-center justify-center gap-2"><i class="fa-solid fa-file-invoice"></i>View Invoice</button>
+            <button id="savedPrintInvoiceBtn" type="button" class="bg-[#001F4D] hover:bg-[#0a2f5c] text-white font-bold py-2 rounded-lg text-sm flex items-center justify-center gap-2"><i class="fa-solid fa-print"></i>Print</button>
+          </div>
+          <a href="./sale-history.html" class="mt-4 block text-center text-xs font-bold text-blue-600 hover:underline">View in Sale History</a>
+          <button id="newSaleBtn" type="button" class="mt-3 w-full bg-[#0C3B73] hover:bg-[#0a2f5c] text-white font-bold py-2.5 rounded-lg text-sm">New Sale</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Sales Summary Modal ============ -->
+    <div id="salesSummaryModal" role="dialog" aria-modal="true" aria-label="Sales Summary" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md">
+        <div class="flex items-center justify-between px-5 py-3 border-b dark:border-gray-700">
+          <h2 class="text-base font-bold text-gray-800 dark:text-white">Sales Summary</h2>
+          <button id="closeSalesSummaryBtn" type="button" class="text-gray-400 hover:text-red-500 text-xl font-bold px-2">&times;</button>
+        </div>
+        <div class="p-5 space-y-4" id="salesSummaryBody">
+          <div class="text-center text-sm text-gray-400 py-6">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Sale Return Modal ============ -->
+    <div id="returnModal" role="dialog" aria-modal="true" aria-label="Sale return" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-5 py-3 border-b dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-10">
+          <h2 class="text-base font-bold text-gray-800 dark:text-white">Sale Return</h2>
+          <button id="closeReturnBtn" type="button" class="text-gray-400 hover:text-red-500 text-xl font-bold px-2">&times;</button>
+        </div>
+        <div class="p-5 space-y-4">
+          <div class="flex gap-2">
+            <input type="text" id="returnInvoiceInput" placeholder="Enter Invoice # (e.g. CNT-000054)"
+              class="flex-1 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-sm font-medium text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+            <button id="findInvoiceBtn" type="button" class="bg-[#0C3B73] hover:bg-[#0a2f5c] text-white font-bold px-4 py-2 rounded-lg text-sm">
+              <i class="fa-solid fa-magnifying-glass"></i> Find
+            </button>
+          </div>
+          <div id="returnLookupMsg" class="text-xs font-semibold hidden"></div>
+          <div id="returnItemsWrap" class="hidden">
+            <div class="text-xs mb-2 text-gray-500 dark:text-gray-400" id="returnInvoiceMeta"></div>
+            <table class="w-full text-xs">
+              <thead>
+                <tr class="text-gray-800 dark:text-gray-200 font-bold border-b dark:border-gray-700">
+                  <th class="text-left py-2">Item</th>
+                  <th class="text-center py-2">Sold Qty</th>
+                  <th class="text-center py-2">Returnable</th>
+                  <th class="text-center py-2 w-24">Return Qty</th>
+                  <th class="text-right py-2">Amount</th>
+                </tr>
+              </thead>
+              <tbody id="returnItemsTableBody" class="divide-y dark:divide-gray-700 text-gray-700 dark:text-gray-300"></tbody>
+            </table>
+            <div class="mt-3">
+              <label class="block text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Remarks (optional)</label>
+              <input type="text" id="returnRemarks" placeholder="Reason for return"
+                class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-white outline-none" />
+            </div>
+            <div class="mt-4 flex justify-between items-center">
+              <div class="text-sm font-bold text-gray-700 dark:text-gray-200">
+                Return Total: <span id="returnTotalDisplay" class="text-red-500">0.00</span>
+              </div>
+              <button id="submitReturnBtn" type="button" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-lg shadow-sm text-sm uppercase tracking-wide">
+                Process Return
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-gray-500 dark:text-gray-400 py-4 border-t dark:border-gray-800">
+      &copy; <span id="footerYear"></span> | Powered by:
+      <a href="https://chughtaisoftwares.com" target="_blank" class="font-semibold text-gray-600 dark:text-gray-300 hover:underline">chughtaisoftwares.com</a>
+    </footer>
+
+
+    <!-- Mobile sale bar (below xl the Current Sale panel is far down the page) -->
+    <div id="mobileSaleBar" class="xl:hidden hidden fixed bottom-0 inset-x-0 z-30 bg-[#001F4D] text-white px-4 py-2.5 shadow-[0_-4px_12px_rgba(0,0,0,0.25)] flex items-center justify-between gap-3" style="padding-bottom:max(0.625rem, env(safe-area-inset-bottom))">
+      <div class="min-w-0">
+        <div class="text-[10px] uppercase tracking-wide text-blue-200"><span id="mbCount">0 Items</span> &middot; Grand Total</div>
+        <div id="mbTotal" class="text-lg font-black leading-tight">Rs 0.00</div>
+      </div>
+      <button id="mbReview" type="button" class="shrink-0 bg-[#108954] hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-lg text-sm flex items-center gap-2"><i class="fa-solid fa-credit-card"></i>Review &amp; Pay</button>
+    </div>
+
+    <!-- App Script -->
+    <script src="../js/counter-sale.js"></script>
+
+    <!-- Counter Sale page extensions (invoice actions, permissions, mobile bar, unsaved-sale guard).
+         Everything here layers on counter-sale.js without changing it. -->
+    <script>
+      (function () {
+        "use strict";
+        var $ = function (id) { return document.getElementById(id); };
+        var lastOrderId = null;
+
+        // ---- Invoice / receipt: uses the existing invoice page and its contract (?order_id=&print=1), same as sale2.html ----
+        function openInvoice(print) {
+          if (!lastOrderId) return;
+          var url = "invoice.html?order_id=" + encodeURIComponent(lastOrderId) + (print ? "&print=1" : "");
+          var w = window.open(url, "_blank");
+          if (!w && typeof showAlert === "function") showAlert("Your browser blocked the invoice window. Allow pop-ups for this site and try again.");
+        }
+        function can(m, a) { return !window.RBAC || !window.RBAC.user ? true : window.RBAC.can(m, a); }
+
+        // Remember which sale was just saved (counter-sale.js calls showSavedModal(data) on success).
+        if (typeof window.showSavedModal === "function") {
+          var origShown = window.showSavedModal;
+          window.showSavedModal = function (d) {
+            origShown(d);
+            if (d && d.order_id) {
+              lastOrderId = d.order_id;
+              var b = $("lastInvoiceBtn"); b.classList.remove("hidden"); b.classList.add("flex");
+              b.title = "Open invoice " + (d.invoice_no || "");
+            }
+          };
+        }
+        $("savedViewInvoiceBtn").addEventListener("click", function () { openInvoice(false); });
+        $("savedPrintInvoiceBtn").addEventListener("click", function () { openInvoice(true); });
+        $("lastInvoiceBtn").addEventListener("click", function () { openInvoice(false); });
+
+        // ---- Role permissions (server still enforces every one of these) ----
+        function applyPermissions() {
+          var notes = [];
+          if (!can("sales", "create")) {
+            notes.push("Your role can view sales but not create them, so saving a sale is disabled.");
+            var save = $("saveSaleBtn");
+            save.addEventListener("click", function (e) { e.stopImmediatePropagation(); }, true); // runs before counter-sale.js handler
+            if (typeof window.saveOrder === "function") window.saveOrder = function () { if (typeof showAlert === "function") showAlert("You do not have permission to create sales."); };
+            $("mbReview").textContent = "Review";
+            var l = $("saveSaleBtnLabel"); if (l) l.textContent = "Save not permitted";
+            save.classList.add("opacity-50", "cursor-not-allowed");
+          }
+          if (!can("sales", "edit")) $("openReturnBtn").classList.add("hidden");        // add_sale_return.php needs sales:edit
+          if (!can("sales", "print")) { $("savedPrintInvoiceBtn").classList.add("hidden"); $("savedViewInvoiceBtn").parentNode.classList.replace("grid-cols-2", "grid-cols-1"); }
+          if (notes.length) { var n = $("permNotice"); n.textContent = notes.join(" "); n.classList.remove("hidden"); }
+        }
+        // auth_check.js loads RBAC asynchronously; wait for it (max ~10 s), otherwise leave defaults (server still guards).
+        var tries = 0, iv = setInterval(function () {
+          if (window.RBAC && window.RBAC.user) { clearInterval(iv); applyPermissions(); }
+          else if (++tries > 100) clearInterval(iv);
+        }, 100);
+
+        // ---- Mobile sale bar ----
+        var bar = $("mobileSaleBar"), grand = $("summaryGrand"), badge = $("cartCountBadge");
+        function syncBar() {
+          var items = parseInt((badge.textContent || "0"), 10) || 0;
+          $("mbCount").textContent = badge.textContent;
+          $("mbTotal").textContent = "Rs " + (grand.textContent || "0.00");
+          bar.classList.toggle("hidden", items === 0);
+        }
+        new MutationObserver(syncBar).observe(grand, { childList: true, characterData: true, subtree: true });
+        new MutationObserver(syncBar).observe(badge, { childList: true, characterData: true, subtree: true });
+        syncBar();
+        $("mbReview").addEventListener("click", function () {
+          var card = $("currentSaleCard");
+          card.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        // Hide the bar while a modal is open so it never overlaps dialogs.
+        ["saleSavedModal", "salesSummaryModal", "returnModal"].forEach(function (id) {
+          var m = $(id); if (!m) return;
+          new MutationObserver(function () {
+            var open = ["saleSavedModal", "salesSummaryModal", "returnModal"].some(function (x) { return !$(x).classList.contains("hidden"); });
+            bar.style.display = open ? "none" : "";
+          }).observe(m, { attributes: true, attributeFilter: ["class"] });
+        });
+
+        // ---- Don't lose a half-built sale by accident ----
+        window.addEventListener("beforeunload", function (e) {
+          var dirty = false;
+          try { dirty = Array.isArray(cart) && cart.length > 0; } catch (_) {}
+          if (dirty) { e.preventDefault(); e.returnValue = ""; }
+        });
+
+        // ---- Escape closes the "sale saved" dialog (other dialogs already have their own close buttons) ----
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && !$("saleSavedModal").classList.contains("hidden")) $("newSaleBtn").click();
+        });
+      })();
+    </script>
+    <script>
+      // Header clock, theme toggle and sidebar behaviour are handled by ../js/sidebar.js
+      document.addEventListener("DOMContentLoaded", function () {
+        var footerYear = document.getElementById("footerYear");
+        if (footerYear) footerYear.textContent = new Date().getFullYear();
+      });
+    </script>
+  </body>
+</html>

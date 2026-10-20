@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance - Inventory Management System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: "class" };</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+      <script src="../js/auth_check.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            50:'#eef2ff',100:'#e0e7ff',500:'#4f46e5',600:'#4338ca',700:'#3730a3'
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  [x-cloak]{display:none!important}
+  .status-radio:checked + span.status-pill-present { background-color:#16a34a; color:#fff; border-color:#16a34a; }
+  .status-radio:checked + span.status-pill-absent { background-color:#dc2626; color:#fff; border-color:#dc2626; }
+  .status-radio:checked + span.status-pill-leave { background-color:#d97706; color:#fff; border-color:#d97706; }
+</style>
+    <script src="../js/auth_check.js"></script>
+</head>
+<body class="bg-slate-100 min-h-screen w-full">
+
+<div class="w-full min-h-screen flex flex-col">
+
+  <!-- Header -->
+      <!-- Top Navbar -->
+    <header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+  <div class="flex items-center gap-4">
+    <button id="menuToggle" type="button" aria-label="Toggle sidebar" aria-controls="main-sidebar" aria-expanded="false"
+      class="text-white text-xl hover:text-amber-400 transition-colors lg:hidden">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Marking Booster Logo" />
+    <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+  </div>
+  <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+    <i class="fa-regular fa-clock mr-1"></i>
+    <span id="currentDate"></span>
+  </div>
+</header>
+
+<!-- Mobile overlay (click to close sidebar) -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+<div class="flex">
+  <!-- Sidebar -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+ 
+<aside
+  id="main-sidebar"
+  aria-label="Primary"
+  class="w-[280px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300
+         flex flex-col justify-between h-[calc(100vh-64px)] overflow-hidden shadow-xl
+         border-r border-slate-800 transition-transform duration-300 ease-in-out z-40
+         -translate-x-full lg:translate-x-0"
+>
+  <!-- Brand block -->
+  <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative shrink-0">
+    <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm overflow-hidden">
+      <img src="../../assets/images/logo.png" class="w-full h-full rounded-full object-cover" alt="Marking Booster Logo" />
+      <button type="button" class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+        <i class="fa-solid fa-camera"></i>
+      </button>
+    </div>
+    <h2 class="mt-3 text-lg font-bold text-white tracking-wide">Marking Booster</h2>
+    <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+  </div>
+ 
+  <!-- Scrollable nav (only this element scrolls; aside itself stays overflow-hidden) -->
+  <nav
+    id="sidebarNav"
+    class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1
+           [&::-webkit-scrollbar]:w-[5px]
+           [&::-webkit-scrollbar-track]:bg-transparent
+           [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded
+           dark:[&::-webkit-scrollbar-thumb]:bg-slate-800"
+  >
+ 
+    <a href="./dashboard.html" data-nav-link
+      class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+      <i class="fa-solid fa-gauge-high text-lg w-5 text-center"></i>
+      <span class="font-medium text-sm">Dashboard</span>
+    </a>
+<!-- Administration -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-administration"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Administration</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-administration" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./employees.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+        <a href="./branch-users.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+        <a href="./parties.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Parties</a>
+        <a href="./area-zones.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+
+      </div>
+    </div>
+ 
+    <!-- Inventory -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-inventory"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-boxes-stacked text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Inventory</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-inventory" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./brands.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Brands</a>
+        <a href="./category.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Categories</a>
+        <a href="./product.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Items</a>
+        <a href="./raw-materials.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Materials</a>
+      </div>
+    </div>
+ 
+    <!-- Billing & Payments -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-billing"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Billing &amp; Payments</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-billing" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./counter-sale.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+
+
+        <a href="./purchase.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Purchase</a>
+        <a href="./party_payment.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Payment</a>
+        <a href="./delete-invoice.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Delete Invoice</a>
+      </div>
+    </div>
+ 
+    <!-- Reports -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-reports"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Reports</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-reports" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./party-invoices-detail.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Invoices Detail</a>
+        <a href="./monthly-sale-repot.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Monthly Sale Report</a>
+        <a href="./invoice-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoices Report</a>
+        <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit</a>
+        <a href="./stock-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+        <a href="./customers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Customers Report</a>
+        <a href="./suppliers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Suppliers Report</a>
+      </div>
+    </div>
+ 
+    <!-- Payroll & Accounts -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-payroll"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-users-viewfinder text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Payroll &amp; Accounts</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-payroll" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./expenses.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Expenses</a>
+        <a href="./accounting-system.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Accounting System</a>
+        <a href="./balance-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Balance Sheet</a>
+        <a href="./generate-salary.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+        <a href="./salary-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+        <a href="./attendance.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+        <a href="./attendance-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance Report</a>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- Bottom controls -->
+  <div class="p-4 border-t border-slate-700/40 space-y-4 shrink-0">
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <i class="fa-solid fa-palette text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-white">Theme</span>
+      </div>
+      <!-- Pure Tailwind switch: peer-checked drives the knob + track color -->
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="theme-toggle" class="sr-only peer" aria-label="Toggle dark theme" />
+        <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white
+                    after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
+                    after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+      </label>
+    </div>
+    <button id="logoutBtn" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+      <i class="fa-solid fa-power-off text-sm"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
+  <main class="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- Toast -->
+    <div id="toast" class="hidden fixed top-5 right-5 z-50 max-w-sm px-4 py-3 rounded-lg shadow-lg text-sm font-medium"></div>
+
+    <!-- Filters Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Attendance Date</label>
+          <input type="date" id="attendanceDate" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Shift</label>
+          <select id="shiftSelect" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+            <option value="Morning">Morning</option>
+            <option value="Evening">Evening</option>
+          </select>
+        </div>
+        <div class="lg:col-span-2">
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Search Employee</label>
+          <input type="text" id="searchEmployee" placeholder="Search by name, ID or designation..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-3 mt-5">
+        <button id="btnLoadEmployees" class="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg shadow-sm transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v6h6M20 20v-6h-6M4 10a8 8 0 0114-4M20 14a8 8 0 01-14 4"/></svg>
+          Load Employees
+        </button>
+        <button id="btnMarkAllPresent" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg shadow-sm transition disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+          Mark All Present
+        </button>
+        <button id="btnSaveAttendance" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-lg shadow-sm transition disabled:opacity-40 disabled:cursor-not-allowed ml-auto" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+          Save Attendance
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary strip -->
+    <div id="summaryStrip" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+        <p class="text-2xl font-bold text-slate-800" id="cntTotal">0</p>
+        <p class="text-xs text-slate-500 uppercase font-semibold mt-1">Total</p>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+        <p class="text-2xl font-bold text-emerald-600" id="cntPresent">0</p>
+        <p class="text-xs text-slate-500 uppercase font-semibold mt-1">Present</p>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+        <p class="text-2xl font-bold text-rose-600" id="cntAbsent">0</p>
+        <p class="text-xs text-slate-500 uppercase font-semibold mt-1">Absent</p>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+        <p class="text-2xl font-bold text-amber-600" id="cntLeave">0</p>
+        <p class="text-xs text-slate-500 uppercase font-semibold mt-1">Leave</p>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="bg-slate-50 text-slate-600 uppercase text-xs font-semibold border-b border-slate-200">
+            <tr>
+             
+              <th class="px-4 py-3">Employee ID</th>
+              <th class="px-4 py-3">Employee Name</th>
+              <th class="px-4 py-3">Designation</th>
+              <th class="px-4 py-3">Shift</th>
+              <th class="px-4 py-3">Status</th>
+              <th class="px-4 py-3">Remarks</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTableBody" class="divide-y divide-slate-100">
+            <tr>
+              <td colspan="7" class="px-4 py-16 text-center text-slate-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-3 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                Select a date and shift, then click <span class="font-semibold text-slate-500">"Load Employees"</span> to begin.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+<script>
+  const base_url="../../action"
+const API = {
+  employees: `${base_url}/employees/get_employees.php`,
+  todayAttendance: `${base_url}/attendance/get_today_attendance.php`,
+  saveAttendance: `${base_url}/attendance/save_attendance.php`,
+};
+
+const attendanceDateEl = document.getElementById('attendanceDate');
+const shiftSelectEl = document.getElementById('shiftSelect');
+const searchEmployeeEl = document.getElementById('searchEmployee');
+const tableBody = document.getElementById('attendanceTableBody');
+const btnLoadEmployees = document.getElementById('btnLoadEmployees');
+const btnMarkAllPresent = document.getElementById('btnMarkAllPresent');
+const btnSaveAttendance = document.getElementById('btnSaveAttendance');
+const summaryStrip = document.getElementById('summaryStrip');
+
+let employeesData = [];
+attendanceDateEl.value = new Date().toISOString().split('T')[0];
+
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const colors = {
+    success: 'bg-emerald-600 text-white',
+    error: 'bg-rose-600 text-white',
+    info: 'bg-slate-800 text-white',
+  };
+  toast.className = `fixed top-5 right-5 z-50 max-w-sm px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${colors[type] || colors.info}`;
+  toast.textContent = message;
+  toast.classList.remove('hidden');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
+}
+
+
+
+function renderTable() {
+  const query = searchEmployeeEl.value.trim().toLowerCase();
+  const filtered = employeesData.filter(emp => {
+    if (!query) return true;
+    return (
+      (emp.full_name || '').toLowerCase().includes(query) ||
+      String(emp.id).includes(query) ||
+      (emp.designation || '').toLowerCase().includes(query)
+    );
+  });
+
+  if (filtered.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="7" class="px-4 py-12 text-center text-slate-400">No employees found.</td>
+      </tr>`;
+    updateSummary();
+    return;
+  }
+
+  tableBody.innerHTML = filtered.map(emp => `
+    <tr class="hover:bg-slate-50 transition" data-emp-id="${emp.id}">
+      <td class="px-4 py-3 font-medium text-slate-700">#${emp.id}</td>
+      <td class="px-4 py-3 font-semibold text-slate-800">${emp.full_name}</td>
+      <td class="px-4 py-3 text-slate-600">${emp.designation || '-'}</td>
+      <td class="px-4 py-3">
+        <span class="px-2 py-1 rounded-full text-xs font-semibold ${emp.shift === 'Morning' ? 'bg-sky-100 text-sky-700' : 'bg-indigo-100 text-indigo-700'}">${emp.shift}</span>
+      </td>
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-2">
+          <label class="cursor-pointer">
+            <input type="radio" class="status-radio sr-only" name="status_${emp.id}" value="Present" ${emp.status === 'Present' ? 'checked' : ''} onchange="updateStatus(${emp.id}, this.value)">
+            <span class="status-pill-present inline-block px-3 py-1 rounded-full text-xs font-semibold border border-emerald-300 text-emerald-700">Present</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" class="status-radio sr-only" name="status_${emp.id}" value="Absent" ${emp.status === 'Absent' ? 'checked' : ''} onchange="updateStatus(${emp.id}, this.value)">
+            <span class="status-pill-absent inline-block px-3 py-1 rounded-full text-xs font-semibold border border-rose-300 text-rose-700">Absent</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" class="status-radio sr-only" name="status_${emp.id}" value="Leave" ${emp.status === 'Leave' ? 'checked' : ''} onchange="updateStatus(${emp.id}, this.value)">
+            <span class="status-pill-leave inline-block px-3 py-1 rounded-full text-xs font-semibold border border-amber-300 text-amber-700">Leave</span>
+          </label>
+        </div>
+      </td>
+      <td class="px-4 py-3">
+        <input type="text" value="${emp.remarks || ''}" placeholder="Optional remarks..." class="w-full min-w-[160px] rounded-lg border border-slate-300 px-3 py-1.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none" oninput="updateRemarks(${emp.id}, this.value)">
+      </td>
+    </tr>
+  `).join('');
+
+  updateSummary();
+}
+
+function updateStatus(empId, status) {
+  const emp = employeesData.find(e => e.id == empId);
+  if (emp) emp.status = status;
+  updateSummary();
+}
+
+function updateRemarks(empId, remarks) {
+  const emp = employeesData.find(e => e.id == empId);
+  if (emp) emp.remarks = remarks;
+}
+
+function updateSummary() {
+  if (employeesData.length === 0) {
+    summaryStrip.classList.add('hidden');
+    return;
+  }
+  summaryStrip.classList.remove('hidden');
+  document.getElementById('cntTotal').textContent = employeesData.length;
+  document.getElementById('cntPresent').textContent = employeesData.filter(e => e.status === 'Present').length;
+  document.getElementById('cntAbsent').textContent = employeesData.filter(e => e.status === 'Absent').length;
+  document.getElementById('cntLeave').textContent = employeesData.filter(e => e.status === 'Leave').length;
+}
+
+async function loadEmployees() {
+  const shift = shiftSelectEl.value;
+  const date = attendanceDateEl.value;
+
+  if (!date) {
+    showToast('Please select an attendance date.', 'error');
+    return;
+  }
+
+  btnLoadEmployees.disabled = true;
+  btnLoadEmployees.textContent = 'Loading...';
+
+  try {
+    const [empRes, attRes] = await Promise.all([
+      fetch(`${API.employees}?shift=${encodeURIComponent(shift)}`).then(r => r.json()),
+      fetch(`${API.todayAttendance}?date=${encodeURIComponent(date)}&shift=${encodeURIComponent(shift)}`).then(r => r.json()),
+    ]);
+
+    const employees = Array.isArray(empRes) ? empRes : (empRes.data || []);
+    const existingAttendance = (attRes && attRes.success) ? (attRes.data || []) : [];
+
+
+    const attendanceMap = {};
+    existingAttendance.forEach(a => { attendanceMap[a.employee_id] = a; });
+
+    employeesData = employees.map(emp => {
+      const existing = attendanceMap[emp.id];
+      return {
+        ...emp,
+        status: existing ? existing.status : 'Present',
+        remarks: existing ? (existing.remarks || '') : '',
+      };
+    });
+
+    renderTable();
+
+    btnMarkAllPresent.disabled = employeesData.length === 0;
+    btnSaveAttendance.disabled = employeesData.length === 0;
+
+    showToast(`Loaded ${employeesData.length} employee(s) for ${shift} shift.`, 'success');
+  } catch (err) {
+    console.error(err);
+    showToast('Failed to load employees. Check console for details.', 'error');
+  } finally {
+    btnLoadEmployees.disabled = false;
+    btnLoadEmployees.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v6h6M20 20v-6h-6M4 10a8 8 0 0114-4M20 14a8 8 0 01-14 4"/></svg>
+      Load Employees`;
+  }
+}
+
+function markAllPresent() {
+  employeesData.forEach(emp => { emp.status = 'Present'; });
+  renderTable();
+  showToast('All employees marked Present.', 'info');
+}
+
+async function saveAttendance() {
+  
+  if (employeesData.length === 0) {
+    showToast('Load employees before saving attendance.', 'error');
+    return;
+  }
+
+  const date = attendanceDateEl.value;
+  const records = employeesData.map(emp => ({
+    employee_id: emp.id,
+    status: emp.status,
+    remarks: emp.remarks || '',
+  }));
+
+
+  btnSaveAttendance.disabled = true;
+  btnSaveAttendance.textContent = 'Saving...';
+
+  try {
+   const res = await fetch(API.saveAttendance, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    attendance_date: date,
+    records
+  }),
+});
+
+
+const text = await res.text();
+let result;
+
+try {
+    result = JSON.parse(text);
+} catch (e) {
+    alert("Invalid JSON Response");
+    console.log(text);
+    return;
+}
+
+if (result.success) {
+    showToast(result.message, "success");
+} else {
+    showToast(result.message, "error");
+}
+  
+  } catch (err) {
+    console.error(err);
+    showToast('Failed to save attendance. Check console for details.', 'error');
+  } finally {
+    btnSaveAttendance.disabled = false;
+    btnSaveAttendance.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+      Save Attendance`;
+  }
+}
+
+btnLoadEmployees.addEventListener('click', loadEmployees);
+btnMarkAllPresent.addEventListener('click', markAllPresent);
+btnSaveAttendance.addEventListener('click', saveAttendance);
+searchEmployeeEl.addEventListener('input', renderTable);
+shiftSelectEl.addEventListener('change', () => {
+  employeesData = [];
+  renderTable();
+  btnMarkAllPresent.disabled = true;
+  btnSaveAttendance.disabled = true;
+  summaryStrip.classList.add('hidden');
+  tableBody.innerHTML = `<tr><td colspan="7" class="px-4 py-16 text-center text-slate-400">Shift changed. Click "Load Employees" to refresh the list.</td></tr>`;
+});
+</script>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

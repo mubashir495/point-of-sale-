@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Branch Users</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: "class" };
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
+
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark .scrollbar-thin::-webkit-scrollbar-thumb { background: #1e293b; }
+
+    .dropdown-menu.show { display: block !important; }
+
+    .type-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .type-sale { background: #dbeafe; color: #1e40af; }
+    .type-delivery { background: #fef3c7; color: #92400e; }
+    .type-admin { background: #e0e7ff; color: #3730a3; }
+    .dark .type-sale { background: #1e3a5f; color: #93c5fd; }
+    .dark .type-delivery { background: #78350f; color: #fcd34d; }
+    .dark .type-admin { background: #312e81; color: #a5b4fc; }
+  </style>
+    <script src="../js/auth_check.js"></script>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900">
+
+  <!-- Top Navbar -->
+     <!-- Top Navbar -->
+  <header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+  <div class="flex items-center gap-4">
+    <button id="menuToggle" type="button" aria-label="Toggle sidebar" aria-controls="main-sidebar" aria-expanded="false"
+      class="text-white text-xl hover:text-amber-400 transition-colors lg:hidden">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Marking Booster Logo" />
+    <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+  </div>
+  <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+    <i class="fa-regular fa-clock mr-1"></i>
+    <span id="currentDate"></span>
+  </div>
+</header>
+
+<!-- Mobile overlay (click to close sidebar) -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+ <div class="flex">
+<aside
+  id="main-sidebar"
+  aria-label="Primary"
+  class="w-[280px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300
+         flex flex-col justify-between h-[calc(100vh-64px)] overflow-hidden shadow-xl
+         border-r border-slate-800 transition-transform duration-300 ease-in-out z-40
+         -translate-x-full lg:translate-x-0"
+>
+  <!-- Brand block -->
+  <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative shrink-0">
+    <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm overflow-hidden">
+      <img src="../../assets/images/logo.png" class="w-full h-full rounded-full object-cover" alt="Marking Booster Logo" />
+      <button type="button" class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+        <i class="fa-solid fa-camera"></i>
+      </button>
+    </div>
+    <h2 class="mt-3 text-lg font-bold text-white tracking-wide">Marking Booster</h2>
+    <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+  </div>
+ 
+  <!-- Scrollable nav (only this element scrolls; aside itself stays overflow-hidden) -->
+  <nav
+    id="sidebarNav"
+    class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1
+           [&::-webkit-scrollbar]:w-[5px]
+           [&::-webkit-scrollbar-track]:bg-transparent
+           [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded
+           dark:[&::-webkit-scrollbar-thumb]:bg-slate-800"
+  >
+ 
+    <a href="./dashboard.html" data-nav-link
+      class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+      <i class="fa-solid fa-gauge-high text-lg w-5 text-center"></i>
+      <span class="font-medium text-sm">Dashboard</span>
+    </a>
+<!-- Administration -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-administration"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Administration</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-administration" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./employees.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+        <a href="./branch-users.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+        <a href="./parties.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Parties</a>
+        <a href="./area-zones.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+
+      </div>
+    </div>
+ 
+    <!-- Inventory -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-inventory"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-boxes-stacked text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Inventory</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-inventory" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./brands.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Brands</a>
+        <a href="./category.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Categories</a>
+        <a href="./product.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Items</a>
+        <a href="./raw-materials.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Materials</a>
+      </div>
+    </div>
+ 
+    <!-- Billing & Payments -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-billing"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Billing &amp; Payments</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-billing" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./counter-sale.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+
+
+        <a href="./purchase.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Purchase</a>
+        <a href="./party_payment.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Payment</a>
+        <a href="./delete-invoice.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Delete Invoice</a>
+      </div>
+    </div>
+ 
+    <!-- Reports -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-reports"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Reports</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-reports" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./party-invoices-detail.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Invoices Detail</a>
+        <a href="./monthly-sale-repot.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Monthly Sale Report</a>
+        <a href="./invoice-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoices Report</a>
+        <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit</a>
+        <a href="./stock-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+        <a href="./customers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Customers Report</a>
+        <a href="./suppliers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Suppliers Report</a>
+      </div>
+    </div>
+ 
+    <!-- Payroll & Accounts -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-payroll"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-users-viewfinder text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Payroll &amp; Accounts</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-payroll" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./expenses.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Expenses</a>
+        <a href="./accounting-system.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Accounting System</a>
+        <a href="./balance-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Balance Sheet</a>
+        <a href="./generate-salary.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+        <a href="./salary-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+        <a href="./attendance.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+        <a href="./attendance-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance Report</a>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- Bottom controls -->
+  <div class="p-4 border-t border-slate-700/40 space-y-4 shrink-0">
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <i class="fa-solid fa-palette text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-white">Theme</span>
+      </div>
+      <!-- Pure Tailwind switch: peer-checked drives the knob + track color -->
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="theme-toggle" class="sr-only peer" aria-label="Toggle dark theme" />
+        <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white
+                    after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
+                    after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+      </label>
+    </div>
+    <button id="logoutBtn" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+      <i class="fa-solid fa-power-off text-sm"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
+
+    <!-- Main Content -->
+    <main class="w-full px-4 py-5">
+      <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm">
+        <div class="flex flex-wrap justify-between items-center gap-4 p-5">
+          <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+            <i class="fa-solid fa-building text-blue-600 dark:text-blue-400"></i> Branch Management
+          </h2>
+          <button onclick="openBranchModal()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1">
+            <i class="fa-solid fa-plus"></i> Add / Manage Branch
+          </button>
+        </div>
+
+        <div class="px-5 pb-5 border-t dark:border-gray-700 pt-5">
+          <div class="overflow-x-auto">
+            <table class="w-full border dark:border-gray-700 text-sm">
+              <thead class="bg-gray-50 dark:bg-gray-700 dark:text-white">
+                <tr>
+                  <th class="border dark:border-gray-600 px-3 py-2 text-left">Branch Name</th>
+                  <th class="border dark:border-gray-600 px-3 py-2 text-left">Branch Manager</th>
+                  <th class="border dark:border-gray-600 px-3 py-2 text-left">Details</th>
+                  <th class="border dark:border-gray-600 px-3 py-2 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="branchesTbody" class="dark:text-gray-300"></tbody>
+            </table>
+          </div>
+
+          <div class="mt-5 border-t dark:border-gray-700 pt-4">
+            <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Overall Branch Summary</h3>
+            <div class="flex flex-wrap gap-6 text-sm">
+              <div class="text-gray-600 dark:text-gray-300">Total Workers: <span id="summaryTotalWorkers" class="font-semibold text-gray-800 dark:text-gray-100">—</span></div>
+              <div class="text-gray-600 dark:text-gray-300">Currently Working: <span id="summaryCurrentlyWorking" class="font-semibold text-green-600 dark:text-green-400">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== MODALS ===== -->
+  <!-- Add/Edit User Modal -->
+  <!-- Add/Edit Branch Modal (unified: branch details + employees in this branch) -->
+  <div id="branchModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm z-10 rounded-t-xl">
+        <h3 id="branchModalTitle" class="text-lg font-semibold text-gray-800 dark:text-gray-200"><i class="fa-solid fa-building mr-2"></i>Add Branch</h3>
+        <button onclick="closeBranchModal()" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">&times;</button>
+      </div>
+      <div class="p-6 space-y-5">
+        <input type="hidden" id="branchId" />
+
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Branch Name</label>
+          <input id="branchNameInput" type="text" autocomplete="off" placeholder="Start typing... existing branches will suggest" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+          <div id="branchSuggestions" class="hidden absolute z-20 mt-1 w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto"></div>
+          <p id="branchModeHint" class="text-xs text-gray-400 mt-1">Creating a new branch.</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Branch Manager</label>
+            <select id="branchManagerSelect" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+              <option value="">-- Select Manager (optional) --</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Address <span class="text-xs text-gray-400">(optional)</span></label>
+            <input id="branchAddressInput" type="text" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+          </div>
+        </div>
+
+        <div id="branchEmployeesSection" class="hidden border-t border-gray-100 dark:border-gray-700 pt-4 space-y-3">
+          <h4 class="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"><i class="fa-solid fa-people-group"></i> Employees in this Branch</h4>
+
+          <div id="branchEmployeesList" class="border dark:border-gray-600 rounded-lg divide-y dark:divide-gray-600 max-h-48 overflow-y-auto bg-gray-50 dark:bg-gray-700/50">
+            <p class="text-gray-400 text-xs p-3">No employees yet.</p>
+          </div>
+
+          <div class="flex flex-wrap items-end gap-2">
+            <div class="flex-1 min-w-[140px]">
+              <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Designation</label>
+              <select id="addByDesignationSelect" onchange="loadAvailableEmployeesForDesignation()" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                <option value="">-- Select Designation --</option>
+              </select>
+            </div>
+            <div class="flex-1 min-w-[140px]">
+              <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Employee</label>
+              <select id="addEmployeeSelect" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                <option value="">-- Select Designation first --</option>
+              </select>
+            </div>
+            <button type="button" onclick="addEmployeeToBranch()" class="bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium px-3 py-2 rounded-lg whitespace-nowrap">
+              <i class="fa-solid fa-plus mr-1"></i>Add
+            </button>
+          </div>
+
+          <button type="button" onclick="toggleQuickAddEmployee()" class="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-1">
+            <i class="fa-solid fa-user-plus"></i> Add New Employee
+          </button>
+
+          <div id="quickAddEmployeeForm" class="hidden border dark:border-gray-600 rounded-lg p-3 space-y-2 bg-gray-50 dark:bg-gray-700/50">
+            <div class="grid grid-cols-2 gap-2">
+              <input id="qaFullName" type="text" placeholder="Full Name" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+              <input id="qaDesignation" type="text" placeholder="Designation e.g. Delivery Boy" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <input id="qaContact" type="text" placeholder="Contact (optional)" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+              <select id="qaShift" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                <option value="Morning">Morning</option>
+                <option value="Evening">Evening</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <input id="qaUsername" type="text" placeholder="Username (optional - for login)" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+              <input id="qaPassword" type="text" placeholder="Password" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+            </div>
+            <button type="button" onclick="saveQuickAddEmployee()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 rounded-lg">Save Employee &amp; Add to Branch</button>
+          </div>
+        </div>
+
+        <div id="branchAreasSection" class="border-t border-gray-100 dark:border-gray-700 pt-4 space-y-3">
+          <h4 class="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"><i class="fa-regular fa-map"></i> Areas in this Branch</h4>
+
+          <div id="branchAreasList" class="border dark:border-gray-600 rounded-lg divide-y dark:divide-gray-600 max-h-40 overflow-y-auto bg-gray-50 dark:bg-gray-700/50">
+            <p class="text-gray-400 text-xs p-3">No areas yet.</p>
+          </div>
+
+          <div class="flex flex-wrap items-end gap-2">
+            <div class="flex-1 min-w-[140px]">
+              <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">City</label>
+              <select id="addByCitySelect" onchange="loadAvailableAreasForCity()" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                <option value="">-- Select City --</option>
+              </select>
+            </div>
+            <div class="flex-1 min-w-[140px]">
+              <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Area</label>
+              <select id="addAreaSelect" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                <option value="">-- Select City first --</option>
+              </select>
+            </div>
+            <button type="button" onclick="addAreaToBranch()" class="bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium px-3 py-2 rounded-lg whitespace-nowrap">
+              <i class="fa-solid fa-plus mr-1"></i>Add
+            </button>
+          </div>
+
+          <button type="button" onclick="toggleQuickAddArea()" class="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-1">
+            <i class="fa-solid fa-map-location-dot"></i> Add New Area
+          </button>
+
+          <div id="quickAddAreaForm" class="hidden border dark:border-gray-600 rounded-lg p-3 space-y-2 bg-gray-50 dark:bg-gray-700/50">
+            <div class="grid grid-cols-2 gap-2">
+              <select id="qaAreaCity" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                <option value="">-- Select City --</option>
+              </select>
+              <input id="qaAreaName" type="text" placeholder="Area Name" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+            </div>
+            <button type="button" onclick="saveQuickAddArea()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 rounded-lg">Save Area &amp; Add to Branch</button>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-100 dark:border-gray-700 px-6 py-4 flex justify-end gap-3 sticky bottom-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
+        <button onclick="closeBranchModal()" class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">Cancel</button>
+        <button onclick="saveBranch()" class="px-6 py-2.5 text-sm font-medium text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Areas Modal -->
+  <div id="areasModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm z-10 rounded-t-xl">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200" id="areasModalTitle"><i class="fa-regular fa-map mr-2"></i>Branch Areas</h3>
+        <button onclick="closeModal('areasModal')" class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none">&times;</button>
+      </div>
+      <div id="areasModalBody" class="p-6 scrollbar-thin space-y-2"></div>
+      <div class="border-t border-gray-100 dark:border-gray-700 px-6 py-4 flex justify-end">
+        <button onclick="closeModal('areasModal')" class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Parties Modal -->
+  <div id="partiesModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm z-10 rounded-t-xl">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200" id="partiesModalTitle"><i class="fa-regular fa-address-card mr-2"></i>Branch Parties</h3>
+        <button onclick="closeModal('partiesModal')" class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none">&times;</button>
+      </div>
+      <div id="partiesModalBody" class="p-6 scrollbar-thin space-y-2"></div>
+      <div class="border-t border-gray-100 dark:border-gray-700 px-6 py-4 flex justify-end">
+        <button onclick="closeModal('partiesModal')" class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">Close</button>
+      </div>
+    </div>
+  </div>
+<script src="../js/sidebar.js"></script>
+<script>
+  // -----------------------------------------------------------
+  // CONFIG & STATE
+  // -----------------------------------------------------------
+  const API_BASE = '../../action';
+
+  document.getElementById('currentDate').textContent =
+    new Date().toLocaleDateString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric" });
+
+  let allAreas = [];
+  let allParties = [];
+  let allBranches = [];
+  let selectedAreaIds = new Set();
+  let selectedPartyIds = new Set();
+
+  // -----------------------------------------------------------
+  // UTILITY: safeFetchJson
+  // -----------------------------------------------------------
+  async function safeFetchJson(url, opts) {
+    try {
+      const res = await fetch(url, opts);
+      const text = await res.text();
+      console.log('RAW response from', url, '(status ' + res.status + ') ->', text);
+      if (!text) return { success: false, message: `Empty response from ${url}` };
+      try { return JSON.parse(text); } catch (e) {
+        return { success: false, message: `Invalid JSON: ${text.slice(0, 300)}` };
+      }
+    } catch (err) {
+      return { success: false, message: `Request failed: ${err.message}` };
+    }
+  }
+
+  // -----------------------------------------------------------
+  // LOAD USERS
+  // -----------------------------------------------------------
+  function typeBadgeClass(type) {
+    const t = (type || '').toLowerCase();
+    if (t === 'sale') return 'type-sale';
+    if (t === 'delivery boy') return 'type-delivery';
+    if (t === 'admin') return 'type-admin';
+    return 'type-sale';
+  }
+
+  async function loadBranchesTable() {
+    const tbody = document.getElementById('branchesTbody');
+    await loadBranchOptions();
+    tbody.innerHTML = '';
+
+    if (!allBranches.length) {
+      tbody.innerHTML = `<tr><td colspan="4" class="border dark:border-gray-700 text-center text-gray-400 py-6">No branches yet.</td></tr>`;
+    } else {
+      allBranches.forEach(b => {
+        tbody.innerHTML += `
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors align-top">
+            <td class="border dark:border-gray-700 px-3 py-3 font-semibold text-gray-800 dark:text-gray-200"><i class="fa-solid fa-building text-blue-500 mr-1"></i>${b.branch_name}</td>
+            <td class="border dark:border-gray-700 px-3 py-3 text-gray-600 dark:text-gray-300">${b.manager_name ? b.manager_name : '<span class="text-gray-400 italic">No manager assigned</span>'}</td>
+            <td class="border dark:border-gray-700 px-3 py-3 text-gray-600 dark:text-gray-300 text-xs leading-relaxed">
+              <div>Address: ${b.address || '—'}</div>
+              <div>Phone: ${b.phone || '—'}</div>
+              <div>Employees: ${b.employee_count ?? 0}</div>
+              <div>Areas: ${b.area_count ?? 0}</div>
+            </td>
+            <td class="border dark:border-gray-700 px-3 py-3">
+              <div class="flex justify-end gap-2 flex-wrap">
+                <button onclick="viewBranchAreas(${b.id}, '${escapeQ(b.branch_name)}')" class="text-cyan-600 dark:text-cyan-400 border border-cyan-600 dark:border-cyan-500 text-xs px-3 py-1.5 rounded-lg hover:bg-cyan-50 dark:hover:bg-cyan-900/20 flex items-center gap-1"><i class="fa-regular fa-map"></i> Areas</button>
+                <button onclick="viewBranchParties(${b.id}, '${escapeQ(b.branch_name)}')" class="text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-500 text-xs px-3 py-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 flex items-center gap-1"><i class="fa-regular fa-address-card"></i> Parties</button>
+                <button onclick="openBranchModal(${b.id})" class="text-yellow-600 dark:text-yellow-400 border border-yellow-500 px-2.5 py-1.5 rounded-lg hover:bg-yellow-50 dark:hover:bg-yellow-900/20"><i class="fa-regular fa-pen-to-square"></i></button>
+                <button onclick="deleteBranch(${b.id}, '${escapeQ(b.branch_name)}')" class="text-red-600 dark:text-red-400 border border-red-500 px-2.5 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"><i class="fa-regular fa-trash-can"></i></button>
+              </div>
+            </td>
+          </tr>`;
+      });
+    }
+
+    loadOverallSummary();
+  }
+
+  async function loadOverallSummary() {
+    const json = await safeFetchJson(`${API_BASE}/branches/get-branch-summary.php`);
+    if (json.success) {
+      document.getElementById('summaryTotalWorkers').textContent = json.data.total_workers;
+      document.getElementById('summaryCurrentlyWorking').textContent = json.data.currently_working;
+    }
+  }
+
+  async function deleteBranch(id, name) {
+    if (!confirm(`Delete branch "${name}"? This can't be undone.`)) return;
+    const json = await safeFetchJson(`${API_BASE}/branches/delete-branch.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    if (json.success) loadBranchesTable(); else alert(json.message || 'Delete failed.');
+  }
+
+  function escapeQ(s) { return String(s).replace(/'/g, "\\'"); }
+
+  // -----------------------------------------------------------
+  // MODAL CONTROLS
+  // -----------------------------------------------------------
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  // -----------------------------------------------------------
+  // BRANCH LIST (used by the filter dropdown + name autocomplete)
+  // -----------------------------------------------------------
+  async function loadBranchOptions() {
+    const json = await safeFetchJson(`${API_BASE}/branches/get-branches.php`);
+    if (!json.success || !Array.isArray(json.data)) return;
+    allBranches = json.data;
+  }
+
+  // -----------------------------------------------------------
+  // ADD / EDIT BRANCH (unified: details + employees in this branch)
+  // -----------------------------------------------------------
+  let currentBranchId = null;
+
+  async function loadCityOptions() {
+    const res = await fetch(`${API_BASE}/cities/get_cities.php`);
+    const cities = await res.json();
+    const list = Array.isArray(cities) ? cities : [];
+    const opts = `<option value="">-- Select City --</option>` +
+      list.map(c => `<option value="${c.id}">${c.city_name}</option>`).join('');
+    document.getElementById('addByCitySelect').innerHTML = opts;
+    document.getElementById('qaAreaCity').innerHTML = opts;
+    document.getElementById('addAreaSelect').innerHTML = `<option value="">-- Select City first --</option>`;
+  }
+
+  async function loadAvailableAreasForCity() {
+    const cityId = document.getElementById('addByCitySelect').value;
+    const sel = document.getElementById('addAreaSelect');
+    if (!cityId) {
+      sel.innerHTML = `<option value="">-- Select City first --</option>`;
+      return;
+    }
+    sel.innerHTML = `<option value="">-- Loading... --</option>`;
+    const json = await safeFetchJson(`${API_BASE}/branches/get-available-areas.php?city_id=${cityId}`);
+    if (json.success && Array.isArray(json.data) && json.data.length) {
+      sel.innerHTML = json.data.map(a => `<option value="${a.id}">${a.area_name}</option>`).join('');
+    } else {
+      sel.innerHTML = `<option value="">-- No available areas in this city --</option>`;
+    }
+  }
+
+  async function loadBranchAreas(branchId) {
+    const box = document.getElementById('branchAreasList');
+    box.innerHTML = `<p class="text-gray-400 text-xs p-3">Loading...</p>`;
+    const json = await safeFetchJson(`${API_BASE}/branches/get-branch-areas.php?branch_id=${branchId}`);
+    const rows = (json.success && Array.isArray(json.data)) ? json.data : [];
+    box.innerHTML = rows.length ? rows.map(a => `
+      <div class="flex items-center justify-between px-3 py-2 text-sm">
+        <span class="text-gray-700 dark:text-gray-200">${a.area_name}
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200">${a.city_name || '—'}</span>
+        </span>
+        <button onclick="removeAreaFromBranch(${a.id})" class="text-red-500 hover:text-red-700 text-xs"><i class="fa-regular fa-circle-xmark"></i> Remove</button>
+      </div>`).join('') : `<p class="text-gray-400 text-xs p-3">No areas yet.</p>`;
+  }
+
+  async function addAreaToBranch() {
+    const areaId = document.getElementById('addAreaSelect').value;
+    if (!areaId) { alert('Select an area to add.'); return; }
+    const branchId = await ensureBranchSaved();
+    if (!branchId) return;
+    const json = await safeFetchJson(`${API_BASE}/branches/assign-area.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ area_id: areaId, branch_id: branchId }),
+    });
+    if (json.success) {
+      await loadBranchAreas(branchId);
+      await loadAvailableAreasForCity();
+    } else {
+      alert(json.message || 'Failed to add area.');
+    }
+  }
+
+  async function removeAreaFromBranch(areaId) {
+    if (!confirm('Remove this area from the branch?')) return;
+    const json = await safeFetchJson(`${API_BASE}/branches/remove-area.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ area_id: areaId }),
+    });
+    if (json.success) {
+      await loadBranchAreas(currentBranchId);
+      await loadAvailableAreasForCity();
+    } else {
+      alert(json.message || 'Failed to remove area.');
+    }
+  }
+
+  function toggleQuickAddArea() {
+    document.getElementById('quickAddAreaForm').classList.toggle('hidden');
+  }
+
+  async function saveQuickAddArea() {
+    const cityId = document.getElementById('qaAreaCity').value;
+    const areaName = document.getElementById('qaAreaName').value.trim();
+    if (!cityId || !areaName) { alert('City and area name are required.'); return; }
+    const branchId = await ensureBranchSaved();
+    if (!branchId) return;
+
+    const json = await safeFetchJson(`${API_BASE}/area-zone/create-area.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ city_id: cityId, area_name: areaName, branch_id: branchId }),
+    });
+    if (json.status) {
+      document.getElementById('qaAreaName').value = '';
+      document.getElementById('quickAddAreaForm').classList.add('hidden');
+      await loadBranchAreas(branchId);
+    } else {
+      alert(json.message || 'Failed to add area.');
+    }
+  }
+
+  async function openBranchModal(id = null) {
+    currentBranchId = id;
+    document.getElementById('branchModalTitle').innerHTML = id
+      ? '<i class="fa-solid fa-building mr-2"></i>Edit Branch'
+      : '<i class="fa-solid fa-building mr-2"></i>Add Branch';
+    document.getElementById('branchId').value = id || '';
+    document.getElementById('branchNameInput').value = '';
+    document.getElementById('branchAddressInput').value = '';
+    document.getElementById('branchModeHint').textContent = id ? '' : 'Creating a new branch.';
+    document.getElementById('branchSuggestions').classList.add('hidden');
+    document.getElementById('quickAddEmployeeForm').classList.add('hidden');
+    document.getElementById('quickAddAreaForm').classList.add('hidden');
+    document.getElementById('branchEmployeesSection').classList.remove('hidden');
+
+    await loadBranchOptions();
+    await loadManagerOptions();
+    await loadDesignationOptions();
+    await loadCityOptions();
+
+    if (id) {
+      const branch = allBranches.find(b => String(b.id) === String(id));
+      if (branch) {
+        document.getElementById('branchNameInput').value = branch.branch_name;
+        document.getElementById('branchAddressInput').value = branch.address || '';
+        document.getElementById('branchManagerSelect').value = branch.manager_id || '';
+      }
+      await loadBranchEmployees(id);
+      await loadBranchAreas(id);
+    } else {
+      document.getElementById('branchEmployeesList').innerHTML = '<p class="text-gray-400 text-xs p-3">No employees yet - add one below (the branch will be saved automatically).</p>';
+      document.getElementById('branchAreasList').innerHTML = '<p class="text-gray-400 text-xs p-3">No areas yet - add one below (the branch will be saved automatically).</p>';
+    }
+
+    const modal = document.getElementById('branchModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closeBranchModal() {
+    const modal = document.getElementById('branchModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    currentBranchId = null;
+  }
+
+  async function loadManagerOptions() {
+    const mgrSel = document.getElementById('branchManagerSelect');
+    mgrSel.innerHTML = `<option value="">-- Loading... --</option>`;
+    const json = await safeFetchJson(`${API_BASE}/branches/get-available-employees.php?designation=${encodeURIComponent('Branch Manager')}`);
+    if (json.success && Array.isArray(json.data) && json.data.length) {
+      mgrSel.innerHTML = `<option value="">-- Select Manager (optional) --</option>` +
+        json.data.map(e => `<option value="${e.id}">${e.full_name}</option>`).join('');
+    } else {
+      mgrSel.innerHTML = `<option value="">-- No available Branch Managers --</option>`;
+    }
+  }
+
+  async function loadDesignationOptions() {
+    const sel = document.getElementById('addByDesignationSelect');
+    const json = await safeFetchJson(`${API_BASE}/branches/get-employee-designations.php`);
+    if (json.success && Array.isArray(json.data)) {
+      sel.innerHTML = `<option value="">-- Select Designation --</option>` +
+        json.data.map(d => `<option value="${escapeQ(d)}">${d}</option>`).join('');
+    } else {
+      sel.innerHTML = `<option value="">-- failed to load --</option>`;
+    }
+    document.getElementById('addEmployeeSelect').innerHTML = `<option value="">-- Select Designation first --</option>`;
+  }
+
+  async function loadAvailableEmployeesForDesignation() {
+    const designation = document.getElementById('addByDesignationSelect').value;
+    const sel = document.getElementById('addEmployeeSelect');
+    if (!designation) {
+      sel.innerHTML = `<option value="">-- Select Designation first --</option>`;
+      return;
+    }
+    sel.innerHTML = `<option value="">-- Loading... --</option>`;
+    const json = await safeFetchJson(`${API_BASE}/branches/get-available-employees.php?designation=${encodeURIComponent(designation)}`);
+    if (json.success && Array.isArray(json.data) && json.data.length) {
+      sel.innerHTML = json.data.map(e => `<option value="${e.id}">${e.full_name}</option>`).join('');
+    } else {
+      sel.innerHTML = `<option value="">-- No available employees for this designation --</option>`;
+    }
+  }
+
+  async function loadBranchEmployees(branchId) {
+    const box = document.getElementById('branchEmployeesList');
+    box.innerHTML = `<p class="text-gray-400 text-xs p-3">Loading...</p>`;
+    const json = await safeFetchJson(`${API_BASE}/branches/get-branch-employees.php?branch_id=${branchId}`);
+    const rows = (json.success && Array.isArray(json.data)) ? json.data : [];
+    box.innerHTML = rows.length ? rows.map(e => `
+      <div class="flex items-center justify-between px-3 py-2 text-sm">
+        <span class="text-gray-700 dark:text-gray-200">${e.full_name}
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200">${e.designation || '—'}</span>
+        </span>
+        <button onclick="removeEmployeeFromBranch(${e.id})" class="text-red-500 hover:text-red-700 text-xs"><i class="fa-regular fa-circle-xmark"></i> Remove</button>
+      </div>`).join('') : `<p class="text-gray-400 text-xs p-3">No employees yet.</p>`;
+  }
+
+  // Saves the branch (create or update) if it hasn't been saved yet,
+  // and returns its id. Used so "Add Employee" / "Add New Employee"
+  // work even before the user has clicked the main Save button.
+  async function ensureBranchSaved() {
+    if (currentBranchId) return currentBranchId;
+
+    const name = document.getElementById('branchNameInput').value.trim();
+    if (!name) { alert('Branch name is required before adding employees.'); return null; }
+
+    const payload = {
+      id: null,
+      branch_name: name,
+      manager_id: document.getElementById('branchManagerSelect').value || null,
+      address: document.getElementById('branchAddressInput').value.trim(),
+    };
+    const json = await safeFetchJson(`${API_BASE}/branches/add-branch.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!json.success) { alert(json.message || 'Failed to save branch.'); return null; }
+
+    currentBranchId = json.id;
+    document.getElementById('branchId').value = json.id;
+    document.getElementById('branchModalTitle').innerHTML = '<i class="fa-solid fa-building mr-2"></i>Edit Branch';
+    document.getElementById('branchModeHint').textContent = '';
+    document.getElementById('branchEmployeesSection').classList.remove('hidden');
+    await loadBranchOptions();
+    return currentBranchId;
+  }
+
+  async function addEmployeeToBranch() {
+    const employeeId = document.getElementById('addEmployeeSelect').value;
+    if (!employeeId) { alert('Select an employee to add.'); return; }
+    const branchId = await ensureBranchSaved();
+    if (!branchId) return;
+    const json = await safeFetchJson(`${API_BASE}/branches/assign-employee.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ employee_id: employeeId, branch_id: branchId }),
+    });
+    if (json.success) {
+      await loadBranchEmployees(branchId);
+      await loadAvailableEmployeesForDesignation();
+      await loadBranchOptions();
+    } else {
+      alert(json.message || 'Failed to add employee.');
+    }
+  }
+
+  async function removeEmployeeFromBranch(employeeId) {
+    if (!confirm('Remove this employee from the branch?')) return;
+    const json = await safeFetchJson(`${API_BASE}/branches/remove-employee.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ employee_id: employeeId }),
+    });
+    if (json.success) {
+      await loadBranchEmployees(currentBranchId);
+      await loadAvailableEmployeesForDesignation();
+      await loadBranchOptions();
+    } else {
+      alert(json.message || 'Failed to remove employee.');
+    }
+  }
+
+  function toggleQuickAddEmployee() {
+    document.getElementById('quickAddEmployeeForm').classList.toggle('hidden');
+  }
+
+  async function saveQuickAddEmployee() {
+    const fullName = document.getElementById('qaFullName').value.trim();
+    const designation = document.getElementById('qaDesignation').value.trim();
+    if (!fullName || !designation) { alert('Full name and designation are required.'); return; }
+    const branchId = await ensureBranchSaved();
+    if (!branchId) return;
+
+    const fd = new FormData();
+    fd.append('full_name', fullName);
+    fd.append('designation', designation);
+    fd.append('contact', document.getElementById('qaContact').value.trim());
+    fd.append('shift', document.getElementById('qaShift').value);
+    fd.append('username', document.getElementById('qaUsername').value.trim());
+    fd.append('password', document.getElementById('qaPassword').value);
+    fd.append('branch_id', branchId);
+
+    const res = await fetch(`${API_BASE}/employees/add_employee.php`, { method: 'POST', body: fd });
+    const json = await res.json();
+    if (json.status) {
+      document.getElementById('qaFullName').value = '';
+      document.getElementById('qaDesignation').value = '';
+      document.getElementById('qaContact').value = '';
+      document.getElementById('qaUsername').value = '';
+      document.getElementById('qaPassword').value = '';
+      document.getElementById('quickAddEmployeeForm').classList.add('hidden');
+      await loadBranchEmployees(branchId);
+      await loadDesignationOptions();
+      await loadBranchOptions();
+    } else {
+      alert(json.message || 'Failed to add employee.');
+    }
+  }
+
+  async function saveBranch() {
+    const name = document.getElementById('branchNameInput').value.trim();
+    if (!name) { alert('Branch name is required.'); return; }
+
+    const payload = {
+      id: document.getElementById('branchId').value || null,
+      branch_name: name,
+      manager_id: document.getElementById('branchManagerSelect').value || null,
+      address: document.getElementById('branchAddressInput').value.trim(),
+    };
+
+    const json = await safeFetchJson(`${API_BASE}/branches/add-branch.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (json.success) {
+      loadBranchesTable();
+      alert('Branch "' + name + '" saved successfully.');
+      closeBranchModal();
+    } else {
+      alert('Save failed: ' + (json.message || 'unknown error'));
+    }
+  }
+
+  // Branch-name autocomplete: filters the already-loaded branch list
+  // client-side and lets picking a suggestion switch straight into
+  // edit mode for that branch.
+  const branchNameInputEl = document.getElementById('branchNameInput');
+  branchNameInputEl.addEventListener('input', () => {
+    const q = branchNameInputEl.value.trim().toLowerCase();
+    const box = document.getElementById('branchSuggestions');
+    if (!q) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+    const matches = allBranches.filter(b => b.branch_name.toLowerCase().includes(q));
+    if (!matches.length) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+    box.innerHTML = matches.map(b => `
+      <button type="button" onclick="pickBranchSuggestion(${b.id})" class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center justify-between">
+        <span>${b.branch_name}</span>
+        <span class="text-xs text-gray-400">${b.employee_count ?? 0} employees</span>
+      </button>`).join('');
+    box.classList.remove('hidden');
+  });
+  document.addEventListener('click', (e) => {
+    const box = document.getElementById('branchSuggestions');
+    if (box && !box.contains(e.target) && e.target !== branchNameInputEl) box.classList.add('hidden');
+  });
+
+  async function pickBranchSuggestion(id) {
+    document.getElementById('branchSuggestions').classList.add('hidden');
+    await openBranchModal(id);
+  }
+
+  // -----------------------------------------------------------
+  // VIEW AREAS / PARTIES (modals) - branch-scoped
+  // -----------------------------------------------------------
+  async function viewBranchAreas(branchId, branchName) {
+    document.getElementById('areasModalTitle').innerHTML = `<i class="fa-regular fa-map mr-2"></i>Areas: ${branchName}`;
+    openModal('areasModal');
+    const body = document.getElementById('areasModalBody');
+    body.innerHTML = '<p class="text-gray-400 text-center py-6">Loading...</p>';
+    const json = await safeFetchJson(`${API_BASE}/branches/get-branch-areas.php?branch_id=${branchId}`);
+    if (!json.success) { body.innerHTML = `<div class="text-center text-red-500 py-10">${json.message || 'Error'}</div>`; return; }
+    const rows = json.data || [];
+    body.innerHTML = rows.length ? rows.map(a => `
+      <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg px-4 py-2 border dark:border-gray-600">
+        <span class="text-gray-700 dark:text-gray-200"><i class="fa-regular fa-map text-cyan-500 mr-2"></i>${a.area_name}${a.city_name ? ` <span class="text-gray-400 text-xs">(${a.city_name})</span>` : ''}</span>
+        <button onclick="unlinkBranchArea(${branchId}, ${a.id}, '${escapeQ(branchName)}')" class="text-red-500 hover:text-red-700"><i class="fa-regular fa-circle-xmark"></i></button>
+      </div>`).join('') : `<div class="text-center text-gray-400 py-10">No areas assigned. Use Edit to add some.</div>`;
+  }
+
+  async function unlinkBranchArea(branchId, areaId, branchName) {
+    await safeFetchJson(`${API_BASE}/branches/remove-area.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ area_id: areaId }),
+    });
+    viewBranchAreas(branchId, branchName);
+    loadBranchesTable();
+  }
+
+  async function viewBranchParties(branchId, branchName) {
+    document.getElementById('partiesModalTitle').innerHTML = `<i class="fa-regular fa-address-card mr-2"></i>Parties: ${branchName}`;
+    openModal('partiesModal');
+    const body = document.getElementById('partiesModalBody');
+    body.innerHTML = '<p class="text-gray-400 text-center py-6">Loading...</p>';
+    const res = await fetch(`${API_BASE}/customers/get_customers.php?branch_id=${branchId}`);
+    const json = await res.json();
+    const rows = (json.status && Array.isArray(json.data)) ? json.data : [];
+    body.innerHTML = rows.length ? rows.map(p => `
+      <div class="flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 rounded-lg px-4 py-2 border dark:border-gray-600">
+        <span class="text-gray-700 dark:text-gray-200"><i class="fa-regular fa-address-card text-blue-500 mr-2"></i>${p.name}${p.phone ? ` <span class="text-gray-400 text-xs">(${p.phone})</span>` : ''}</span>
+      </div>`).join('') : `<div class="text-center text-gray-400 py-10">No customers in this branch yet.</div>`;
+  }
+
+  // -----------------------------------------------------------
+  // DEBOUNCE, SIDEBAR TOGGLE, THEME TOGGLE
+  // -----------------------------------------------------------
+  function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+  const menuToggle = document.getElementById("menuToggle");
+  const mainSidebar = document.getElementById("main-sidebar");
+  if (menuToggle && mainSidebar) {
+    menuToggle.addEventListener("click", () => {
+      mainSidebar.classList.toggle("w-0");
+      mainSidebar.classList.toggle("opacity-0");
+      mainSidebar.classList.toggle("w-[320px]");
+      mainSidebar.classList.toggle("opacity-100");
+    });
+  }
+
+  const themeToggle = document.getElementById("theme-toggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("change", function () {
+      document.documentElement.classList.toggle("dark");
+    });
+  }
+
+  // dropdown toggle (administration)
+  document.querySelector('.dropdown-toggle')?.addEventListener('click', function () {
+    this.nextElementSibling.classList.toggle('show');
+  });
+
+  // initial load
+  loadBranchesTable();
+</script>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

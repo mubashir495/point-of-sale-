@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MARKING BOOSTER - Cities</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script src="../js/sidebar.js"></script>
+    <style>
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #1e293b;
+      }
+      .stat-card {
+        border-left: 4px solid;
+      }
+      .stat-blue {
+        border-color: #3b82f6;
+      }
+      .stat-green {
+        border-color: #22c55e;
+      }
+      .modal-wrap {
+        display: none;
+      }
+      .modal-wrap.open {
+        display: flex;
+      }
+      .dropdown-menu.show {
+        display: block !important;
+      }
+    </style>
+      <script src="../js/auth_check.js"></script>
+</head>
+  <body class="bg-slate-100 dark:bg-slate-900  w-full h-screen ">
+    
+
+
+<header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+  <div class="flex items-center gap-4">
+    <button id="menuToggle" type="button" aria-label="Toggle sidebar" aria-controls="main-sidebar" aria-expanded="false"
+      class="text-white text-xl hover:text-amber-400 transition-colors lg:hidden">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Marking Booster Logo" />
+    <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+  </div>
+  <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+    <i class="fa-regular fa-clock mr-1"></i>
+    <span id="currentDate"></span>
+  </div>
+</header>
+
+<!-- Mobile overlay (click to close sidebar) -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+ 
+<aside
+  id="main-sidebar"
+  aria-label="Primary"
+  class="w-[280px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300
+         flex flex-col justify-between h-[calc(100vh-64px)] overflow-hidden shadow-xl
+         border-r border-slate-800 transition-transform duration-300 ease-in-out z-40
+         -translate-x-full lg:translate-x-0"
+>
+  <!-- Brand block -->
+  <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative shrink-0">
+    <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm overflow-hidden">
+      <img src="../../assets/images/logo.png" class="w-full h-full rounded-full object-cover" alt="Marking Booster Logo" />
+      <button type="button" class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+        <i class="fa-solid fa-camera"></i>
+      </button>
+    </div>
+    <h2 class="mt-3 text-lg font-bold text-white tracking-wide">Marking Booster</h2>
+    <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+  </div>
+ 
+  <!-- Scrollable nav (only this element scrolls; aside itself stays overflow-hidden) -->
+  <nav
+    id="sidebarNav"
+    class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1
+           [&::-webkit-scrollbar]:w-[5px]
+           [&::-webkit-scrollbar-track]:bg-transparent
+           [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded
+           dark:[&::-webkit-scrollbar-thumb]:bg-slate-800"
+  >
+ 
+    <a href="./dashboard.html" data-nav-link
+      class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+      <i class="fa-solid fa-gauge-high text-lg w-5 text-center"></i>
+      <span class="font-medium text-sm">Dashboard</span>
+    </a>
+<!-- Administration -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-administration"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Administration</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-administration" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./employees.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+        <a href="./cities.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+        <a href="./parties.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Parties</a>
+        <a href="./area-zones.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+
+      </div>
+    </div>
+ 
+    <!-- Inventory -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-inventory"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-boxes-stacked text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Inventory</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-inventory" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./brands.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Brands</a>
+        <a href="./category.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Categories</a>
+        <a href="./product.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Items</a>
+        <a href="./raw-materials.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Materials</a>
+      </div>
+    </div>
+ 
+    <!-- Billing & Payments -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-billing"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Billing &amp; Payments</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-billing" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./counter-sale.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+
+        <a href="./orders.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Orders</a>
+        <a href="./purchase.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Purchase</a>
+        <a href="./party_payment.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Payment</a>
+        <a href="./delete-invoice.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Delete Invoice</a>
+      </div>
+    </div>
+ 
+    <!-- Reports -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-reports"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Reports</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-reports" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./party-invoices-detail.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Invoices Detail</a>
+        <a href="./monthly-sale-repot.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Monthly Sale Report</a>
+        <a href="./invoice-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoices Report</a>
+        <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit</a>
+        <a href="./stock-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+        <a href="./customers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Customers Report</a>
+        <a href="./suppliers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Suppliers Report</a>
+      </div>
+    </div>
+ 
+    <!-- Payroll & Accounts -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-payroll"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-users-viewfinder text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Payroll &amp; Accounts</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-payroll" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./expenses.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Expenses</a>
+        <a href="./accounting-system.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Accounting System</a>
+        <a href="./balance-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Balance Sheet</a>
+        <a href="./generate-salary.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+        <a href="./salary-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+        <a href="./attendance.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+        <a href="./attendance-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance Report</a>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- Bottom controls -->
+  <div class="p-4 border-t border-slate-700/40 space-y-4 shrink-0">
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <i class="fa-solid fa-palette text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-white">Theme</span>
+      </div>
+      <!-- Pure Tailwind switch: peer-checked drives the knob + track color -->
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="theme-toggle" class="sr-only peer" aria-label="Toggle dark theme" />
+        <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white
+                    after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
+                    after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+      </label>
+    </div>
+    <button id="logoutBtn" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+      <i class="fa-solid fa-power-off text-sm"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
+      <!-- MAIN -->
+      <main class="flex-1 min-w-0 overflow-x-hidden px-4 py-5">
+        <!-- STAT CARDS -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="stat-card stat-blue bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm p-5">
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Total Cities
+            </p>
+            <p id="totalCities" class="text-3xl font-bold text-gray-800 dark:text-white">0</p>
+          </div>
+          <div class="stat-card stat-green bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm p-5">
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Last Updated
+            </p>
+            <p id="lastUpdated" class="text-lg font-bold text-gray-800 dark:text-white">—</p>
+          </div>
+        </div>
+        <!-- TABLE CARD -->
+        <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm overflow-hidden">
+          <div
+            class="flex flex-wrap justify-between items-center p-5 border-b dark:border-gray-700"
+          >
+            <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
+              Cities
+            </h2>
+            <button
+              onclick="openAddModal()"
+              class="bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-5 py-2 rounded font-medium text-sm"
+            >
+              + Add City
+            </button>
+          </div>
+          <div class="p-5 border-b dark:border-gray-700">
+            <div class="relative max-w-xs">
+              <i
+                class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
+              ></i>
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Search cities..."
+                onkeyup="filterTable()"
+                class="w-full pl-9 pr-3 py-2 border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2.5 outline-none text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm hidden sm:table">
+              <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">ID</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">City Name</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">Created At</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="dark:text-gray-300"></tbody>
+            </table>
+            <div
+              id="mobileCards"
+              class="sm:hidden divide-y divide-gray-100 dark:divide-gray-700"
+            ></div>
+          </div>
+          <p
+            id="noResults"
+            class="hidden text-center text-gray-400 py-8 text-sm"
+          >
+            No cities found.
+          </p>
+        </div>
+      </main>
+    </div>
+    <footer class="text-center text-xs text-gray-400 py-5">
+      © 2026 | Powered by:
+      <span class="text-blue-500"> MarkingBooster.com</span>
+    </footer>
+    <!-- ══════════════ ADD MODAL ══════════════ -->
+    <div
+      id="addModal"
+      class="modal-wrap fixed inset-0 bg-black/40 backdrop-blur-[1px] z-50 items-center justify-center p-4"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-t-xl"
+        >
+          <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg flex items-center gap-2">
+            <i class="fas fa-plus"></i> Add City
+          </h3>
+          <button
+            type="button"
+            onclick="closeModal('addModal')"
+            class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
+          >
+            ×
+          </button>
+        </div>
+        <form id="addCityForm">
+          <div class="px-6 py-5">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">City Name</label>
+              <input
+                type="text"
+                name="city_name"
+                required
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+          </div>
+          <div class="px-6 pb-5 flex justify-end gap-3">
+            <p id="addFormMsg" class="hidden text-sm text-red-500 mb-2"></p>
+            <button
+              type="button"
+              onclick="closeModal('addModal')"
+              class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition shadow-sm"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-6 py-2.5 text-sm font-medium text-white bg-slate-900 dark:bg-slate-700 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-600 transition shadow-sm"
+            >
+              Save City
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- ══════════════ EDIT MODAL ══════════════ -->
+    <div
+      id="editModal"
+      class="modal-wrap fixed inset-0 bg-black/40 backdrop-blur-[1px] z-50 items-center justify-center p-4"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-t-xl"
+        >
+          <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg flex items-center gap-2">
+            <i class="fas fa-pen-to-square"></i> Edit City
+          </h3>
+          <button
+            type="button"
+            onclick="closeModal('editModal')"
+            class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
+          >
+            ×
+          </button>
+        </div>
+        <div class="px-6 py-5">
+          <input type="hidden" id="eId" />
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >City Name</label
+            >
+            <input
+              id="eCityName"
+              type="text"
+              class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+            />
+          </div>
+        </div>
+        <div class="px-6 pb-5 flex gap-3">
+          <button
+            onclick="closeModal('editModal')"
+            class="flex-1 px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition shadow-sm"
+          >
+            Cancel
+          </button>
+          <button
+            onclick="updateCity()"
+            class="flex-1 px-6 py-2.5 text-sm font-medium text-white bg-slate-900 dark:bg-slate-700 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-600 transition shadow-sm"
+          >
+            Update City
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- ══════════════ DELETE MODAL ══════════════ -->
+    <div
+      id="deleteModal"
+      class="modal-wrap fixed inset-0 bg-black/40 backdrop-blur-[1px] z-50 items-center justify-center p-4"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-t-xl"
+        >
+          <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg flex items-center gap-2">
+            <i class="fas fa-trash"></i> Delete City
+          </h3>
+          <button
+            type="button"
+            onclick="closeModal('deleteModal')"
+            class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
+          >
+            ×
+          </button>
+        </div>
+        <div id="deleteContent" class="px-6 py-5 dark:text-gray-300"></div>
+        <div class="px-6 pb-5 flex gap-3">
+          <button
+            onclick="confirmDelete()"
+            class="flex-1 px-6 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition shadow-sm flex items-center justify-center gap-2"
+          >
+            <i class="fas fa-trash"></i> Delete
+          </button>
+          <button
+            onclick="closeModal('deleteModal')"
+            class="flex-1 px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition shadow-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      let cities = [];
+      let pendingDeleteId = null;
+      // ── Modal helpers ──
+      function openModal(id) {
+        document.getElementById(id).classList.add("open");
+      }
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("open");
+      }
+      // ── Load Cities ──
+      function loadCities() {
+        fetch("../../action/cities/get_cities.php")
+          .then((res) => res.json())
+          .then((data) => {
+            cities = data;
+            updateStats();
+            renderTable(cities);
+          })
+          .catch((err) => {
+            console.error(err);
+            document.getElementById("noResults").classList.remove("hidden");
+          });
+      }
+      // ── Stats ──
+      function updateStats() {
+        document.getElementById("totalCities").textContent = cities.length;
+        if (cities.length > 0) {
+          const lastCity = cities[0];
+          document.getElementById("lastUpdated").textContent =
+            lastCity.created_at.split(" ")[0];
+        }
+      }
+      // ── Render Table ──
+      function renderTable(data) {
+        const tbody = document.getElementById("tableBody");
+        const mobile = document.getElementById("mobileCards");
+        tbody.innerHTML = "";
+        mobile.innerHTML = "";
+        if (!data.length) {
+          document.getElementById("noResults").classList.remove("hidden");
+          return;
+        }
+        document.getElementById("noResults").classList.add("hidden");
+        data.forEach((city) => {
+          const tr = document.createElement("tr");
+          tr.className = "border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition";
+          tr.innerHTML = `
+      <td class="px-5 py-3 text-gray-500 dark:text-gray-400 font-medium">#${city.id}</td>
+      <td class="px-5 py-3 font-semibold text-gray-800 dark:text-gray-200">${city.city_name}</td>
+      <td class="px-5 py-3 text-xs text-gray-400 dark:text-gray-500">${city.created_at}</td>
+      <td class="px-5 py-3 text-center">
+        <div class="flex items-center justify-center gap-3">
+          <button onclick="openEditModal(${city.id})" class="text-blue-500 hover:text-blue-700 text-lg" title="Edit"><i class="fas fa-pen-to-square"></i></button>
+          <button onclick="openDeleteModal(${city.id})" class="text-red-400 hover:text-red-600 text-lg" title="Delete"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>`;
+          tbody.appendChild(tr);
+          const card = document.createElement("div");
+          card.className = "p-4 flex items-center justify-between border-b dark:border-gray-700";
+          card.innerHTML = `
+      <div>
+        <p class="font-semibold text-gray-800 dark:text-gray-200 text-sm">${city.city_name}</p>
+        <span class="text-xs text-gray-400 dark:text-gray-500">${city.created_at}</span>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="openEditModal(${city.id})" class="text-blue-500 text-lg"><i class="fas fa-pen-to-square"></i></button>
+        <button onclick="openDeleteModal(${city.id})" class="text-red-400 text-lg"><i class="fas fa-trash"></i></button>
+      </div>`;
+          mobile.appendChild(card);
+        });
+      }
+      function filterTable() {
+        const q = document.getElementById("searchInput").value.toLowerCase();
+        renderTable(
+          cities.filter((c) => c.city_name.toLowerCase().includes(q)),
+        );
+      }
+      // ── ADD ──
+      function openAddModal() {
+        document.getElementById("addCityForm").reset();
+        document.getElementById("addFormMsg").classList.add("hidden");
+        openModal("addModal");
+      }
+      document
+        .getElementById("addCityForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const msg = document.getElementById("addFormMsg");
+          const formData = new FormData(this);
+          fetch("../../action/cities/add_city.php", {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.status) {
+                closeModal("addModal");
+                loadCities();
+              } else {
+                msg.textContent = data.message || "Something went wrong";
+                msg.classList.remove("hidden");
+              }
+            })
+            .catch(() => {
+              msg.textContent = "Network error, please try again";
+              msg.classList.remove("hidden");
+            });
+        });
+      // ── EDIT ──
+      function openEditModal(id) {
+        const city = cities.find((c) => c.id == id);
+        if (!city) return;
+        document.getElementById("eId").value = city.id;
+        document.getElementById("eCityName").value = city.city_name;
+        openModal("editModal");
+      }
+      function updateCity() {
+        const id = document.getElementById("eId").value;
+        const fd = new FormData();
+        fd.append("id", id);
+        fd.append(
+          "city_name",
+          document.getElementById("eCityName").value.trim(),
+        );
+        fetch("../../action/cities/update_city.php", {
+          method: "POST",
+          body: fd,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status) {
+              closeModal("editModal");
+              loadCities();
+            } else alert(data.message || "Update failed");
+          })
+          .catch(() => alert("Network error, please try again"));
+      }
+      // ── DELETE ──
+      function openDeleteModal(id) {
+        const city = cities.find((c) => c.id == id);
+        if (!city) return;
+        pendingDeleteId = id;
+        document.getElementById("deleteContent").innerHTML = `
+    <div class="p-3 bg-red-50 dark:bg-red-950/20 rounded-xl border border-red-100 dark:border-red-900/40">
+      <p class="font-bold text-gray-800 dark:text-gray-200">${city.city_name}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400">#${city.id}</p>
+    </div>
+    <div class="mt-4 p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-900/40">
+      <p class="text-red-600 dark:text-red-400 text-xs font-semibold text-center"><i class="fas fa-triangle-exclamation mr-1"></i>This action cannot be undone!</p>
+    </div>`;
+        openModal("deleteModal");
+      }
+      function confirmDelete() {
+        const fd = new FormData();
+        fd.append("id", pendingDeleteId);
+        fetch("../../action/cities/delete_city.php", {
+          method: "POST",
+          body: fd,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status) {
+              closeModal("deleteModal");
+              loadCities();
+            } else alert(data.message || "Delete failed");
+            pendingDeleteId = null;
+          })
+          .catch(() => {
+            alert("Network error, please try again");
+            pendingDeleteId = null;
+          });
+      }
+      // close modal on backdrop click
+      ["addModal", "editModal", "deleteModal"].forEach((id) => {
+        document.getElementById(id).addEventListener("click", function (e) {
+          if (e.target === this) closeModal(id);
+        });
+      });
+      loadCities();
+    </script>
+  </body>
+</html>

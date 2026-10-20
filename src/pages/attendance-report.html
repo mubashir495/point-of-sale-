@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Report - Inventory Management System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+    <script>tailwind.config = { darkMode: "class" };</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+      <script src="../js/auth_check.js"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: { colors: { brand: { 50:'#eef2ff',100:'#e0e7ff',500:'#4f46e5',600:'#4338ca',700:'#3730a3' } } } }
+  }
+</script>
+<!-- Export libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  @media print {
+    header, #filtersCard, #actionButtons, footer, .no-print { display: none !important; }
+    body { background: white !important; }
+    #reportCard { box-shadow: none !important; border: none !important; }
+  }
+</style>
+    <script src="../js/auth_check.js"></script>
+</head>
+<body class="bg-slate-100 min-h-screen w-full">
+
+<div class="w-full min-h-screen flex flex-col">
+
+      <!-- Top Navbar -->
+   <header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+  <div class="flex items-center gap-4">
+    <button id="menuToggle" type="button" aria-label="Toggle sidebar" aria-controls="main-sidebar" aria-expanded="false"
+      class="text-white text-xl hover:text-amber-400 transition-colors lg:hidden">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Marking Booster Logo" />
+    <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+  </div>
+  <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+    <i class="fa-regular fa-clock mr-1"></i>
+    <span id="currentDate"></span>
+  </div>
+</header>
+
+<!-- Mobile overlay (click to close sidebar) -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+<div class="flex">
+  <!-- Sidebar -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+ 
+<aside
+  id="main-sidebar"
+  aria-label="Primary"
+  class="w-[280px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300
+         flex flex-col justify-between h-[calc(100vh-64px)] overflow-hidden shadow-xl
+         border-r border-slate-800 transition-transform duration-300 ease-in-out z-40
+         -translate-x-full lg:translate-x-0"
+>
+  <!-- Brand block -->
+  <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative shrink-0">
+    <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm overflow-hidden">
+      <img src="../../assets/images/logo.png" class="w-full h-full rounded-full object-cover" alt="Marking Booster Logo" />
+      <button type="button" class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+        <i class="fa-solid fa-camera"></i>
+      </button>
+    </div>
+    <h2 class="mt-3 text-lg font-bold text-white tracking-wide">Marking Booster</h2>
+    <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+  </div>
+ 
+  <!-- Scrollable nav (only this element scrolls; aside itself stays overflow-hidden) -->
+  <nav
+    id="sidebarNav"
+    class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1
+           [&::-webkit-scrollbar]:w-[5px]
+           [&::-webkit-scrollbar-track]:bg-transparent
+           [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded
+           dark:[&::-webkit-scrollbar-thumb]:bg-slate-800"
+  >
+ 
+    <a href="./dashboard.html" data-nav-link
+      class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+      <i class="fa-solid fa-gauge-high text-lg w-5 text-center"></i>
+      <span class="font-medium text-sm">Dashboard</span>
+    </a>
+<!-- Administration -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-administration"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Administration</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-administration" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./employees.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+        <a href="./branch-users.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+        <a href="./parties.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Parties</a>
+        <a href="./area-zones.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+
+      </div>
+    </div>
+ 
+    <!-- Inventory -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-inventory"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-boxes-stacked text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Inventory</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-inventory" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./brands.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Brands</a>
+        <a href="./category.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Categories</a>
+        <a href="./product.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Items</a>
+        <a href="./raw-materials.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Materials</a>
+      </div>
+    </div>
+ 
+    <!-- Billing & Payments -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-billing"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Billing &amp; Payments</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-billing" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./counter-sale.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+
+
+        <a href="./purchase.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Purchase</a>
+        <a href="./party_payment.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Payment</a>
+        <a href="./delete-invoice.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Delete Invoice</a>
+      </div>
+    </div>
+ 
+    <!-- Reports -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-reports"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Reports</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-reports" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./party-invoices-detail.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Invoices Detail</a>
+        <a href="./monthly-sale-repot.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Monthly Sale Report</a>
+        <a href="./invoice-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoices Report</a>
+        <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit</a>
+        <a href="./stock-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+        <a href="./customers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Customers Report</a>
+        <a href="./suppliers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Suppliers Report</a>
+      </div>
+    </div>
+ 
+    <!-- Payroll & Accounts -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-payroll"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-users-viewfinder text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Payroll &amp; Accounts</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-payroll" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./expenses.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Expenses</a>
+        <a href="./accounting-system.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Accounting System</a>
+        <a href="./balance-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Balance Sheet</a>
+        <a href="./generate-salary.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+        <a href="./salary-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+        <a href="./attendance.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+        <a href="./attendance-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance Report</a>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- Bottom controls -->
+  <div class="p-4 border-t border-slate-700/40 space-y-4 shrink-0">
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <i class="fa-solid fa-palette text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-white">Theme</span>
+      </div>
+      <!-- Pure Tailwind switch: peer-checked drives the knob + track color -->
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="theme-toggle" class="sr-only peer" aria-label="Toggle dark theme" />
+        <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white
+                    after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
+                    after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+      </label>
+    </div>
+    <button id="logoutBtn" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+      <i class="fa-solid fa-power-off text-sm"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
+
+  <main class="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6">
+
+    <div id="toast" class="hidden fixed top-5 right-5 z-50 max-w-sm px-4 py-3 rounded-lg shadow-lg text-sm font-medium"></div>
+
+    <!-- Filters -->
+    <div id="filtersCard" class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Start Date</label>
+          <input type="date" id="startDate" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">End Date</label>
+          <input type="date" id="endDate" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Shift</label>
+          <select id="shiftFilter" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+            <option value="">All Shifts</option>
+            <option value="Morning">Morning</option>
+            <option value="Evening">Evening</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Employee</label>
+          <select id="employeeFilter" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+            <option value="">All Employees</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="actionButtons" class="flex flex-wrap gap-3 mt-5">
+        <button id="btnViewReport" class="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg shadow-sm transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg>
+          View Report
+        </button>
+        <button id="btnPrint" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-700 hover:bg-slate-800 text-white text-sm font-semibold rounded-lg shadow-sm transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+          Print
+        </button>
+        <button id="btnExportPdf" class="inline-flex items-center gap-2 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold rounded-lg shadow-sm transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+          Export PDF
+        </button>
+        <button id="btnExportExcel" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg shadow-sm transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+          Export Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Report Table -->
+    <div id="reportCard" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="px-4 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+        <h2 class="font-bold text-slate-800">Report Summary</h2>
+        <p id="rangeLabel" class="text-xs text-slate-500"></p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left" id="reportTable">
+          <thead class="bg-slate-50 text-slate-600 uppercase text-xs font-semibold border-b border-slate-200">
+            <tr>
+              
+              <th class="px-4 py-3">Employee Name</th>
+              <th class="px-4 py-3">Designation</th>
+              <th class="px-4 py-3">Shift</th>
+              <th class="px-4 py-3 text-center">Present</th>
+              <th class="px-4 py-3 text-center">Absent</th>
+              <th class="px-4 py-3 text-center">Leave</th>
+              <th class="px-4 py-3">Remarks</th>
+              <th class="px-4 py-3 no-print">Details</th>
+            </tr>
+          </thead>
+          <tbody id="reportTableBody" class="divide-y divide-slate-100">
+            <tr>
+              <td colspan="9" class="px-4 py-16 text-center text-slate-400">
+                Select filters above and click <span class="font-semibold text-slate-500">"View Report"</span>.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Employee Details Modal -->
+<div id="employeeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+      <div class="flex items-center gap-3">
+        <img id="modalPhoto" src="" class="w-12 h-12 rounded-full object-cover border border-slate-200" alt="">
+        <div>
+          <h3 id="modalName" class="font-bold text-slate-800 text-lg"></h3>
+          <p id="modalDesignation" class="text-sm text-slate-500"></p>
+        </div>
+      </div>
+      <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="px-6 py-4 grid grid-cols-2 sm:grid-cols-4 gap-3 border-b border-slate-100">
+      <div class="bg-emerald-50 rounded-lg p-3 text-center">
+        <p id="modalPresent" class="text-xl font-bold text-emerald-600">0</p>
+        <p class="text-xs text-slate-500 uppercase font-semibold">Present</p>
+      </div>
+      <div class="bg-rose-50 rounded-lg p-3 text-center">
+        <p id="modalAbsent" class="text-xl font-bold text-rose-600">0</p>
+        <p class="text-xs text-slate-500 uppercase font-semibold">Absent</p>
+      </div>
+      <div class="bg-amber-50 rounded-lg p-3 text-center">
+        <p id="modalLeave" class="text-xl font-bold text-amber-600">0</p>
+        <p class="text-xs text-slate-500 uppercase font-semibold">Leave</p>
+      </div>
+      <div class="bg-brand-50 rounded-lg p-3 text-center">
+        <p id="modalPercentage" class="text-xl font-bold text-brand-600">0%</p>
+        <p class="text-xs text-slate-500 uppercase font-semibold">Attendance</p>
+      </div>
+    </div>
+
+    <div class="overflow-y-auto flex-1 px-6 py-4">
+      <table class="w-full text-sm text-left">
+        <thead class="text-slate-500 text-xs uppercase font-semibold border-b border-slate-200">
+          <tr>
+            <th class="py-2">Date</th>
+            <th class="py-2">Status</th>
+            <th class="py-2">Remarks</th>
+          </tr>
+        </thead>
+        <tbody id="modalHistoryBody" class="divide-y divide-slate-100"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  const base_url="../../action"
+const API = {
+  employees: `${base_url}/employees/get_employees.php`,
+  report: `${base_url}/attendance/attendance_report.php`,
+};
+
+const startDateEl = document.getElementById('startDate');
+const endDateEl = document.getElementById('endDate');
+const shiftFilterEl = document.getElementById('shiftFilter');
+const employeeFilterEl = document.getElementById('employeeFilter');
+const reportTableBody = document.getElementById('reportTableBody');
+const rangeLabel = document.getElementById('rangeLabel');
+
+let allEmployees = [];      // merged Morning + Evening employees
+let currentReportRows = []; // last rendered report rows (for export)
+
+// Default: last 30 days
+const today = new Date();
+const monthAgo = new Date();
+monthAgo.setDate(today.getDate() - 30);
+endDateEl.value = today.toISOString().split('T')[0];
+startDateEl.value = monthAgo.toISOString().split('T')[0];
+
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const colors = {
+    success: 'bg-emerald-600 text-white',
+    error: 'bg-rose-600 text-white',
+    info: 'bg-slate-800 text-white',
+  };
+  toast.className = `fixed top-5 right-5 z-50 max-w-sm px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${colors[type] || colors.info}`;
+  toast.textContent = message;
+  toast.classList.remove('hidden');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
+}
+
+
+async function loadAllEmployees() {
+  try {
+    const [morning, evening] = await Promise.all([
+      fetch(`${API.employees}?shift=Morning`).then(r => r.json()),
+      fetch(`${API.employees}?shift=Evening`).then(r => r.json()),
+    ]);
+    const morningList = Array.isArray(morning) ? morning : (morning.data || []);
+    const eveningList = Array.isArray(evening) ? evening : (evening.data || []);
+
+    const merged = {};
+    [...morningList, ...eveningList].forEach(emp => { merged[emp.id] = emp; });
+    allEmployees = Object.values(merged);
+
+    employeeFilterEl.innerHTML = '<option value="">All Employees</option>' +
+      allEmployees.map(emp => `<option value="${emp.id}">${emp.full_name} (#${emp.id})</option>`).join('');
+  } catch (err) {
+    console.error(err);
+    showToast('Failed to load employee list.', 'error');
+  }
+}
+
+async function viewReport() {
+  const start_date = startDateEl.value;
+  const end_date = endDateEl.value;
+  const shift = shiftFilterEl.value;
+  const employee_id = employeeFilterEl.value;
+
+  if (!start_date || !end_date) {
+    showToast('Please select both start and end dates.', 'error');
+    return;
+  }
+  if (start_date > end_date) {
+    showToast('Start date cannot be after end date.', 'error');
+    return;
+  }
+
+  const params = new URLSearchParams({ start_date, end_date });
+  if (shift) params.set('shift', shift);
+  if (employee_id) params.set('employee_id', employee_id);
+
+  reportTableBody.innerHTML = `<tr><td colspan="9" class="px-4 py-12 text-center text-slate-400">Loading report...</td></tr>`;
+
+  try {
+    const res = await fetch(`${API.report}?${params.toString()}`);
+    const result = await res.json();
+
+    if (!result.success) {
+      reportTableBody.innerHTML = `<tr><td colspan="9" class="px-4 py-12 text-center text-rose-500">${result.message || 'Failed to load report.'}</td></tr>`;
+      return;
+    }
+
+    const empMap = {};
+    allEmployees.forEach(e => { empMap[e.id] = e; });
+
+    let rows = (result.data || [])
+      .map(r => ({ ...r, emp: empMap[r.employee_id] }))
+      .filter(r => r.emp); // only show rows we can resolve to a known employee
+
+    if (shift) rows = rows.filter(r => r.emp.shift === shift);
+
+    currentReportRows = rows;
+    rangeLabel.textContent = `${start_date} to ${end_date}${shift ? ' • ' + shift + ' shift' : ''}`;
+
+    if (rows.length === 0) {
+      reportTableBody.innerHTML = `<tr><td colspan="9" class="px-4 py-12 text-center text-slate-400">No attendance records found for the selected filters.</td></tr>`;
+      return;
+    }
+
+    reportTableBody.innerHTML = rows.map(r => `
+      <tr class="hover:bg-slate-50 transition">
+        <td class="px-4 py-3 font-semibold text-slate-800">${r.emp.full_name}</td>
+        <td class="px-4 py-3 text-slate-600">${r.emp.designation || '-'}</td>
+        <td class="px-4 py-3">
+          <span class="px-2 py-1 rounded-full text-xs font-semibold ${r.emp.shift === 'Morning' ? 'bg-sky-100 text-sky-700' : 'bg-indigo-100 text-indigo-700'}">${r.emp.shift}</span>
+        </td>
+        <td class="px-4 py-3 text-center font-semibold text-emerald-600">${r.present_count}</td>
+        <td class="px-4 py-3 text-center font-semibold text-rose-600">${r.absent_count}</td>
+        <td class="px-4 py-3 text-center font-semibold text-amber-600">${r.leave_count}</td>
+        <td class="px-4 py-3 text-slate-500 max-w-[220px] truncate" title="${r.remarks || ''}">${r.remarks || '-'}</td>
+        <td class="px-4 py-3 no-print">
+          <button onclick="openEmployeeModal(${r.employee_id})" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 transition">View Details</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    console.error(err);
+    reportTableBody.innerHTML = `<tr><td colspan="9" class="px-4 py-12 text-center text-rose-500">Failed to load report. Check console for details.</td></tr>`;
+  }
+}
+
+async function openEmployeeModal(employeeId) {
+  const emp = allEmployees.find(e => e.id == employeeId);
+  if (!emp) return;
+
+  document.getElementById('modalPhoto').src = photoUrl(emp.photo, emp.full_name);
+  document.getElementById('modalPhoto').onerror = function () {
+    this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(emp.full_name)}&background=e0e7ff&color=4338ca`;
+  };
+  document.getElementById('modalName').textContent = emp.full_name;
+  document.getElementById('modalDesignation').textContent = `${emp.designation || '-'} • ${emp.shift} Shift`;
+  document.getElementById('modalHistoryBody').innerHTML = `<tr><td colspan="3" class="py-6 text-center text-slate-400">Loading history...</td></tr>`;
+  document.getElementById('employeeModal').classList.remove('hidden');
+
+  const params = new URLSearchParams({
+    mode: 'history',
+    employee_id: employeeId,
+    start_date: startDateEl.value,
+    end_date: endDateEl.value,
+  });
+
+  try {
+    const res = await fetch(`${API.report}?${params.toString()}`);
+    const result = await res.json();
+
+    if (!result.success) {
+      document.getElementById('modalHistoryBody').innerHTML = `<tr><td colspan="3" class="py-6 text-center text-rose-500">${result.message || 'Failed to load history.'}</td></tr>`;
+      return;
+    }
+
+    const s = result.summary;
+    document.getElementById('modalPresent').textContent = s.present_count;
+    document.getElementById('modalAbsent').textContent = s.absent_count;
+    document.getElementById('modalLeave').textContent = s.leave_count;
+    document.getElementById('modalPercentage').textContent = `${s.percentage}%`;
+
+    const history = result.history || [];
+    if (history.length === 0) {
+      document.getElementById('modalHistoryBody').innerHTML = `<tr><td colspan="3" class="py-6 text-center text-slate-400">No records in this date range.</td></tr>`;
+      return;
+    }
+
+    const statusColor = { Present: 'text-emerald-600', Absent: 'text-rose-600', Leave: 'text-amber-600' };
+
+    document.getElementById('modalHistoryBody').innerHTML = history.map(h => `
+      <tr>
+        <td class="py-2 text-slate-700">${h.attendance_date}</td>
+        <td class="py-2 font-semibold ${statusColor[h.status] || 'text-slate-600'}">${h.status}</td>
+        <td class="py-2 text-slate-500">${h.remarks || '-'}</td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    console.error(err);
+    document.getElementById('modalHistoryBody').innerHTML = `<tr><td colspan="3" class="py-6 text-center text-rose-500">Failed to load history.</td></tr>`;
+  }
+}
+
+function closeModal() {
+  document.getElementById('employeeModal').classList.add('hidden');
+}
+
+function exportPdf() {
+  if (currentReportRows.length === 0) {
+    showToast('View a report before exporting.', 'error');
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(14);
+  doc.text('Attendance Report', 14, 15);
+  doc.setFontSize(10);
+  doc.text(rangeLabel.textContent, 14, 21);
+
+  const body = currentReportRows.map(r => [
+    r.emp.full_name,
+    r.emp.designation || '-',
+    r.emp.shift,
+    r.present_count,
+    r.absent_count,
+    r.leave_count,
+    r.remarks || '-',
+  ]);
+
+  doc.autoTable({
+    startY: 27,
+    head: [['Employee', 'Designation', 'Shift', 'Present', 'Absent', 'Leave', 'Remarks']],
+    body,
+    styles: { fontSize: 9 },
+    headStyles: { fillColor: [79, 70, 229] },
+  });
+
+  doc.save(`attendance-report-${startDateEl.value}_to_${endDateEl.value}.pdf`);
+}
+
+function exportExcel() {
+  if (currentReportRows.length === 0) {
+    showToast('View a report before exporting.', 'error');
+    return;
+  }
+  const data = currentReportRows.map(r => ({
+    'Employee': r.emp.full_name,
+    'Designation': r.emp.designation || '-',
+    'Shift': r.emp.shift,
+    'Present': r.present_count,
+    'Absent': r.absent_count,
+    'Leave': r.leave_count,
+    'Remarks': r.remarks || '-',
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Attendance Report');
+  XLSX.writeFile(wb, `attendance-report-${startDateEl.value}_to_${endDateEl.value}.xlsx`);
+}
+
+document.getElementById('btnViewReport').addEventListener('click', viewReport);
+document.getElementById('btnPrint').addEventListener('click', () => window.print());
+document.getElementById('btnExportPdf').addEventListener('click', exportPdf);
+document.getElementById('btnExportExcel').addEventListener('click', exportExcel);
+document.getElementById('employeeModal').addEventListener('click', (e) => {
+  if (e.target.id === 'employeeModal') closeModal();
+});
+
+loadAllEmployees();
+</script>
+<script src="../js/sidebar.js"> </script>
+</body>
+</html>

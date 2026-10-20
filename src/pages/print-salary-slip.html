@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salary Slip</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body { background: #f1f5f9; font-family: Arial, sans-serif; }
+      .slip-box {
+        max-width: 480px; margin: 40px auto; background: #fff;
+        border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden;
+      }
+      .slip-header { background: #0f2647; color: #fff; padding: 20px; text-align: center; }
+      .slip-body { padding: 24px; }
+      .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
+      .row .label { color: #64748b; }
+      .divider { border-top: 1px dashed #cbd5e1; margin: 12px 0; }
+      .gross-row { font-weight: 700; font-size: 16px; color: #0f2647; }
+      .sign-line { border-top: 1px solid #94a3b8; width: 180px; margin: 40px auto 4px; text-align: center; }
+      .print-bar { max-width: 480px; margin: 0 auto 20px; text-align: right; }
+      @media print {
+        .print-bar { display: none; }
+        body { background: #fff; }
+        .slip-box { box-shadow: none; margin: 0; max-width: 100%; }
+      }
+    </style>
+      <script src="../js/auth_check.js"></script>
+</head>
+  <body>
+    <div class="print-bar pt-5">
+      <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded text-sm">Print</button>
+    </div>
+
+    <div class="slip-box" id="slipBox">
+      <div class="slip-header">
+        <h2 class="text-lg font-bold">MARKING BOOSTER</h2>
+        <p class="text-xs opacity-80" id="slipPeriod">Salary Slip</p>
+      </div>
+      <div class="slip-body" id="slipBody">
+        <p class="text-center text-gray-400 py-10">Loading...</p>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const API_BASE = "../../action";
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+        const slipBody = document.getElementById("slipBody");
+        const slipPeriod = document.getElementById("slipPeriod");
+
+        function fmt(n) {
+          return (parseFloat(n) || 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        }
+
+        async function load() {
+          if (!id) {
+            slipBody.innerHTML = '<p class="text-center text-red-500 py-10">Missing salary id.</p>';
+            return;
+          }
+          try {
+            const res = await fetch(`${API_BASE}/salary/get_salary_slip.php?id=${id}`);
+            const data = await res.json();
+            if (!data.success) {
+              slipBody.innerHTML = `<p class="text-center text-red-500 py-10">${data.message || "Slip not found"}</p>`;
+              return;
+            }
+            const r = data.data;
+            slipPeriod.textContent = "Salary Slip: " + r.period;
+
+            slipBody.innerHTML = `
+              <div class="row"><span class="label">Name</span><span class="font-semibold">${r.full_name}</span></div>
+              <div class="row"><span class="label">Employee ID</span><span>#${r.employee_id}</span></div>
+              <div class="row"><span class="label">Designation</span><span>${r.designation || "-"}</span></div>
+              <div class="row"><span class="label">Shift</span><span>${r.shift || "-"}</span></div>
+              <div class="divider"></div>
+              <div class="row"><span class="label">Basic</span><span>${fmt(r.basic)}</span></div>
+              <div class="row"><span class="label">Incentive</span><span>+${fmt(r.incentive)}</span></div>
+              <div class="row"><span class="label">Deduction${r.deduction_reason ? " (" + r.deduction_reason + ")" : ""}</span><span>-${fmt(r.deduction)}</span></div>
+              <div class="divider"></div>
+              <div class="row gross-row"><span>Gross / Net Payable</span><span>${fmt(r.net_payable)}</span></div>
+              <div class="row"><span class="label">Paid Amount</span><span>${fmt(r.paid_amount)}</span></div>
+              <div class="row"><span class="label">Status</span><span class="font-semibold">${r.status}</span></div>
+              ${r.remarks ? `<div class="row"><span class="label">Remarks</span><span>${r.remarks}</span></div>` : ""}
+              <div class="sign-line"></div>
+              <p class="text-center text-xs text-gray-400">Signature</p>
+            `;
+          } catch (e) {
+            slipBody.innerHTML = '<p class="text-center text-red-500 py-10">Failed to load slip.</p>';
+          }
+        }
+
+        load();
+      })();
+    </script>
+  </body>
+</html>

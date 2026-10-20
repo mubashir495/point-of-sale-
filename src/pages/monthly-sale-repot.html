@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MARKING BOOSTER - Sale Report</title>
+<script src="https://cdn.tailwindcss.com"></script>
+ <script>
+        tailwind.config = { darkMode: "class" };
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="../js/auth_check.js"></script>
+<style>
+  body{font-family:'Segoe UI',Arial,sans-serif;}
+  .nav-link.active{background:#163a5c; border-left:3px solid #4fd1c5;}
+  table.report-table th, table.report-table td{white-space:nowrap;}
+  ::-webkit-scrollbar{height:8px; width:8px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:#c7cdd4; border-radius:999px;}
+  ::-webkit-scrollbar-thumb:hover{background:#9ca3af;}
+
+  @media print{
+    .no-print{display:none !important;}
+    #sidebar{display:none !important;}
+    #mainContent{margin-left:0 !important;}
+    body{background:#fff !important;}
+    #reportCard{box-shadow:none !important; border:none !important;}
+  }
+</style>
+    <script src="../js/auth_check.js"></script>
+</head>
+<body class="bg-[#f4f6f8] min-h-screen overflow-x-hidden">
+
+<!-- ================= SIDEBAR ================= -->
+ <header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+  <div class="flex items-center gap-4">
+    <button id="menuToggle" type="button" aria-label="Toggle sidebar" aria-controls="main-sidebar" aria-expanded="false"
+      class="text-white text-xl hover:text-amber-400 transition-colors lg:hidden">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Marking Booster Logo" />
+    <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+  </div>
+  <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+    <i class="fa-regular fa-clock mr-1"></i>
+    <span id="currentDate"></span>
+  </div>
+</header>
+
+<!-- Mobile overlay (click to close sidebar) -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+<div class="flex">
+  <!-- Sidebar -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+ 
+<aside
+  id="main-sidebar"
+  aria-label="Primary"
+  class="w-[280px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300
+         flex flex-col justify-between h-[calc(100vh-64px)] overflow-hidden shadow-xl
+         border-r border-slate-800 transition-transform duration-300 ease-in-out z-40
+         -translate-x-full lg:translate-x-0"
+>
+  <!-- Brand block -->
+  <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative shrink-0">
+    <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm overflow-hidden">
+      <img src="../../assets/images/logo.png" class="w-full h-full rounded-full object-cover" alt="Marking Booster Logo" />
+      <button type="button" class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+        <i class="fa-solid fa-camera"></i>
+      </button>
+    </div>
+    <h2 class="mt-3 text-lg font-bold text-white tracking-wide">Marking Booster</h2>
+    <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+  </div>
+ 
+  <!-- Scrollable nav (only this element scrolls; aside itself stays overflow-hidden) -->
+  <nav
+    id="sidebarNav"
+    class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1
+           [&::-webkit-scrollbar]:w-[5px]
+           [&::-webkit-scrollbar-track]:bg-transparent
+           [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded
+           dark:[&::-webkit-scrollbar-thumb]:bg-slate-800"
+  >
+ 
+    <a href="./dashboard.html" data-nav-link
+      class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+      <i class="fa-solid fa-gauge-high text-lg w-5 text-center"></i>
+      <span class="font-medium text-sm">Dashboard</span>
+    </a>
+<!-- Administration -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-administration"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Administration</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-administration" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./employees.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+        <a href="./branch-users.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+        <a href="./parties.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Parties</a>
+        <a href="./area-zones.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+
+      </div>
+    </div>
+ 
+    <!-- Inventory -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-inventory"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-boxes-stacked text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Inventory</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-inventory" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./brands.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Brands</a>
+        <a href="./category.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Categories</a>
+        <a href="./product.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Items</a>
+        <a href="./raw-materials.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Materials</a>
+      </div>
+    </div>
+ 
+    <!-- Billing & Payments -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-billing"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Billing &amp; Payments</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-billing" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./counter-sale.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+
+        <a href="./orders.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Orders</a>
+        <a href="./purchase.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Purchase</a>
+        <a href="./party_payment.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Payment</a>
+        <a href="./delete-invoice.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Delete Invoice</a>
+      </div>
+    </div>
+ 
+    <!-- Reports -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-reports"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Reports</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-reports" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./party-invoices-detail.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Invoices Detail</a>
+        <a href="./monthly-sale-repot.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Monthly Sale Report</a>
+        <a href="./invoice-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoices Report</a>
+        <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit</a>
+        <a href="./stock-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+        <a href="./customers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Customers Report</a>
+        <a href="./suppliers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Suppliers Report</a>
+      </div>
+    </div>
+ 
+    <!-- Payroll & Accounts -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-payroll"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-users-viewfinder text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Payroll &amp; Accounts</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-payroll" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./expenses.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Expenses</a>
+        <a href="./accounting-system.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Accounting System</a>
+        <a href="./balance-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Balance Sheet</a>
+        <a href="./generate-salary.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+        <a href="./salary-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+        <a href="./attendance.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+        <a href="./attendance-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance Report</a>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- Bottom controls -->
+  <div class="p-4 border-t border-slate-700/40 space-y-4 shrink-0">
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <i class="fa-solid fa-palette text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-white">Theme</span>
+      </div>
+      <!-- Pure Tailwind switch: peer-checked drives the knob + track color -->
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="theme-toggle" class="sr-only peer" aria-label="Toggle dark theme" />
+        <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white
+                    after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
+                    after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+      </label>
+    </div>
+    <button id="logoutBtn" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+      <i class="fa-solid fa-power-off text-sm"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
+
+  <main class="p-4 sm:p-5 lg:p-6 flex-1 min-w-0 w-auto ml-0 lg:ml-70">
+
+    <!-- Filter Card -->
+    <div class="no-print bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <div class="flex flex-wrap items-end gap-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-600 mb-1">From:</label>
+          <input id="dateFrom" type="date" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f2942]">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-600 mb-1">To:</label>
+          <input id="dateTo" type="date" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f2942]">
+        </div>
+        <button id="loadBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2 rounded-md transition">
+          Load Report
+        </button>
+        <button id="printBtn" class="bg-[#111827] hover:bg-black text-white font-semibold text-sm px-5 py-2 rounded-md transition flex items-center gap-2">
+          🖨️ Print
+        </button>
+      </div>
+    </div>
+
+    <div id="loadingMsg" class="hidden text-center text-gray-400 py-8 text-sm">Loading sale report...</div>
+    <div id="errorMsg" class="hidden text-center text-red-500 py-8 text-sm bg-red-50 border border-red-200 rounded-md"></div>
+
+    <!-- Report Card -->
+    <div id="reportCard" class="hidden bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 min-w-0 max-w-full overflow-hidden">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
+        <h2 id="reportTitle" class="text-lg font-extrabold text-gray-800">Monthly Report</h2>
+        <span id="printedAt" class="text-xs text-gray-400"></span>
+      </div>
+
+     <div class="relative w-full max-w-full h-[55vh] sm:h-[60vh] lg:h-[62vh]
+            overflow-auto overscroll-contain
+            border border-gray-200 rounded-md
+            [&::-webkit-scrollbar]:h-2
+            [&::-webkit-scrollbar]:w-2
+            [&::-webkit-scrollbar-track]:bg-gray-100
+            [&::-webkit-scrollbar-thumb]:bg-gray-300
+            [&::-webkit-scrollbar-thumb]:rounded-full
+            hover:[&::-webkit-scrollbar-thumb]:bg-gray-400">
+
+  <table class="report-table min-w-max w-max text-xs border-collapse table-auto">
+
+    <thead>
+      <tr id="theadRow" class="bg-[#0f2942] text-white">
+
+        <th class="px-3 py-2 text-left sticky left-0 top-0
+                   bg-[#0f2942] z-30
+                   shadow-[2px_0_3px_rgba(0,0,0,0.08)]">
+          Party Name
+        </th>
+
+        <th class="px-3 py-2 text-right sticky top-0
+                   bg-[#0f2942] z-20">
+          Rate
+        </th>
+
+        <th class="px-0 py-0 sticky top-0
+                   bg-[#0f2942] z-20">
+        </th>
+
+        <th class="px-3 py-2 text-right sticky top-0
+                   bg-[#0f2942] z-20">
+          Total Qty
+        </th>
+
+        <th class="px-3 py-2 text-right sticky top-0
+                   bg-[#0f2942] z-20">
+          Total Bill
+        </th>
+
+        <th class="px-3 py-2 text-right sticky top-0
+                   bg-[#0f2942] z-20">
+          Prev Bal
+        </th>
+
+        <th class="px-3 py-2 text-right sticky top-0
+                   bg-[#0f2942] z-20">
+          New Bal
+        </th>
+
+      </tr>
+    </thead>
+
+    <tbody
+      id="reportBody"
+      class="divide-y divide-gray-100">
+    </tbody>
+
+    <tfoot
+      id="reportFooter"
+      class="bg-gray-50 font-bold text-gray-800">
+    </tfoot>
+
+  </table>
+
+</div>
+
+      <p class="text-xs text-gray-400 mt-3 leading-5 wrap-break-word">
+        Cell format = Morning&nbsp;Qty / Evening&nbsp;Qty per day. Cancelled orders are excluded.
+        "Prev Bal" and "New Bal" are derived as <b>New&nbsp;Bal − Total&nbsp;Bill&nbsp;=&nbsp;Prev&nbsp;Bal</b>,
+        where New&nbsp;Bal is the customer's current account balance.
+      </p>
+    </div>
+
+    <div id="emptyState" class="text-center text-gray-400 py-16 text-sm">
+      Select a date range and click <span class="font-semibold text-gray-500">Load Report</span> to view sales.
+    </div>
+
+    <footer class="no-print text-center text-xs text-gray-300 mt-10 pb-4">
+      © 2026 | Powered by <b>MARKING BOOSTER</b>
+    </footer>
+  </main>
+</div>
+<script src="../js/sidebar.js"></script>
+<script>
+/* ================== CONFIG ================== */
+// Full absolute URL — must match wherever "inventory-system" lives on your server.
+const BASE_URL = "http://localhost/inventory-system";
+const ORDERS_API = `${BASE_URL}/action/orders/get_orders.php`;
+
+console.log('ORDERS_API =', ORDERS_API);
+
+/* ================== DOM ================== */
+const dateFrom = document.getElementById('dateFrom');
+const dateTo = document.getElementById('dateTo');
+const loadBtn = document.getElementById('loadBtn');
+const printBtn = document.getElementById('printBtn');
+const loadingMsg = document.getElementById('loadingMsg');
+const errorMsg = document.getElementById('errorMsg');
+const reportCard = document.getElementById('reportCard');
+const emptyState = document.getElementById('emptyState');
+const reportTitle = document.getElementById('reportTitle');
+const printedAt = document.getElementById('printedAt');
+const reportBody = document.getElementById('reportBody');
+const reportFooter = document.getElementById('reportFooter');
+
+/* default range: current month */
+(function initDates(){
+  const now = new Date();
+  const first = new Date(now.getFullYear(), now.getMonth(), 1);
+  const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  dateFrom.value = first.toISOString().slice(0,10);
+  dateTo.value = last.toISOString().slice(0,10);
+})();
+
+/* ================== HELPERS ================== */
+function money(n){
+  const num = Number(n || 0);
+  return num.toLocaleString('en-PK', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+function pad2(n){ return String(n).padStart(2,'0'); }
+function toISO(d){ return d.toISOString().slice(0,10); }
+function dateRange(fromISO, toISO_){
+  const dates = [];
+  let cur = new Date(fromISO + 'T00:00:00');
+  const end = new Date(toISO_ + 'T00:00:00');
+  while (cur <= end){
+    dates.push(new Date(cur));
+    cur.setDate(cur.getDate() + 1);
+  }
+  return dates;
+}
+function showError(msg){
+  errorMsg.textContent = msg;
+  errorMsg.classList.remove('hidden');
+  loadingMsg.classList.add('hidden');
+}
+function clearMessages(){
+  errorMsg.classList.add('hidden');
+  loadingMsg.classList.add('hidden');
+}
+
+/* ================== LOAD & BUILD REPORT ================== */
+async function loadReport(){
+  const from = dateFrom.value;
+  const to = dateTo.value;
+
+  if (!from || !to){
+    showError('Please select both From and To dates.');
+    return;
+  }
+
+  clearMessages();
+  loadingMsg.classList.remove('hidden');
+  reportCard.classList.add('hidden');
+  emptyState.classList.add('hidden');
+
+  try{
+    const res = await fetch(ORDERS_API);
+    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    const orders = await res.json();
+    console.log('get_orders.php response:', orders);
+
+    if (!Array.isArray(orders)){
+      showError('Unexpected response from get_orders.php (expected an array). Check console.');
+      return;
+    }
+
+    buildReport(orders, from, to);
+
+    loadingMsg.classList.add('hidden');
+    reportCard.classList.remove('hidden');
+  }catch(err){
+    console.error('Failed to load sale report:', err);
+    showError('Could not load sale report from ' + ORDERS_API + '. Open DevTools console for details.');
+  }
+}
+
+function buildReport(orders, from, to){
+  const days = dateRange(from, to);
+
+  // Filter orders within range, excluding cancelled
+  const filtered = orders.filter(o => {
+    if (!o.order_date) return false;
+    if ((o.status || '').toLowerCase() === 'cancelled') return false;
+    return o.order_date >= from && o.order_date <= to;
+  });
+
+  // Group by customer
+  const parties = {}; // customer_id -> {name, rate, currentBalance, totalBill, days: {iso: {m:0,e:0}}}
+  filtered.forEach(o => {
+    const cid = o.customer_id;
+    if (!parties[cid]){
+      parties[cid] = {
+        name: o.customer_name || `#${cid}`,
+        rate: parseFloat((o.product_rates || '0').toString().split(',')[0]) || 0,
+        currentBalance: Number(o.current_balance || 0),
+        totalBill: 0,
+        totalQtyM: 0,
+        totalQtyE: 0,
+        days: {}
+      };
+    }
+    const p = parties[cid];
+    const iso = o.order_date;
+    if (!p.days[iso]) p.days[iso] = { m: 0, e: 0 };
+
+    const qty = Number(o.total_qty || 0);
+    const isMorning = (o.shift || '').toLowerCase() === 'morning';
+    if (isMorning) { p.days[iso].m += qty; p.totalQtyM += qty; }
+    else { p.days[iso].e += qty; p.totalQtyE += qty; }
+
+    p.totalBill += Number(o.total || 0);
+  });
+
+  // Build day header cells (look up by stable id — safe to call repeatedly)
+  const theadRow = document.getElementById('theadRow');
+  theadRow.innerHTML = `
+    <th class="px-3 py-2 text-left sticky left-0 top-0 bg-[#0f2942] z-30 shadow-[2px_0_3px_rgba(0,0,0,0.08)]">Party Name</th>
+    <th class="px-3 py-2 text-right">Rate</th>
+    ${days.map(d => `<th class="px-2 py-2 text-center sticky top-0 bg-[#0f2942] z-20">${pad2(d.getDate())}</th>`).join('')}
+    <th class="px-3 py-2 text-right sticky top-0 bg-[#0f2942] z-20">Total Qty</th>
+    <th class="px-3 py-2 text-right sticky top-0 bg-[#0f2942] z-20">Total Bill</th>
+    <th class="px-3 py-2 text-right sticky top-0 bg-[#0f2942] z-20">Prev Bal</th>
+    <th class="px-3 py-2 text-right sticky top-0 bg-[#0f2942] z-20">New Bal</th>
+  `;
+
+  // Build body rows
+  reportBody.innerHTML = '';
+  const partyList = Object.values(parties).sort((a,b) => a.name.localeCompare(b.name));
+
+  const colTotals = {
+    qtyM: 0, qtyE: 0, totalBill: 0, prevBal: 0, newBal: 0,
+    perDay: days.map(() => ({ m: 0, e: 0 }))
+  };
+
+  if (partyList.length === 0){
+    reportBody.innerHTML = `<tr><td colspan="${days.length + 6}" class="px-4 py-8 text-center text-gray-400">No orders found for this date range.</td></tr>`;
+  } else {
+    partyList.forEach(p => {
+      const newBal = p.currentBalance;
+      const prevBal = newBal - p.totalBill;
+
+      const dayCells = days.map((d, idx) => {
+        const iso = toISO(d);
+        const cell = p.days[iso] || { m: 0, e: 0 };
+        colTotals.perDay[idx].m += cell.m;
+        colTotals.perDay[idx].e += cell.e;
+        const empty = cell.m === 0 && cell.e === 0;
+        return `<td class="px-2 py-2 text-center ${empty ? 'text-gray-300' : 'text-gray-700 font-medium'}">${empty ? '-' : `${cell.m}/${cell.e}`}</td>`;
+      }).join('');
+
+      colTotals.qtyM += p.totalQtyM;
+      colTotals.qtyE += p.totalQtyE;
+      colTotals.totalBill += p.totalBill;
+      colTotals.prevBal += prevBal;
+      colTotals.newBal += newBal;
+
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-gray-50';
+      tr.innerHTML = `
+        <td class="px-3 py-2 font-semibold text-gray-800 sticky left-0 bg-white z-10 shadow-[2px_0_3px_rgba(0,0,0,0.05)]">${p.name}</td>
+        <td class="px-3 py-2 text-right">${money(p.rate)}</td>
+        ${dayCells}
+        <td class="px-3 py-2 text-right font-semibold">${p.totalQtyM}/${p.totalQtyE}</td>
+        <td class="px-3 py-2 text-right font-semibold">${money(p.totalBill)}</td>
+        <td class="px-3 py-2 text-right ${prevBal < 0 ? 'text-red-500' : 'text-gray-600'}">${money(prevBal)}</td>
+        <td class="px-3 py-2 text-right font-bold ${newBal < 0 ? 'text-red-600' : 'text-[#0f2942]'}">${money(newBal)}</td>
+      `;
+      reportBody.appendChild(tr);
+    });
+  }
+
+  // Footer totals row
+  const totalDayCells = colTotals.perDay.map(c => {
+    const empty = c.m === 0 && c.e === 0;
+    return `<td class="px-2 py-2 text-center ${empty ? 'text-gray-300' : ''}">${empty ? '-' : `${c.m}/${c.e}`}</td>`;
+  }).join('');
+
+  reportFooter.innerHTML = `
+    <tr>
+      <td class="px-3 py-2 sticky left-0 bg-gray-50 z-10 shadow-[2px_0_3px_rgba(0,0,0,0.05)]" colspan="2">Column Totals</td>
+      ${totalDayCells}
+      <td class="px-3 py-2 text-right">${colTotals.qtyM}/${colTotals.qtyE}</td>
+      <td class="px-3 py-2 text-right">${money(colTotals.totalBill)}</td>
+      <td class="px-3 py-2 text-right">${money(colTotals.prevBal)}</td>
+      <td class="px-3 py-2 text-right">${money(colTotals.newBal)}</td>
+    </tr>
+  `;
+
+  // Title & print timestamp
+  const fromD = new Date(from + 'T00:00:00');
+  const toD = new Date(to + 'T00:00:00');
+  const sameMonth = fromD.getMonth() === toD.getMonth() && fromD.getFullYear() === toD.getFullYear();
+  reportTitle.textContent = sameMonth
+    ? `Monthly Report: ${fromD.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
+    : `Sale Report: ${from} to ${to}`;
+
+  const now = new Date();
+  printedAt.textContent = `Printed: ${now.toLocaleDateString('en-GB')} ${now.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'})}`;
+}
+
+/* ================== EVENTS ================== */
+loadBtn.addEventListener('click', loadReport);
+printBtn.addEventListener('click', () => window.print());
+
+/* auto-load on first visit */
+loadReport();
+</script>
+
+</body>
+</html>

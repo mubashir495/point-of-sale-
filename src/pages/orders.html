@@ -1,0 +1,1242 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Management</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+      <script src="../js/auth_check.js"></script>
+</head>
+
+  <body class="bg-slate-100 dark:bg-slate-900">
+    <!-- Top Navbar -->
+        <!-- Top Navbar -->
+    <header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+      <div class="flex items-center gap-4">
+        <button id="menuToggle" type="button" class="text-white text-xl hover:text-amber-400 transition-colors">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Logo" />
+        <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+      </div>
+      <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+        <i class="fa-regular fa-clock mr-1"></i>
+        <span id="currentDate"></span>
+      </div>
+    </header>
+
+    <div class="flex">
+      <!-- Sidebar -->
+            <!-- Sidebar -->
+      <aside id="main-sidebar" class="w-[320px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300 flex flex-col justify-between h-[calc(100vh-64px)] overflow-y-auto shadow-xl border-r border-slate-800 transition-all duration-300 z-40 transform -translate-x-full lg:translate-x-0">
+        <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative">
+          <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm">
+            <span class="text-[#051E3D] font-black text-xl tracking-wider"><img src="../../assets/images/logo.png" class="rounded-full" alt="Logo" /></span>
+            <button class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+          <h2 class="mt-3 text-lg font-bold text-white tracking-wide">MARKING BOOSTER</h2>
+          <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scrollbar px-3 py-4 space-y-1" id="sidebarNav">
+          <a href="./dashboard.html" class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+            <i class="fa-solid fa-gauge-high text-lg"></i>
+            <span class="font-medium text-sm">Dashboard</span>
+          </a>
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-user-gear text-lg"></i>
+                <span class="font-medium text-sm">Administration</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+              <a href="./employees.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+              <a href="./cities.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+              <a href="./area-zones.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+              <a href="./branch-users.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Branch Users</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-boxes-stacked text-lg"></i>
+                <span class="font-medium text-sm">Inventory</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+              <a href="./category.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Category</a>
+              <a href="./product.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Products</a>
+              <a href="./stock-audit-report.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit &amp; Report</a>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
+                <span class="font-medium text-sm">Billing &amp; Payments</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+
+              <a href="./counter-sale.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+              <a href="./orders.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Orders</a>
+              <a href="./sale-invoices.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoice History</a>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-users-viewfinder text-lg"></i>
+                <span class="font-medium text-sm">HR &amp; Payroll</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+              <a href="./attendance.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+              <a href="./generate-salary.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+              <a href="./salary-sheet.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button type="button" class="dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 transition-colors group">
+              <div class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+                <span class="font-medium text-sm">Reports</span>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs text-gray-400 pointer-events-none transition-transform duration-200"></i>
+            </button>
+            <div class="dropdown-menu hidden mt-1 space-y-1 pl-6 transition-all">
+              <a href="./monthly-sale-repot.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sales Report</a>
+              <a href="./invoice-report.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoice Report</a>
+              <a href="./stock-audit-report.html" class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-700/40 space-y-4">
+          <div class="flex items-center justify-between px-2">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                <i class="fa-solid fa-palette text-sm"></i>
+              </div>
+              <span class="text-sm font-medium text-white">Theme</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="theme-toggle" class="sr-only peer" checked />
+              <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+            </label>
+          </div>
+          <button id="logoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+            <i class="fa-solid fa-power-off text-sm"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+
+      <style>
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 4px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #1e293b;
+        }
+        .dropdown-menu.show {
+          display: block !important;
+        }
+        .action-dropdown {
+          position: absolute;
+          right: 0;
+          top: 100%;
+          min-width: 180px;
+          z-index: 50;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .dark .action-dropdown {
+          background: #1f2937;
+        }
+        .action-dropdown-item {
+          transition: all 0.2s;
+          padding: 8px 16px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          cursor: pointer;
+        }
+        .action-dropdown-item:hover {
+          background-color: #f3f4f6;
+        }
+        .dark .action-dropdown-item:hover {
+          background-color: #374151;
+        }
+        .status-badge {
+          padding: 4px 12px;
+          border-radius: 20px;
+          font-size: 11px;
+          font-weight: 600;
+          white-space: nowrap;
+        }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-confirmed { background: #dbeafe; color: #1e40af; }
+        .status-delivered { background: #d1fae5; color: #065f46; }
+        .status-cancelled { background: #fecaca; color: #991b1b; }
+        .status-invoiced { background: #e0e7ff; color: #3730a3; }
+        .dark .status-pending { background: #78350f; color: #fcd34d; }
+        .dark .status-confirmed { background: #1e3a5f; color: #93c5fd; }
+        .dark .status-delivered { background: #064e3b; color: #6ee7b7; }
+        .dark .status-cancelled { background: #7f1d1d; color: #fca5a5; }
+        .dark .status-invoiced { background: #312e81; color: #a5b4fc; }
+        .product-row { transition: all 0.3s ease; }
+        .product-row:hover { background-color: #f3f4f6; }
+        .dark .product-row:hover { background-color: #374151; }
+        .customer-search-result { cursor: pointer; transition: all 0.2s; }
+        .customer-search-result:hover { background-color: #f3f4f6; }
+        .dark .customer-search-result:hover { background-color: #374151; }
+        #customerSearchResults { max-height: 200px; overflow-y: auto; }
+
+        /* Tabs */
+        .order-tab-btn {
+          padding: 10px 4px;
+          font-weight: 600;
+          font-size: 14px;
+          color: #6b7280;
+          border-bottom: 2px solid transparent;
+          transition: all 0.2s;
+        }
+        .order-tab-btn.active {
+          color: #2563eb;
+          border-bottom-color: #2563eb;
+        }
+        .dark .order-tab-btn { color: #9ca3af; }
+        .dark .order-tab-btn.active { color: #60a5fa; border-bottom-color: #60a5fa; }
+
+        /* Status modal option cards */
+        .status-option {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 12px;
+          border-radius: 10px;
+          border: 1.5px solid;
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          background: transparent;
+        }
+        .status-option i { font-size: 13px; }
+        .status-option.selected {
+          box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+          transform: translateY(-1px);
+        }
+        .payment-toggle.selected-yes {
+          background: #ecfdf5; border-color: #10b981 !important; color: #047857 !important;
+        }
+        .dark .payment-toggle.selected-yes {
+          background: rgba(16,185,129,0.12); color: #6ee7b7 !important;
+        }
+        .payment-toggle.selected-no {
+          background: #fef2f2; border-color: #ef4444 !important; color: #b91c1c !important;
+        }
+        .dark .payment-toggle.selected-no {
+          background: rgba(239,68,68,0.12); color: #fca5a5 !important;
+        }
+        #stToast {
+          position: fixed; top: 20px; right: 20px; z-index: 100;
+          transform: translateX(120%); transition: transform 0.3s ease;
+        }
+        #stToast.show { transform: translateX(0); }
+
+        @media print {
+          body * { visibility: hidden; }
+          #printArea, #printArea * { visibility: visible; }
+          #printArea {
+            position: absolute; left: 0; top: 0; width: 100%;
+          }
+        }
+      </style>
+
+      <!-- Main Content -->
+      <main class="w-full px-4 py-5">
+        <div
+          class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm"
+        >
+          <div class="flex flex-wrap justify-between items-center p-5">
+            <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
+              Order Management
+            </h2>
+            <button
+              id="openModal"
+              class="bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-5 py-2 rounded font-medium text-sm"
+            >
+              + New Order
+            </button>
+          </div>
+
+          <!-- Tabs -->
+          <div class="px-5 border-t dark:border-gray-700 flex gap-8 pt-3">
+            <button id="tabCustomerOrders" class="order-tab-btn active">
+              Customer Orders
+            </button>
+            <button id="tabEmployeeOrders" class="order-tab-btn">
+              Employee Orders
+            </button>
+          </div>
+
+          <!-- ============ CUSTOMER ORDERS PANEL ============ -->
+          <div id="customerOrdersPanel">
+            <!-- Filters -->
+            <div class="p-5 border-t dark:border-gray-700">
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Search Order No, Customer..."
+                  class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 outline-none"
+                />
+                <select
+                  id="statusFilter"
+                  class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2"
+                >
+                  <option value="">All Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Confirmed">Confirmed</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Complete">Complete</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+                <select
+                  id="customerFilter"
+                  class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2"
+                >
+                  <option value="">All Customers</option>
+                </select>
+                <input
+                  type="date"
+                  id="dateFrom"
+                  class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 outline-none"
+                />
+                <input
+                  type="date"
+                  id="dateTo"
+                  class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 outline-none"
+                />
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="px-5 pb-5 overflow-x-auto">
+              <table class="w-full border dark:border-gray-700 text-sm">
+                <thead class="bg-gray-50 dark:bg-gray-700 dark:text-white">
+                  <tr>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Sr#</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">ID</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Product</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Customer Name</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Contact</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Address</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Area</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-right">Balance</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-right">Rate</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-right">Qty</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Shift</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Status</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody" class="dark:text-gray-300"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ============ EMPLOYEE ORDERS PANEL ============ -->
+          <div id="employeeOrdersPanel" class="hidden">
+            <div class="p-5 border-t dark:border-gray-700">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <input
+                  type="text"
+                  id="empSearchInput"
+                  placeholder="Search Employee, Order No, Customer..."
+                  class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 outline-none"
+                />
+                <select
+                  id="empShiftFilter"
+                  class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2"
+                >
+                  <option value="">All Shifts</option>
+                  <option value="Morning">Morning</option>
+                  <option value="Evening">Evening</option>
+                </select>
+              </div>
+            </div>
+            <div class="px-5 pb-5 overflow-x-auto">
+              <table class="w-full border dark:border-gray-700 text-sm">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">#</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Employee</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Designation</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Shift</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Order No</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Customer</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Items</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Order Date</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-right">Total</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Status</th>
+                    <th class="border dark:border-gray-600 px-2 py-2 text-left">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="employeeOrdersTableBody" class="dark:text-gray-300"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ======================== ORDER MODAL (Add/Edit) ======================== -->
+    <div
+      id="modalOverlay"
+      class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-[1000px] max-h-[95vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm z-10 rounded-t-xl">
+          <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight" id="modalTitle">New Order</h2>
+          <button id="closeModal" class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20">×</button>
+        </div>
+        <div class="p-6">
+          <form id="orderForm" novalidate>
+            <input type="hidden" id="orderId" value="0" />
+
+            <div class="mb-6 border-b dark:border-gray-700 pb-6">
+              <h3 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-3">Customer Information</h3>
+              <div class="relative">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search Customer <span class="text-red-500">*</span></label>
+                <div class="flex gap-2">
+                  <div class="flex-1 relative">
+                    <input type="text" id="customerSearch" placeholder="Search by name, phone or code..." class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+                    <div id="customerSearchResults" class="absolute z-10 w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg mt-1 hidden max-h-60 overflow-y-auto shadow-lg"></div>
+                  </div>
+                  <button type="button" id="addNewCustomerBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap"><i class="fa-solid fa-plus"></i> New</button>
+                </div>
+                <input type="hidden" id="selectedCustomerId" value="" />
+              </div>
+              <div id="selectedCustomerInfo" class="hidden">
+                <p><strong>Name:</strong> <span id="displayCustomerName"></span></p>
+                <p><strong>Phone:</strong> <span id="displayCustomerPhone"></span></p>
+                <p><strong>City:</strong> <span id="displayCustomerCity"></span></p>
+                <p><strong>Area:</strong> <span id="displayCustomerArea"></span></p>
+                <p><strong>Address:</strong> <span id="displayCustomerAddress"></span></p>
+                <p><strong>Balance:</strong> <span id="displayCustomerBalance"></span></p>
+              </div>
+            </div>
+
+            <div class="mb-6 border-b dark:border-gray-700 pb-6">
+              <h3 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-3">Order Details</h3>
+              <div class="grid md:grid-cols-4 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order Date <span class="text-red-500">*</span></label>
+                  <input type="date" id="orderDate" required class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Delivery Date</label>
+                  <input type="date" id="deliveryDate" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Shift <span class="text-red-500">*</span></label>
+                  <select id="orderShift" required class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                    <option value="">Select Shift</option>
+                    <option value="Morning">Morning</option>
+                    <option value="Evening">Evening</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Employee <span class="text-red-500">*</span></label>
+                  <select id="employeeSelect" required class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                    <option value="">Select Employee</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                  <select id="categorySelect" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                    <option value="">All Categories</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-md font-semibold text-gray-700 dark:text-gray-300">Products <span class="text-red-500">*</span></h3>
+                <button type="button" id="addProductBtn" class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm font-medium rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition border border-blue-100 dark:border-blue-800">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                  Add Product
+                </button>
+              </div>
+              <div id="productContainer" class="space-y-3"></div>
+              <div id="productError" class="text-red-500 text-sm mt-2 hidden">Please add at least one product.</div>
+            </div>
+
+            <div class="border-t dark:border-gray-700 pt-4">
+              <div class="grid md:grid-cols-3 gap-4 max-w-md ml-auto">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subtotal</label>
+                  <input type="number" id="subtotal" value="0.00" step="0.01" readonly class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded-lg px-3 py-2.5 text-sm bg-gray-100 dark:bg-gray-600 cursor-not-allowed" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Discount</label>
+                  <input type="number" id="discount" value="0.00" step="0.01" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Total</label>
+                  <input type="number" id="totalAmount" value="0.00" step="0.01" readonly class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded-lg px-3 py-2.5 text-sm bg-gray-100 dark:bg-gray-600 cursor-not-allowed font-bold" />
+                </div>
+              </div>
+              <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Remarks</label>
+                <textarea id="orderRemarks" rows="2" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="Additional remarks..."></textarea>
+              </div>
+            </div>
+
+            <div class="border-t border-gray-100 dark:border-gray-700 px-0 py-4 mt-6 flex justify-end gap-3">
+              <button type="button" id="closeBtn" class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition shadow-sm">Close</button>
+              <button type="submit" class="px-6 py-2.5 text-sm font-medium text-white bg-gray-800 dark:bg-gray-700 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-600 transition shadow-sm flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+                Save Order
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== NEW CUSTOMER MODAL ======================== -->
+    <div id="customerModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-[700px] max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm z-10 rounded-t-xl">
+          <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Add New Customer</h2>
+          <button id="closeCustomerModal" class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none">×</button>
+        </div>
+        <div class="p-6">
+          <form id="customerForm">
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer Name <span class="text-red-500">*</span></label>
+                <input type="text" id="newCustomerName" placeholder="Enter customer name" required class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone <span class="text-red-500">*</span></label>
+                <input type="text" id="newCustomerPhone" placeholder="03XX-XXXXXXX" required class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                <input type="email" id="newCustomerEmail" placeholder="customer@email.com" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">City <span class="text-red-500">*</span></label>
+                <select id="newCustomerCity" required class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                  <option value="">Select City</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Area <span class="text-red-500">*</span></label>
+                <select id="newCustomerArea" required class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                  <option value="">Select Area</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Opening Balance</label>
+                <input type="number" id="newCustomerBalance" value="0.00" step="0.01" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Address</label>
+                <input type="text" id="newCustomerAddress" placeholder="Street, building, landmark..." class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+              </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+              <button type="button" id="closeCustomerBtn" class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition shadow-sm">Cancel</button>
+              <button type="submit" class="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition shadow-sm">Add Customer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== VIEW ORDER MODAL ======================== -->
+    <div id="viewOrderModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-[750px] max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm z-10 rounded-t-xl">
+          <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Order Details</h2>
+          <button id="closeViewOrderModal" class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none">×</button>
+        </div>
+        <div class="p-6">
+          <div id="printArea">
+            <div class="flex justify-between items-start mb-4 pb-4 border-b dark:border-gray-700">
+              <div>
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">MARKING BOOSTER</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400"><i class="fa-solid fa-location-dot mr-1"></i>Multan</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Order: <span id="voOrderNo"></span></p>
+                <span id="voStatusBadge" class="status-badge"></span>
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-4 text-sm">
+              <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                <p class="font-semibold text-gray-700 dark:text-gray-300 mb-1">Customer</p>
+                <p id="voCustomerName" class="text-gray-800 dark:text-gray-200"></p>
+                <p id="voCustomerPhone" class="text-gray-500 dark:text-gray-400"></p>
+                <p id="voCustomerAddress" class="text-gray-500 dark:text-gray-400"></p>
+              </div>
+              <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                <p><span class="font-semibold">Order Date:</span> <span id="voOrderDate"></span></p>
+                <p><span class="font-semibold">Delivery Date:</span> <span id="voDeliveryDate"></span></p>
+                <p><span class="font-semibold">Shift:</span> <span id="voShift"></span></p>
+                <p><span class="font-semibold">Employee:</span> <span id="voEmployee"></span></p>
+              </div>
+            </div>
+
+            <table class="w-full border dark:border-gray-700 text-sm mb-4">
+              <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-left">Product</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-right">Qty</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-right">Unit Price</th>
+                  <th class="border dark:border-gray-600 px-2 py-2 text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody id="voItemsBody"></tbody>
+            </table>
+
+            <div class="flex justify-end">
+              <div class="w-64 text-sm space-y-1">
+                <div class="flex justify-between"><span>Subtotal:</span><span id="voSubtotal"></span></div>
+                <div class="flex justify-between"><span>Discount:</span><span id="voDiscount"></span></div>
+                <div class="flex justify-between font-bold text-base border-t dark:border-gray-700 pt-1"><span>Total:</span><span id="voTotal"></span></div>
+              </div>
+            </div>
+
+            <div id="voRemarksWrap" class="mt-4 text-sm">
+              <p class="font-semibold text-gray-700 dark:text-gray-300">Remarks:</p>
+              <p id="voRemarks" class="text-gray-500 dark:text-gray-400"></p>
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-gray-100 dark:border-gray-700 px-6 py-4 flex justify-end gap-3">
+          <button id="printOrderBtn" class="px-5 py-2.5 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition flex items-center gap-2">
+            <i class="fa-solid fa-print"></i> Print
+          </button>
+          <button id="closeViewOrderBtn" class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== PAY MODAL (New Transaction) ======================== -->
+    <div id="payModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-[420px]">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">New Transaction</h2>
+          <button id="closePayModal" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">×</button>
+        </div>
+        <div class="p-6 space-y-4">
+          <input type="hidden" id="payCustomerId" value="" />
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type</label>
+            <select id="txnType" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+              <option value="in">Money Received (In)</option>
+              <option value="out">Money Paid (Out)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount</label>
+            <input type="number" id="txnAmount" step="0.01" min="0" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Remarks</label>
+            <input type="text" id="txnRemarks" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
+          </div>
+        </div>
+        <div class="border-t border-gray-100 dark:border-gray-700 px-6 py-4 flex justify-end gap-3">
+          <button id="closePayBtn" class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">Close</button>
+          <button id="postTxnBtn" class="px-6 py-2.5 text-sm font-medium text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition">Post</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== INVOICE MODAL (Party Invoices Report) ======================== -->
+    <div id="invoiceModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-[1000px] max-h-[92vh] overflow-y-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-10">
+      <h2 class="text-lg font-semibold text-gray-800 dark:text-white">
+        Party Invoice Report
+      </h2>
+      <button 
+        id="closeInvoiceModal"
+        class="text-gray-400 hover:text-red-500 text-2xl">
+        ×
+      </button>
+    </div>
+    <div class="p-6" id="invoicePrintArea">
+      <!-- Company Details -->
+      <div class="flex justify-between items-start mb-5 pb-4 border-b dark:border-gray-700">
+
+        <div>
+          <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+            MARKING BOOSTER
+          </h3>
+
+          <p class="text-sm text-gray-500">
+            Multan
+          </p>
+
+          <p class="text-sm text-gray-500">
+            03114683143
+          </p>
+        </div>
+        <div class="text-right">
+          <h3 class="font-semibold text-gray-700 dark:text-gray-300">
+            Invoice Report
+          </h3>
+          <p class="text-sm text-gray-500">
+            <span id="invDateFromLabel"></span>
+            To
+            <span id="invDateToLabel"></span>
+          </p>
+        </div>
+      </div>
+      <div class="flex justify-between mb-5">
+        <div>
+          <p class="text-xs text-gray-400 uppercase">
+            Customer Details
+          </p>
+          <h3 
+            id="invCustomerName"
+            class="font-bold text-lg text-gray-800 dark:text-white">
+          </h3>
+          <p id="invCustomerPhone"
+             class="text-sm text-gray-500">
+          </p>
+          <p id="invCustomerAddress"
+             class="text-sm text-gray-500">
+          </p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="rounded-lg border p-4 bg-blue-50 dark:bg-blue-900/20">
+
+          <p class="text-xs text-gray-500 uppercase">
+            Total Invoice Amount
+          </p>
+
+          <h2 id="invTotalAmount"
+              class="text-xl font-bold text-blue-600">
+            0.00
+          </h2>
+        </div>
+        <div class="rounded-lg border p-4 bg-green-50 dark:bg-green-900/20">
+
+          <p class="text-xs text-gray-500 uppercase">
+            Total Paid Amount
+          </p>
+
+          <h2 id="invTotalPaid"
+              class="text-xl font-bold text-green-600">
+            0.00
+          </h2>
+
+        </div>
+
+        <div class="rounded-lg border p-4 bg-red-50 dark:bg-red-900/20">
+
+          <p class="text-xs text-gray-500 uppercase">
+            Total Due Amount
+          </p>
+
+          <h2 id="invTotalDue"
+              class="text-xl font-bold text-red-600">
+            0.00
+          </h2>
+        </div>
+
+        <div class="rounded-lg border p-4 bg-gray-50 dark:bg-gray-700">
+          <p class="text-xs text-gray-500 uppercase">
+            Current Customer Balance
+          </p>
+          <h2 id="invCurrentBalance"
+              class="text-xl font-bold text-gray-800 dark:text-white">
+            0.00
+          </h2>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-3 mb-5">
+        <div>
+          <label class="text-xs text-gray-500">
+            From Date
+          </label>
+          <input 
+            type="date"
+            id="invDateFrom"
+            class="border rounded px-3 py-2 dark:bg-gray-700 dark:text-white">
+        </div>
+        <div>
+          <label class="text-xs text-gray-500">
+            To Date
+          </label>
+          <input 
+            type="date"
+            id="invDateTo"
+            class="border rounded px-3 py-2 dark:bg-gray-700 dark:text-white">
+        </div>
+        <button 
+          id="invLoadBtn"
+          class="bg-blue-600 text-white px-4 py-2 rounded mt-5">
+          Load
+        </button>
+        <button 
+          id="invPrintBtn"
+          class="bg-green-600 text-white px-4 py-2 rounded mt-5">
+
+          Print
+
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+      <table class="w-full border text-sm">
+        <thead class="bg-gray-900 text-white">
+          <tr>
+            <th class="px-3 py-2 text-left">
+              Invoice No
+            </th>
+            <th class="px-3 py-2">
+              Date
+            </th>
+            <th class="px-3 py-2 text-right">
+              Bill Amt
+            </th>
+            <th class="px-3 py-2 text-right">
+              Discount
+            </th>
+            <th class="px-3 py-2 text-right">
+              Net Bill
+            </th>
+            <th class="px-3 py-2 text-right">
+              Prev Balance
+            </th>
+            <th class="px-3 py-2 text-right">
+              Paid
+            </th>
+            <th class="px-3 py-2 text-right">
+              New Balance
+            </th>
+          </tr>
+        </thead>
+        <tbody 
+          id="invoiceTableBody"
+          class="dark:text-gray-300">
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- ======================== LEDGER MODAL (Party Ledger) ======================== -->
+    <div id="ledgerModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-[950px] max-h-[92vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm z-10 rounded-t-xl">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Party Ledger</h2>
+          <button id="closeLedgerModal" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">×</button>
+        </div>
+        <div class="p-6">
+          <div id="ledgerPrintArea">
+            <div class="flex justify-between items-start mb-4 pb-4 border-b dark:border-gray-700">
+              <div>
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">MARKING BOOSTER</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400"><i class="fa-solid fa-location-dot mr-1"></i>Multan</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400"><i class="fa-solid fa-phone mr-1"></i>03114683143</p>
+              </div>
+              <div class="text-right">
+                <p class="font-semibold text-gray-700 dark:text-gray-300">PARTY LEDGER</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400"><span id="ledDateFromLabel"></span> - <span id="ledDateToLabel"></span></p>
+              </div>
+            </div>
+
+            <table class="w-full border dark:border-gray-700 text-sm mb-4">
+              <tbody>
+                <tr>
+                  <td class="bg-gray-900 text-white px-3 py-2 font-semibold w-32">Party Name</td>
+                  <td class="border dark:border-gray-700 px-3 py-2" id="ledCustomerName"></td>
+                  <td class="bg-gray-900 text-white px-3 py-2 font-semibold w-24">Type</td>
+                  <td class="border dark:border-gray-700 px-3 py-2">Cash Customer</td>
+                </tr>
+                <tr>
+                  <td class="bg-gray-900 text-white px-3 py-2 font-semibold">Contact</td>
+                  <td class="border dark:border-gray-700 px-3 py-2" id="ledCustomerPhone"></td>
+                  <td class="bg-gray-900 text-white px-3 py-2 font-semibold">Balance</td>
+                  <td class="border dark:border-gray-700 px-3 py-2 font-bold" id="ledCustomerBalance"></td>
+                </tr>
+                <tr>
+                  <td class="bg-gray-900 text-white px-3 py-2 font-semibold">Address</td>
+                  <td class="border dark:border-gray-700 px-3 py-2" colspan="3" id="ledCustomerAddress"></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="flex flex-wrap items-end gap-3 mb-4">
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">From Date</label>
+                <input type="date" id="ledDateFrom" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">To Date</label>
+                <input type="date" id="ledDateTo" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 text-sm" />
+              </div>
+              <button id="ledLoadBtn" class="px-4 py-2 bg-slate-900 text-white rounded text-sm hover:bg-slate-800">Load</button>
+              <button id="ledPrintBtn" class="px-4 py-2 bg-gray-700 text-white rounded text-sm hover:bg-gray-800">Print</button>
+            </div>
+
+            <table class="w-full border dark:border-gray-700 text-sm">
+              <thead class="bg-gray-900 text-white">
+                <tr>
+                  <th class="px-3 py-2 text-left">Sr</th>
+                  <th class="px-3 py-2 text-left">Date</th>
+                  <th class="px-3 py-2 text-left">Description</th>
+                  <th class="px-3 py-2 text-right">Opening</th>
+                  <th class="px-3 py-2 text-right">Debt</th>
+                  <th class="px-3 py-2 text-right">Credit</th>
+                  <th class="px-3 py-2 text-right">Balance</th>
+                </tr>
+              </thead>
+              <tbody id="ledgerTableBody" class="dark:text-gray-300"></tbody>
+              <tfoot class="font-bold bg-gray-50 dark:bg-gray-700">
+                <tr>
+                  <td colspan="3" class="px-3 py-2 text-right">TOTAL</td>
+                  <td></td>
+                  <td class="px-3 py-2 text-right" id="ledTotalDebit">0.00</td>
+                  <td class="px-3 py-2 text-right" id="ledTotalCredit">0.00</td>
+                  <td class="px-3 py-2 text-right" id="ledClosingBalance">0.00</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== UPDATE STATUS MODAL (new) ======================== -->
+    <div id="statusModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden items-center justify-center z-50 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-[420px]">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Update Order Status</h2>
+          <button id="closeStatusModal" type="button" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">×</button>
+        </div>
+        <div class="p-6 space-y-4">
+          <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+            <div>
+              <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">Order: <span id="stOrderNo"></span></p>
+              <p class="text-xs text-gray-500 dark:text-gray-400" id="stCustomerName"></p>
+            </div>
+            <span id="stCurrentBadge" class="status-badge"></span>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select New Status</label>
+            <div id="stStatusGrid" class="grid grid-cols-2 gap-2"></div>
+          </div>
+
+          <div id="stPaymentSection" class="hidden">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Payment Received?</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" class="payment-toggle status-option border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300" data-payment="1">
+                <i class="fa-solid fa-check"></i> Yes
+              </button>
+              <button type="button" class="payment-toggle status-option border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300" data-payment="0">
+                <i class="fa-solid fa-xmark"></i> No
+              </button>
+            </div>
+          </div>
+
+          <p id="stError" class="text-red-500 text-sm hidden"></p>
+        </div>
+        <div class="border-t border-gray-100 dark:border-gray-700 px-6 py-4 flex justify-end gap-3">
+          <button type="button" id="stCancelBtn" class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">Cancel</button>
+          <button type="button" id="stSaveBtn" class="px-6 py-2.5 text-sm font-medium text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition flex items-center gap-2">
+            <span id="stSpinner" class="hidden"><i class="fa-solid fa-spinner fa-spin"></i></span>
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Small toast for status update feedback -->
+    <div id="stToast" class="hidden rounded-lg shadow-lg px-4 py-3 text-sm font-medium text-white bg-emerald-600 items-center gap-2">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="stToastMsg">Status updated</span>
+    </div>
+
+    <!-- ======================== JAVASCRIPT ======================== -->
+    <script src="../js/orders.js"></script>
+
+ 
+    <!-- ======================== UPDATE STATUS MODAL LOGIC (new) ======================== -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // >>> IMPORTANT: adjust this to your real API path (matches the folder
+        // where update_order_status.php lives, e.g. "../api/update_order_status.php")
+        const STATUS_UPDATE_URL = "../api/update_order_status.php";
+
+        const STATUS_CONFIG = {
+          Pending:   { icon: "fa-clock",         border: "border-amber-300 dark:border-amber-800",  text: "text-amber-700 dark:text-amber-300",   activeBg: "bg-amber-500 border-amber-500 text-white" },
+          Confirmed: { icon: "fa-check-double",  border: "border-blue-300 dark:border-blue-800",    text: "text-blue-700 dark:text-blue-300",     activeBg: "bg-blue-600 border-blue-600 text-white" },
+          Delivered: { icon: "fa-truck-fast",    border: "border-emerald-300 dark:border-emerald-800", text: "text-emerald-700 dark:text-emerald-300", activeBg: "bg-emerald-600 border-emerald-600 text-white" },
+          Complete:  { icon: "fa-circle-check",  border: "border-indigo-300 dark:border-indigo-800", text: "text-indigo-700 dark:text-indigo-300", activeBg: "bg-indigo-600 border-indigo-600 text-white" },
+          Cancelled: { icon: "fa-ban",           border: "border-red-300 dark:border-red-800",      text: "text-red-700 dark:text-red-300",       activeBg: "bg-red-600 border-red-600 text-white" },
+        };
+
+        let stCurrentOrderId = null;
+        let stSelectedStatus = null;
+        let stPaymentReceived = null; // 1 | 0 | null
+
+        function stBadgeClass(status) {
+          if (status === "Complete") return "status-invoiced";
+          return "status-" + String(status || "").toLowerCase();
+        }
+
+        function buildStatusGrid() {
+          const grid = document.getElementById("stStatusGrid");
+          if (!grid) return;
+          grid.innerHTML = "";
+          Object.keys(STATUS_CONFIG).forEach((status) => {
+            const cfg = STATUS_CONFIG[status];
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.dataset.status = status;
+            btn.className = `status-option ${cfg.border} ${cfg.text}`;
+            btn.innerHTML = `<i class="fa-solid ${cfg.icon}"></i> ${status}`;
+            btn.addEventListener("click", () => selectStStatus(status));
+            grid.appendChild(btn);
+          });
+        }
+
+        function selectStStatus(status) {
+          stSelectedStatus = status;
+          const cfg = STATUS_CONFIG[status];
+          if (!cfg) return;
+
+          document.querySelectorAll("#stStatusGrid .status-option").forEach((el) => {
+            const s = el.dataset.status;
+            const c = STATUS_CONFIG[s];
+            if (!c) return;
+            el.classList.remove("selected", ...c.activeBg.split(" "));
+            el.classList.add(c.border, c.text);
+            if (s === status) {
+              el.classList.add("selected", ...cfg.activeBg.split(" "));
+              el.classList.remove(cfg.text);
+            }
+          });
+
+          const paymentSection = document.getElementById("stPaymentSection");
+          const errEl = document.getElementById("stError");
+          if (status === "Delivered") {
+            if (paymentSection) paymentSection.classList.remove("hidden");
+            if (stPaymentReceived === null && errEl) {
+              errEl.classList.add("hidden");
+            }
+          } else {
+            if (paymentSection) paymentSection.classList.add("hidden");
+            stPaymentReceived = null;
+            resetPaymentButtons();
+          }
+          if (errEl) errEl.classList.add("hidden");
+        }
+
+        function resetPaymentButtons() {
+          document.querySelectorAll(".payment-toggle").forEach((b) => {
+            b.classList.remove("selected-yes", "selected-no");
+          });
+        }
+
+        document.querySelectorAll(".payment-toggle").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            stPaymentReceived = btn.dataset.payment === "1" ? 1 : 0;
+            resetPaymentButtons();
+            btn.classList.add(stPaymentReceived ? "selected-yes" : "selected-no");
+            const errEl = document.getElementById("stError");
+            if (errEl) errEl.classList.add("hidden");
+          });
+        });
+
+        // Public function — call this from wherever your row's action menu
+        // has an "Update Status" item, e.g.:
+        // openStatusModal(order.id, order.order_no, order.customer_name, order.status)
+        window.openStatusModal = function (orderId, orderNo, customerName, currentStatus) {
+          stCurrentOrderId = orderId;
+          stSelectedStatus = null;
+          stPaymentReceived = null;
+
+          const orderNoEl = document.getElementById("stOrderNo");
+          if (orderNoEl) orderNoEl.textContent = orderNo || orderId;
+
+          const customerNameEl = document.getElementById("stCustomerName");
+          if (customerNameEl) customerNameEl.textContent = customerName || "";
+
+          const badge = document.getElementById("stCurrentBadge");
+          if (badge) {
+            badge.textContent = currentStatus || "—";
+            badge.className = "status-badge " + stBadgeClass(currentStatus || "");
+          }
+
+          buildStatusGrid();
+          const paymentSection = document.getElementById("stPaymentSection");
+          if (paymentSection) paymentSection.classList.add("hidden");
+          const errEl = document.getElementById("stError");
+          if (errEl) errEl.classList.add("hidden");
+          resetPaymentButtons();
+
+          const modal = document.getElementById("statusModal");
+          if (modal) {
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+          }
+        };
+
+        function closeStStatusModal() {
+          const modal = document.getElementById("statusModal");
+          if (modal) {
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+          }
+        }
+
+        const closeStatusModalBtn = document.getElementById("closeStatusModal");
+        if (closeStatusModalBtn) closeStatusModalBtn.addEventListener("click", closeStStatusModal);
+
+        const stCancelBtn = document.getElementById("stCancelBtn");
+        if (stCancelBtn) stCancelBtn.addEventListener("click", closeStStatusModal);
+
+        function stShowToast(message, isError) {
+          const toast = document.getElementById("stToast");
+          if (!toast) return;
+          const msgEl = document.getElementById("stToastMsg");
+          if (msgEl) msgEl.textContent = message;
+          toast.classList.remove("hidden", "bg-emerald-600", "bg-red-600");
+          toast.classList.add("flex", isError ? "bg-red-600" : "bg-emerald-600");
+          requestAnimationFrame(() => toast.classList.add("show"));
+          setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.classList.add("hidden"), 300);
+          }, 2500);
+        }
+
+        const stSaveBtn = document.getElementById("stSaveBtn");
+        if (stSaveBtn) {
+          stSaveBtn.addEventListener("click", async () => {
+            const errEl = document.getElementById("stError");
+            if (errEl) errEl.classList.add("hidden");
+
+            if (!stSelectedStatus) {
+              if (errEl) {
+                errEl.textContent = "Pehle koi status select karein.";
+                errEl.classList.remove("hidden");
+              }
+              return;
+            }
+            if (stSelectedStatus === "Delivered" && stPaymentReceived === null) {
+              if (errEl) {
+                errEl.textContent = "Batayein payment mili ya nahi.";
+                errEl.classList.remove("hidden");
+              }
+              return;
+            }
+
+            const saveBtn = document.getElementById("stSaveBtn");
+            const spinner = document.getElementById("stSpinner");
+            if (saveBtn) saveBtn.disabled = true;
+            if (spinner) spinner.classList.remove("hidden");
+
+            const payload = {
+              order_id: stCurrentOrderId,
+              status: stSelectedStatus,
+            };
+            if (stSelectedStatus === "Delivered") {
+              payload.payment_received = stPaymentReceived;
+            }
+
+            try {
+              const res = await fetch(STATUS_UPDATE_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+              });
+              const result = await res.json();
+
+              if (!res.ok || !result.success) {
+                throw new Error(result.message || "Update failed");
+              }
+
+              const finalStatus = result.data.new_status;
+
+              // Update badge live in whichever table row matches this order
+              document.querySelectorAll(`tr[data-order-id="${stCurrentOrderId}"] .status-badge`).forEach((el) => {
+                el.textContent = finalStatus;
+                el.className = "status-badge " + stBadgeClass(finalStatus);
+              });
+
+              // Let orders.js (or anything else) react to the change
+              document.dispatchEvent(new CustomEvent("orderStatusUpdated", {
+                detail: { orderId: stCurrentOrderId, status: finalStatus }
+              }));
+
+              stShowToast(
+                finalStatus === "Cancelled" && stSelectedStatus === "Delivered"
+                  ? "Payment na milne ki wajah se order Cancelled kar diya gaya"
+                  : `Status updated to ${finalStatus}`,
+                false
+              );
+              closeStStatusModal();
+            } catch (err) {
+              if (errEl) {
+                errEl.textContent = err.message || "Kuch masla ho gaya, dobara koshish karein.";
+                errEl.classList.remove("hidden");
+              }
+              stShowToast("Update fail ho gaya", true);
+            } finally {
+              if (saveBtn) saveBtn.disabled = false;
+              if (spinner) spinner.classList.add("hidden");
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Area Zones - MARKING BOOSTER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="../js/sidebar.js"></script>
+    <style>
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #1e293b;
+      }
+      .dropdown-menu.show {
+        display: block !important;
+      }
+    </style>
+      <script src="../js/auth_check.js"></script>
+</head>
+  <body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-gray-200 min-h-screen">
+    <!-- Top Navbar -->
+       <!-- Top Navbar -->
+ <header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+  <div class="flex items-center gap-4">
+    <button id="menuToggle" type="button" aria-label="Toggle sidebar" aria-controls="main-sidebar" aria-expanded="false"
+      class="text-white text-xl hover:text-amber-400 transition-colors lg:hidden">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Marking Booster Logo" />
+    <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+  </div>
+  <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+    <i class="fa-regular fa-clock mr-1"></i>
+    <span id="currentDate"></span>
+  </div>
+</header>
+
+<!-- Mobile overlay (click to close sidebar) -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+<div class="flex">
+  <!-- Sidebar -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+ 
+<aside
+  id="main-sidebar"
+  aria-label="Primary"
+  class="w-[280px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300
+         flex flex-col justify-between h-[calc(100vh-64px)] overflow-hidden shadow-xl
+         border-r border-slate-800 transition-transform duration-300 ease-in-out z-40
+         -translate-x-full lg:translate-x-0"
+>
+  <!-- Brand block -->
+  <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative shrink-0">
+    <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm overflow-hidden">
+      <img src="../../assets/images/logo.png" class="w-full h-full rounded-full object-cover" alt="Marking Booster Logo" />
+      <button type="button" class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+        <i class="fa-solid fa-camera"></i>
+      </button>
+    </div>
+    <h2 class="mt-3 text-lg font-bold text-white tracking-wide">Marking Booster</h2>
+    <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+  </div>
+ 
+  <!-- Scrollable nav (only this element scrolls; aside itself stays overflow-hidden) -->
+  <nav
+    id="sidebarNav"
+    class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1
+           [&::-webkit-scrollbar]:w-[5px]
+           [&::-webkit-scrollbar-track]:bg-transparent
+           [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded
+           dark:[&::-webkit-scrollbar-thumb]:bg-slate-800"
+  >
+ 
+    <a href="./dashboard.html" data-nav-link
+      class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+      <i class="fa-solid fa-gauge-high text-lg w-5 text-center"></i>
+      <span class="font-medium text-sm">Dashboard</span>
+    </a>
+<!-- Administration -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-administration"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Administration</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-administration" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./employees.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+        <a href="./branch-users.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+        <a href="./parties.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Parties</a>
+        <a href="./area-zones.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+
+      </div>
+    </div>
+ 
+    <!-- Inventory -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-inventory"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-boxes-stacked text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Inventory</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-inventory" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./brands.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Brands</a>
+        <a href="./category.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Categories</a>
+        <a href="./product.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Items</a>
+        <a href="./raw-materials.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Materials</a>
+      </div>
+    </div>
+ 
+    <!-- Billing & Payments -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-billing"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Billing &amp; Payments</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-billing" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./counter-sale.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+
+        <a href="./orders.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Orders</a>
+        <a href="./purchase.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Purchase</a>
+        <a href="./party_payment.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Payment</a>
+        <a href="./delete-invoice.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Delete Invoice</a>
+      </div>
+    </div>
+ 
+    <!-- Reports -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-reports"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Reports</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-reports" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./party-invoices-detail.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Invoices Detail</a>
+        <a href="./monthly-sale-repot.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Monthly Sale Report</a>
+        <a href="./invoice-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoices Report</a>
+        <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit</a>
+        <a href="./stock-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+        <a href="./customers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Customers Report</a>
+        <a href="./suppliers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Suppliers Report</a>
+      </div>
+    </div>
+ 
+    <!-- Payroll & Accounts -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-payroll"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-users-viewfinder text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Payroll &amp; Accounts</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-payroll" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./expenses.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Expenses</a>
+        <a href="./accounting-system.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Accounting System</a>
+        <a href="./balance-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Balance Sheet</a>
+        <a href="./generate-salary.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+        <a href="./salary-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+        <a href="./attendance.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+        <a href="./attendance-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance Report</a>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- Bottom controls -->
+  <div class="p-4 border-t border-slate-700/40 space-y-4 shrink-0">
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <i class="fa-solid fa-palette text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-white">Theme</span>
+      </div>
+      <!-- Pure Tailwind switch: peer-checked drives the knob + track color -->
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="theme-toggle" class="sr-only peer" aria-label="Toggle dark theme" />
+        <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white
+                    after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
+                    after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+      </label>
+    </div>
+    <button id="logoutBtn" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+      <i class="fa-solid fa-power-off text-sm"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
+
+      <main class="w-full px-4 py-5">
+        <!-- Toast -->
+        <div
+          id="toast"
+          class="hidden fixed top-20 right-6 z-[60] px-4 py-3 rounded-lg shadow-lg text-sm font-semibold text-white"
+        ></div>
+
+        <!-- Filters card -->
+        <div
+          class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm p-5 flex flex-col sm:flex-row items-center justify-between gap-4 mb-6"
+        >
+          <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto flex-1">
+            <div class="relative flex-1 sm:max-w-xs">
+              <span
+                class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"
+                ><i class="fa-solid fa-magnifying-glass text-xs"></i
+              ></span>
+              <input
+                id="search-input"
+                type="text"
+                placeholder="Search Area"
+                class="w-full pl-9 pr-3 py-2 border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+            <select
+              id="city-filter"
+              class="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+            >
+              <option value="">All Cities</option>
+            </select>
+          </div>
+          <div class="flex gap-2 w-full sm:w-auto">
+            <button
+              onclick="openAreaModal()"
+              class="flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg flex items-center justify-center gap-1.5 shadow transition-colors"
+            >
+              <i class="fa-solid fa-plus text-xs"></i> New Area
+            </button>
+          </div>
+        </div>
+
+        <!-- Table card -->
+        <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm overflow-hidden">
+          <div class="px-5 py-4 border-b dark:border-gray-700 flex items-center justify-between">
+            <h3 class="font-bold text-lg text-gray-700 dark:text-gray-200">Areas List</h3>
+            <span
+              id="area-count"
+              class="text-xs font-semibold text-slate-400"
+            ></span>
+          </div>
+
+          <div class="overflow-x-auto px-5 pb-5">
+            <table class="w-full border dark:border-gray-700 text-sm border-collapse">
+              <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left w-24">ID</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">Area</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">City</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">Created</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 w-32 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="areas-tbody" class="dark:text-gray-300 divide-y dark:divide-gray-700">
+                <tr>
+                  <td colspan="5" class="py-10 text-center text-slate-400">
+                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading
+                    areas...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Create / Edit Modal -->
+    <div id="area-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+      <div
+        class="fixed inset-0 bg-black/40 backdrop-blur-[1px]"
+        onclick="closeAreaModal()"
+      ></div>
+      <div class="flex min-h-full items-center justify-center p-4">
+        <div
+          class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md border dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-t-xl"
+          >
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-map-pin text-amber-500"></i>
+              <h3 id="modal-title-text" class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                Create New Area
+              </h3>
+            </div>
+            <button
+              onclick="closeAreaModal()"
+              class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
+            >
+              ×
+            </button>
+          </div>
+
+          <form id="area-form" class="p-6 space-y-4">
+            <input type="hidden" id="entry-id" value="" />
+
+            <div>
+              <label
+                for="city-select"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Select City</label
+              >
+              <select
+                id="city-select"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              >
+                <option value="">Loading cities...</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                for="entry-name"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Area Name</label
+              >
+              <input
+                id="entry-name"
+                type="text"
+                placeholder="e.g. Buch Villas"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+
+            <p
+              id="form-error"
+              class="hidden text-xs font-semibold text-red-600"
+            ></p>
+          </form>
+
+          <div class="px-6 py-4 flex justify-end gap-3 border-t border-gray-100 dark:border-gray-700">
+            <button
+              onclick="closeAreaModal()"
+              class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition shadow-sm"
+            >
+              Cancel
+            </button>
+            <button
+              id="save-btn"
+              onclick="saveEntry()"
+              class="px-6 py-2.5 text-sm font-medium text-white bg-slate-900 dark:bg-slate-700 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-600 transition shadow-sm"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="py-5 text-center text-xs text-gray-400">
+      &copy; 2026 | Powered by:
+      <a
+        href="https://chughtaisoftwares.com"
+        target="_blank"
+        class="text-blue-500"
+        >MarkingBooster.com</a
+      >
+    </footer>
+<script src="../js/orders.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Current Date
+        const currentDate = document.getElementById("currentDate");
+        if (currentDate) {
+          currentDate.textContent = new Date().toLocaleDateString("en-US", {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        }
+
+        // Sidebar Toggle
+        const menuToggle = document.getElementById("menuToggle");
+        const mainSidebar = document.getElementById("main-sidebar");
+
+        if (menuToggle && mainSidebar) {
+          menuToggle.addEventListener("click", () => {
+            if (window.innerWidth < 1024) {
+              mainSidebar.classList.toggle("-translate-x-full");
+            } else {
+              mainSidebar.classList.toggle("w-[320px]");
+              mainSidebar.classList.toggle("w-0");
+              mainSidebar.classList.toggle("overflow-hidden");
+            }
+          });
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById("theme-toggle");
+        if (themeToggle) {
+          themeToggle.addEventListener("change", () => {
+            document.documentElement.classList.toggle("dark");
+          });
+        }
+
+        // Dropdown
+        const dropdownButtons = document.querySelectorAll(".dropdown-toggle");
+        dropdownButtons.forEach((button) => {
+          button.addEventListener("click", function (e) {
+            e.stopPropagation();
+
+            const menu = this.nextElementSibling;
+            const icon = this.querySelector(".fa-chevron-right");
+
+            // Close other dropdowns
+            document.querySelectorAll(".dropdown-menu").forEach((item) => {
+              if (item !== menu) item.classList.add("hidden");
+            });
+
+            document.querySelectorAll(".dropdown-toggle .fa-chevron-right").forEach((i) => {
+              if (i !== icon) i.classList.remove("rotate-90");
+            });
+
+            // Toggle current dropdown
+            menu.classList.toggle("hidden");
+            if (icon) {
+              icon.classList.toggle("rotate-90");
+            }
+          });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", () => {
+          document.querySelectorAll(".dropdown-menu").forEach((menu) => {
+            menu.classList.add("hidden");
+          });
+          document.querySelectorAll(".dropdown-toggle .fa-chevron-right").forEach((icon) => {
+            icon.classList.remove("rotate-90");
+          });
+        });
+      });
+    </script>
+    <script>
+      // ---------- Base setup ----------
+      const API = {
+        cities: "../../action/area-zone/get-cities.php",
+        areas: "../../action/area-zone/get-area.php",
+        createArea: "../../action/area-zone/create-area.php",
+        updateArea: "../../action/area-zone/update-area.php",
+        deleteArea: "../../action/area-zone/delete-area.php",
+      };
+
+      let citiesCache = [];
+      let areasCache = [];
+
+      function updateClock() {
+        // Keeps local setup running without breaking
+      }
+
+      // ---------- Toast ----------
+      function showToast(message, type = "success") {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.className =
+          "fixed top-20 right-6 z-[60] px-4 py-3 rounded-lg shadow-lg text-sm font-semibold text-white " +
+          (type === "success" ? "bg-emerald-600" : "bg-red-600");
+        toast.classList.remove("hidden");
+        setTimeout(() => toast.classList.add("hidden"), 2500);
+      }
+
+      // ---------- Modal ----------
+      function openAreaModal(entry = null) {
+        document.getElementById("area-modal").classList.remove("hidden");
+        document.getElementById("entry-id").value = entry ? entry.id : "";
+        document.getElementById("form-error").classList.add("hidden");
+        document.getElementById("modal-title-text").textContent = entry
+          ? "Edit Area"
+          : "Create New Area";
+        document.getElementById("entry-name").value = entry
+          ? entry.area_name
+          : "";
+        populateCitySelect(entry ? entry.city_id : "");
+      }
+
+      function closeAreaModal() {
+        document.getElementById("area-modal").classList.add("hidden");
+        document.getElementById("area-form").reset();
+      }
+
+      function showFormError(message) {
+        const err = document.getElementById("form-error");
+        err.textContent = message;
+        err.classList.remove("hidden");
+      }
+
+      // ---------- Cities ----------
+      async function loadCities() {
+        try {
+          const res = await fetch(API.cities);
+          const json = await res.json();
+          citiesCache = json.status ? json.data : [];
+          renderCityFilter();
+        } catch (e) {
+          showToast("Failed to load cities", "error");
+        }
+      }
+
+      function renderCityFilter() {
+        const filter = document.getElementById("city-filter");
+        filter.innerHTML =
+          '<option value="">All Cities</option>' +
+          citiesCache
+            .map((c) => `<option value="${c.id}">${c.city_name}</option>`)
+            .join("");
+      }
+
+      function populateCitySelect(selectedId = "") {
+        const select = document.getElementById("city-select");
+        select.innerHTML =
+          '<option value="">Select city</option>' +
+          citiesCache
+            .map(
+              (c) =>
+                `<option value="${c.id}" ${String(c.id) === String(selectedId) ? "selected" : ""}>${c.city_name}</option>`,
+            )
+            .join("");
+      }
+
+      // ---------- Areas ----------
+      async function loadAreas() {
+        try {
+          const res = await fetch(API.areas);
+          const json = await res.json();
+          areasCache = json.status ? json.data : [];
+          renderAreas();
+        } catch (e) {
+          showToast("Failed to load areas", "error");
+        }
+      }
+
+      function renderAreas() {
+        const tbody = document.getElementById("areas-tbody");
+        const search = document
+          .getElementById("search-input")
+          .value.trim()
+          .toLowerCase();
+        const cityId = document.getElementById("city-filter").value;
+
+        const filtered = areasCache.filter((a) => {
+          const matchesSearch =
+            !search || a.area_name.toLowerCase().includes(search);
+          const matchesCity = !cityId || String(a.city_id) === String(cityId);
+          return matchesSearch && matchesCity;
+        });
+
+        document.getElementById("area-count").textContent =
+          filtered.length + " area(s)";
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-slate-400">No areas found</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = filtered
+          .map(
+            (a) => `
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+          <td class="py-4 px-6 text-slate-400 font-mono border-b dark:border-gray-700">${a.id}</td>
+          <td class="py-4 px-6 font-semibold text-slate-900 dark:text-gray-200 border-b dark:border-gray-700">${a.area_name}</td>
+          <td class="py-4 px-6 text-slate-500 dark:text-gray-400 border-b dark:border-gray-700">${a.city_name ?? "-"}</td>
+          <td class="py-4 px-6 text-slate-400 text-xs border-b dark:border-gray-700">${a.created_at ?? "-"}</td>
+          <td class="py-4 px-6 text-center space-x-1 border-b dark:border-gray-700">
+            <button onclick='editArea(${a.id})' class="text-blue-500 hover:text-blue-700 font-semibold px-2 py-1 text-xs">Edit</button>
+            <button onclick='deleteArea(${a.id})' class="text-red-500 hover:text-red-700 font-semibold px-2 py-1 text-xs">Delete</button>
+          </td>
+        </tr>
+      `,
+          )
+          .join("");
+      }
+
+      document
+        .getElementById("search-input")
+        .addEventListener("input", renderAreas);
+      document
+        .getElementById("city-filter")
+        .addEventListener("change", renderAreas);
+
+      function editArea(id) {
+        const entry = areasCache.find((a) => a.id == id);
+        if (entry) openAreaModal(entry);
+      }
+
+      async function deleteArea(id) {
+        if (!confirm("Delete this area?")) return;
+        try {
+          const res = await fetch(API.deleteArea, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id }),
+          });
+          const json = await res.json();
+          if (json.status) {
+            showToast("Area deleted");
+            loadAreas();
+          } else {
+            showToast(json.message || "Delete failed", "error");
+          }
+        } catch (e) {
+          showToast("Delete failed", "error");
+        }
+      }
+
+      // ---------- Save (Create or Update Area) ----------
+      async function saveEntry() {
+        const id = document.getElementById("entry-id").value;
+        const name = document.getElementById("entry-name").value.trim();
+        const cityId = document.getElementById("city-select").value;
+
+        if (!cityId) return showFormError("Please select a city");
+        if (!name) return showFormError("Area name is required");
+
+        try {
+          const url = id ? API.updateArea : API.createArea;
+          const payload = id
+            ? { id, city_id: cityId, area_name: name }
+            : { city_id: cityId, area_name: name };
+
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const json = await res.json();
+          if (!json.status)
+            return showFormError(json.message || "Failed to save area");
+
+          showToast(id ? "Area updated" : "Area created");
+          await loadAreas();
+          closeAreaModal();
+        } catch (e) {
+          showFormError("Something went wrong, please try again");
+        }
+      }
+
+      // ---------- Init ----------
+      (async function init() {
+        await loadCities();
+        await loadAreas();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MARKING BOOSTER - Invoice Report</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body{font-family: 'Segoe UI', Arial, sans-serif;}
+  @media print{
+    .no-print{display:none !important;}
+    body{background:#fff !important;}
+    #printArea{box-shadow:none !important; border:none !important;}
+  }
+</style>
+    <script src="../js/auth_check.js"></script>
+</head>
+<body class="bg-[#f4f6f8] min-h-screen py-8 px-4">
+
+<div id="printArea" class="max-w-6xl mx-auto bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+
+  <!-- Top navy strip -->
+  <div class="h-2 bg-[#0f2942]"></div>
+
+  <div class="p-8">
+
+    <!-- Header -->
+    <div class="flex items-start justify-between flex-wrap gap-4 pb-4 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <div class="w-14 h-14 rounded-full bg-[#0f2942] flex items-center justify-center text-white font-bold text-xs text-center leading-tight overflow-hidden">
+          <img id="logoImg" src="" alt="" class="hidden w-full h-full object-cover rounded-full">
+          <span id="logoFallback">Nowruz</span>
+        </div>
+        <div>
+          <h1 class="text-3xl font-extrabold text-[#0f2942] leading-tight">MARKING BOOSTER</h1>
+          <div class="flex items-center gap-1 text-gray-500 text-sm mt-1">
+            <span>📍</span><span id="companyCity">Multan</span>
+          </div>
+          <div class="flex items-center gap-1 text-gray-500 text-sm">
+            <span>📞</span><span id="companyPhone">0311-4683143</span>
+          </div>
+        </div>
+      </div>
+      <div class="text-right">
+        <h2 class="text-2xl font-extrabold text-[#0f2942] tracking-wide">INVOICE REPORT</h2>
+        <p id="reportMonth" class="text-gray-500 font-medium mt-1"></p>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="no-print flex flex-wrap items-center gap-3 bg-gray-50 border border-gray-200 rounded-md px-4 py-4 mt-5">
+      <select id="customerSelect" class="border border-gray-300 rounded-md px-3 py-2 text-sm min-w-[180px] focus:outline-none focus:ring-2 focus:ring-[#0f2942]">
+        <option value="">Select Customer</option>
+      </select>
+      <input id="dateFrom" type="date" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f2942]">
+      <input id="dateTo" type="date" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f2942]">
+
+      <button id="loadBtn" class="bg-[#0f2942] hover:bg-[#163a5c] text-white text-sm font-semibold px-4 py-2 rounded-md transition">
+        Load
+      </button>
+      <button id="addPaymentBtn" disabled class="bg-[#1a7a4c] hover:bg-[#166b42] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-md transition flex items-center gap-1">
+        <span class="text-lg leading-none">+</span> Add Payment
+      </button>
+      <button id="printBtn" class="bg-[#111827] hover:bg-black text-white px-3 py-2 rounded-md transition" title="Print">
+        🖨️
+      </button>
+    </div>
+
+    <div id="loadingMsg" class="hidden text-center text-gray-400 py-6 text-sm">Loading invoices...</div>
+    <div id="errorMsg" class="hidden text-center text-red-500 py-6 text-sm"></div>
+
+    <div id="reportContent" class="hidden">
+
+      <!-- Customer / Bill summary -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <table class="w-full text-sm border border-gray-200 rounded-md overflow-hidden">
+          <tbody>
+            <tr class="border-b border-gray-200">
+              <td class="bg-gray-50 font-semibold text-gray-600 px-4 py-3 w-1/3">Customer</td>
+              <td id="cCustomer" class="px-4 py-3 text-gray-800"></td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="bg-gray-50 font-semibold text-gray-600 px-4 py-3">Contact</td>
+              <td id="cContact" class="px-4 py-3 text-gray-800"></td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="bg-gray-50 font-semibold text-gray-600 px-4 py-3">Address</td>
+              <td id="cAddress" class="px-4 py-3 text-gray-800"></td>
+            </tr>
+            <tr>
+              <td class="bg-gray-50 font-semibold text-gray-600 px-4 py-3">Current A/C Balance</td>
+              <td id="cBalance" class="px-4 py-3 font-bold text-[#0f2942]"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="w-full text-sm border border-gray-200 rounded-md overflow-hidden">
+          <tbody>
+            <tr class="border-b border-gray-200">
+              <td class="bg-gray-50 font-semibold text-gray-600 px-4 py-3 w-1/2">Current Bill</td>
+              <td id="sCurrentBill" class="px-4 py-3 text-right text-gray-800"></td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="bg-gray-50 font-semibold text-gray-600 px-4 py-3">Prev. Arrears</td>
+              <td id="sPrevArrears" class="px-4 py-3 text-right text-gray-800"></td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="bg-gray-100 font-bold text-gray-700 px-4 py-3">Sub Total</td>
+              <td id="sSubTotal" class="px-4 py-3 text-right font-bold text-gray-800"></td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="bg-gray-50 font-semibold text-gray-600 px-4 py-3">Paid Amount</td>
+              <td id="sPaidAmount" class="px-4 py-3 text-right font-semibold text-blue-600"></td>
+            </tr>
+            <tr class="bg-[#0f2942]">
+              <td class="font-bold text-white px-4 py-3">Net Payable</td>
+              <td id="sNetPayable" class="px-4 py-3 text-right font-bold text-white"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Invoice table -->
+      <div class="mt-6 overflow-x-auto rounded-md border border-gray-200">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-[#0f2942] text-white">
+              <th class="px-4 py-3 text-left font-semibold">Date</th>
+              <th class="px-4 py-3 text-left font-semibold">Inv #</th>
+              <th class="px-4 py-3 text-right font-semibold">Bill Amt</th>
+              <th class="px-4 py-3 text-right font-semibold">Discount</th>
+              <th class="px-4 py-3 text-right font-semibold">Net Bill</th>
+              <th class="px-4 py-3 text-right font-semibold">Prev Bal</th>
+              <th class="px-4 py-3 text-right font-semibold">Paid</th>
+              <th class="px-4 py-3 text-right font-semibold">New Bal</th>
+              <th class="px-4 py-3 text-center font-semibold">Status</th>
+              <th class="px-4 py-3 text-center font-semibold no-print">Action</th>
+            </tr>
+          </thead>
+          <tbody id="invoiceRows" class="divide-y divide-gray-100"></tbody>
+          <tfoot>
+            <tr class="font-bold text-gray-800 bg-gray-50">
+              <td class="px-4 py-3" colspan="2">TOTALS</td>
+              <td id="tBillAmt" class="px-4 py-3 text-right"></td>
+              <td id="tDiscount" class="px-4 py-3 text-right"></td>
+              <td id="tNetBill" class="px-4 py-3 text-right"></td>
+              <td></td>
+              <td id="tPaid" class="px-4 py-3 text-right"></td>
+              <td id="tNewBal" class="px-4 py-3 text-right"></td>
+              <td colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div id="emptyState" class="text-center text-gray-400 py-10 text-sm">
+      Select a customer and click <span class="font-semibold text-gray-500">Load</span> to view invoice report.
+    </div>
+
+  </div>
+</div>
+
+<!-- Receive Payment Modal -->
+<div id="paymentModal" class="no-print hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+  <div class="bg-white w-full max-w-lg rounded-lg shadow-xl border-4 border-blue-500 overflow-hidden">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+      <h3 class="text-xl font-bold text-gray-800">Receive Payment</h3>
+      <button id="closeModalX" class="text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
+    </div>
+    <div class="px-6 py-5 grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Invoice No</label>
+        <select id="modalInvoiceNo" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50"></select>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Bill Total</label>
+        <input id="modalBillTotal" readonly class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm font-bold text-blue-600 bg-gray-50">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Already Paid</label>
+        <input id="modalAlreadyPaid" readonly class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm font-semibold text-green-600 bg-gray-50">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Old Remaining</label>
+        <input id="modalOldRemaining" readonly class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm font-semibold text-red-500 bg-gray-50">
+      </div>
+      <div class="col-span-2">
+        <label class="block text-sm font-semibold text-gray-700 mb-1">New Payment Received</label>
+        <input id="modalNewPayment" type="number" min="0" step="0.01" class="w-full border-2 border-blue-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+      <div class="col-span-2">
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Payment Date</label>
+        <input id="modalPaymentDate" type="date" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm">
+      </div>
+    </div>
+    <div id="modalMsg" class="hidden px-6 text-sm"></div>
+    <div class="flex justify-end gap-3 px-6 py-4 border-t border-gray-200">
+      <button id="closeModalBtn" class="px-5 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold text-sm">Close</button>
+      <button id="savePaymentBtn" class="px-5 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm">Save Payment</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================== CONFIG ================== */
+// IMPORTANT: This MUST be a full absolute URL, not a relative one (../../).
+// Change this ONE line to match wherever "inventory-system" lives on your server.
+// Example: if you open this page as http://localhost/inventory-system/invoice_report.html
+// then BASE_URL should be "http://localhost/inventory-system"
+const BASE_URL = "../../action";
+
+const EMPLOYEES_API   = `${BASE_URL}/customers/get_customers.php`;
+const INVOICES_API    = `${BASE_URL}/invoices/get_invoices.php`;
+const TRANSACTION_API = `${BASE_URL}/orders/add_transaction.php`;
+
+console.log('API base configured as:', BASE_URL);
+console.log('EMPLOYEES_API  =', EMPLOYEES_API);
+console.log('INVOICES_API   =', INVOICES_API);
+console.log('TRANSACTION_API=', TRANSACTION_API);
+
+/* ================== STATE ================== */
+let currentCustomer = null;
+let currentInvoices = [];
+
+/* ================== DOM ================== */
+const customerSelect = document.getElementById('customerSelect');
+const dateFrom = document.getElementById('dateFrom');
+const dateTo = document.getElementById('dateTo');
+const loadBtn = document.getElementById('loadBtn');
+const addPaymentBtn = document.getElementById('addPaymentBtn');
+const printBtn = document.getElementById('printBtn');
+const loadingMsg = document.getElementById('loadingMsg');
+const errorMsg = document.getElementById('errorMsg');
+const reportContent = document.getElementById('reportContent');
+const emptyState = document.getElementById('emptyState');
+const reportMonth = document.getElementById('reportMonth');
+
+/* default date range: 1st of month -> today */
+(function initDates(){
+  const now = new Date();
+  const first = new Date(now.getFullYear(), now.getMonth(), 1);
+  dateFrom.value = first.toISOString().slice(0,10);
+  dateTo.value = now.toISOString().slice(0,10);
+  reportMonth.textContent = now.toLocaleDateString('en-GB', { month:'long', year:'numeric' });
+})();
+
+/* ================== HELPERS ================== */
+function money(n){
+  const num = Number(n || 0);
+  return num.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function showError(msg){
+  errorMsg.textContent = msg;
+  errorMsg.classList.remove('hidden');
+  loadingMsg.classList.add('hidden');
+}
+
+function clearMessages(){
+  errorMsg.classList.add('hidden');
+  loadingMsg.classList.add('hidden');
+}
+
+/* ================== LOAD CUSTOMERS (employees endpoint) ================== */
+async function loadCustomers(){
+  try{
+    const res = await fetch(EMPLOYEES_API);
+
+    if (!res.ok){
+      throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    console.log('get_employees.php raw response:', data); // <-- check this in DevTools Console (F12)
+
+    // Try to find an array of records regardless of exact key name
+    const list = data.employees || data.customers || data.data || (Array.isArray(data) ? data : []);
+
+    if (!list.length){
+      console.warn('No records found in response. Actual keys were:', Object.keys(data));
+      customerSelect.innerHTML = '<option value="">No customers found (check console)</option>';
+      return;
+    }
+
+    customerSelect.innerHTML = '<option value="">Select Customer</option>';
+    list.forEach(item => {
+      const id = item.id ?? item.customer_id ?? item.employee_id;
+      const name = item.name ?? item.customer_name ?? item.full_name ?? item.emp_name ?? `#${id}`;
+      if (id === undefined) return;
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = name;
+      customerSelect.appendChild(opt);
+    });
+
+    console.log(`Loaded ${customerSelect.options.length - 1} customers into dropdown.`);
+  }catch(err){
+    console.error('Failed to load customers:', err);
+    customerSelect.innerHTML = '<option value="">⚠ Failed to load (see console)</option>';
+    showError('Could not load customer list from ' + EMPLOYEES_API + '. Open DevTools (F12) → Console/Network tab to see the exact error (likely CORS or wrong URL).');
+  }
+}
+loadCustomers();
+
+/* ================== LOAD INVOICES ================== */
+async function loadInvoices(){
+  const customerId = customerSelect.value;
+  console.log('Selected customer_id:', customerId, '| dropdown selected text:', customerSelect.options[customerSelect.selectedIndex]?.textContent);
+
+  if (!customerId){
+    showError('Please select a customer first (dropdown value is empty — check that get_employees.php loaded correctly).');
+    return;
+  }
+
+  clearMessages();
+  loadingMsg.classList.remove('hidden');
+  reportContent.classList.add('hidden');
+  emptyState.classList.add('hidden');
+  addPaymentBtn.disabled = true;
+
+  const url = `${INVOICES_API}?customer_id=${encodeURIComponent(customerId)}`;
+  console.log('Fetching invoices from:', url);
+
+  try{
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    const data = await res.json();
+    console.log('get_invoices.php response:', data);
+
+    if (!data.success){
+      showError(data.message || 'Failed to load invoices.');
+      return;
+    }
+
+    currentCustomer = data.customer;
+    currentInvoices = data.invoices || [];
+    renderReport(data);
+
+    loadingMsg.classList.add('hidden');
+    reportContent.classList.remove('hidden');
+    addPaymentBtn.disabled = currentInvoices.length === 0;
+  }catch(err){
+    console.error('Failed to load invoices:', err);
+    showError('Could not load invoice report. Check that the API server is reachable at ' + INVOICES_API);
+  }
+}
+
+/* ================== RENDER ================== */
+function renderReport(data){
+  const c = data.customer;
+
+  document.getElementById('cCustomer').textContent = c.name || '-';
+  document.getElementById('cContact').textContent = c.phone || '-';
+  document.getElementById('cAddress').textContent = [c.address, c.area_name, c.city_name].filter(Boolean).join(', ') || '-';
+  document.getElementById('cBalance').textContent = money(data.current_balance ?? c.current_balance);
+
+  const invoices = data.invoices || [];
+  const currentBillTotal = invoices.reduce((s,i)=> s + Number(i.bill_amt || 0), 0);
+  const discountTotal = invoices.reduce((s,i)=> s + Number(i.discount || 0), 0);
+  const netBillTotal = invoices.reduce((s,i)=> s + Number(i.net_bill || 0), 0);
+  const paidTotal = invoices.reduce((s,i)=> s + Number(i.paid || 0), 0);
+  const prevArrears = Number(c.opening_balance || 0);
+  const subTotal = netBillTotal + prevArrears;
+  const netPayable = Number(data.current_balance ?? c.current_balance ?? (subTotal - paidTotal));
+
+  document.getElementById('sCurrentBill').textContent = money(currentBillTotal);
+  document.getElementById('sPrevArrears').textContent = money(prevArrears);
+  document.getElementById('sSubTotal').textContent = money(subTotal);
+  document.getElementById('sPaidAmount').textContent = money(paidTotal);
+  document.getElementById('sNetPayable').textContent = money(netPayable);
+
+  const statusColor = (status) => {
+    const s = (status || '').toLowerCase();
+    if (s === 'paid') return 'bg-green-100 text-green-700';
+    if (s === 'partial') return 'bg-yellow-100 text-yellow-700';
+    return 'bg-red-100 text-red-700';
+  };
+
+  const rows = document.getElementById('invoiceRows');
+  rows.innerHTML = '';
+  if (invoices.length === 0){
+    rows.innerHTML = `<tr><td colspan="10" class="px-4 py-6 text-center text-gray-400">No invoices found for this period.</td></tr>`;
+  } else {
+    invoices.forEach(inv => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-gray-50';
+      tr.innerHTML = `
+        <td class="px-4 py-3">${inv.date || '-'}</td>
+        <td class="px-4 py-3 font-semibold text-[#0f2942]">${inv.invoice_no || '-'}</td>
+        <td class="px-4 py-3 text-right">${money(inv.bill_amt)}</td>
+        <td class="px-4 py-3 text-right">${money(inv.discount)}</td>
+        <td class="px-4 py-3 text-right font-semibold">${money(inv.net_bill)}</td>
+        <td class="px-4 py-3 text-right">${money(inv.prev_bal)}</td>
+        <td class="px-4 py-3 text-right text-blue-600">${money(inv.paid)}</td>
+        <td class="px-4 py-3 text-right font-bold">${money(inv.new_bal)}</td>
+        <td class="px-4 py-3 text-center"><span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColor(inv.status)}">${inv.status || '-'}</span></td>
+        <td class="px-4 py-3 text-center no-print">
+          <button class="pay-inv-btn text-blue-600 hover:underline text-xs font-semibold" data-inv="${inv.invoice_no}">Pay</button>
+        </td>
+      `;
+      rows.appendChild(tr);
+    });
+  }
+
+  document.getElementById('tBillAmt').textContent = money(currentBillTotal);
+  document.getElementById('tDiscount').textContent = money(discountTotal);
+  document.getElementById('tNetBill').textContent = money(netBillTotal);
+  document.getElementById('tPaid').textContent = money(paidTotal);
+  document.getElementById('tNewBal').textContent = invoices.length ? money(invoices[invoices.length-1].new_bal) : money(0);
+
+  // Wire up per-row Pay buttons
+  document.querySelectorAll('.pay-inv-btn').forEach(btn => {
+    btn.addEventListener('click', () => openPaymentModal(btn.dataset.inv));
+  });
+}
+
+/* ================== EVENTS ================== */
+loadBtn.addEventListener('click', loadInvoices);
+printBtn.addEventListener('click', () => window.print());
+
+/* ================== PAYMENT MODAL ================== */
+const paymentModal = document.getElementById('paymentModal');
+const modalInvoiceNo = document.getElementById('modalInvoiceNo');
+const modalBillTotal = document.getElementById('modalBillTotal');
+const modalAlreadyPaid = document.getElementById('modalAlreadyPaid');
+const modalOldRemaining = document.getElementById('modalOldRemaining');
+const modalNewPayment = document.getElementById('modalNewPayment');
+const modalPaymentDate = document.getElementById('modalPaymentDate');
+const modalMsg = document.getElementById('modalMsg');
+const savePaymentBtn = document.getElementById('savePaymentBtn');
+
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+
+function fillInvoiceFields(invoiceNo){
+  const inv = currentInvoices.find(i => i.invoice_no === invoiceNo);
+  if (!inv) return;
+  modalBillTotal.value = money(inv.net_bill);
+  modalAlreadyPaid.value = money(inv.paid);
+  modalOldRemaining.value = money(inv.net_bill - inv.paid);
+}
+
+function openPaymentModal(preselectInvoice){
+  if (!currentCustomer){
+    alert('Please load a customer first.');
+    return;
+  }
+  modalInvoiceNo.innerHTML = '';
+  currentInvoices.forEach(inv => {
+    const opt = document.createElement('option');
+    opt.value = inv.invoice_no;
+    opt.textContent = inv.invoice_no;
+    modalInvoiceNo.appendChild(opt);
+  });
+
+  if (preselectInvoice) modalInvoiceNo.value = preselectInvoice;
+  fillInvoiceFields(modalInvoiceNo.value);
+
+  modalNewPayment.value = '';
+  modalPaymentDate.value = todayISO();
+  modalMsg.classList.add('hidden');
+  paymentModal.classList.remove('hidden');
+}
+
+addPaymentBtn.addEventListener('click', () => openPaymentModal());
+modalInvoiceNo.addEventListener('change', () => fillInvoiceFields(modalInvoiceNo.value));
+
+function closeModal(){ paymentModal.classList.add('hidden'); }
+document.getElementById('closeModalX').addEventListener('click', closeModal);
+document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+paymentModal.addEventListener('click', (e) => { if (e.target === paymentModal) closeModal(); });
+
+savePaymentBtn.addEventListener('click', async () => {
+  const amount = parseFloat(modalNewPayment.value);
+  if (!amount || amount <= 0){
+    modalMsg.textContent = 'Please enter a valid payment amount.';
+    modalMsg.className = 'px-6 text-sm text-red-500 mb-2';
+    modalMsg.classList.remove('hidden');
+    return;
+  }
+  if (!currentCustomer){
+    modalMsg.textContent = 'No customer selected.';
+    modalMsg.className = 'px-6 text-sm text-red-500 mb-2';
+    modalMsg.classList.remove('hidden');
+    return;
+  }
+
+  savePaymentBtn.disabled = true;
+  savePaymentBtn.textContent = 'Saving...';
+
+  try{
+    const payload = {
+      customer_id: currentCustomer.id,
+      type: 'in',
+      amount: amount,
+      remarks: `Payment for Invoice ${modalInvoiceNo.value} on ${modalPaymentDate.value}`
+    };
+
+    console.log('Posting payment to:', TRANSACTION_API, 'payload:', payload);
+
+    const res = await fetch(TRANSACTION_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    const data = await res.json();
+    console.log('add_transaction.php response:', data);
+
+    if (data.success){
+      modalMsg.textContent = data.message || 'Payment saved successfully.';
+      modalMsg.className = 'px-6 text-sm text-green-600 mb-2';
+      modalMsg.classList.remove('hidden');
+      setTimeout(() => {
+        closeModal();
+        loadInvoices(); // refresh report
+      }, 900);
+    } else {
+      modalMsg.textContent = data.message || 'Failed to save payment.';
+      modalMsg.className = 'px-6 text-sm text-red-500 mb-2';
+      modalMsg.classList.remove('hidden');
+    }
+  }catch(err){
+    console.error('Payment save error:', err);
+    modalMsg.textContent = 'Network error: could not reach ' + TRANSACTION_API;
+    modalMsg.className = 'px-6 text-sm text-red-500 mb-2';
+    modalMsg.classList.remove('hidden');
+  }finally{
+    savePaymentBtn.disabled = false;
+    savePaymentBtn.textContent = 'Save Payment';
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1354 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MARKING BOOSTER - Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script src="../js/sidebar.js"></script>
+    <style>
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #1e293b;
+      }
+      .stat-card {
+        border-left: 4px solid;
+      }
+      .stat-blue {
+        border-color: #3b82f6;
+      }
+      .stat-green {
+        border-color: #22c55e;
+      }
+      .stat-red {
+        border-color: #ef4444;
+      }
+      .stat-yellow {
+        border-color: #eab308;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 9999px;
+        border: 1px solid #d1d5db;
+        font-size: 12px;
+        color: #374151;
+        background: #fff;
+      }
+      .dark .badge {
+        border-color: #4b5563;
+        color: #d1d5db;
+        background: #374151;
+      }
+      .stock-ok {
+        color: #16a34a;
+        font-weight: 700;
+      }
+      .stock-low {
+        color: #d97706;
+        font-weight: 700;
+      }
+      .stock-out {
+        color: #dc2626;
+        font-weight: 700;
+      }
+      .dark .stock-ok {
+        color: #4ade80;
+      }
+      .dark .stock-low {
+        color: #fbbf24;
+      }
+      .dark .stock-out {
+        color: #f87171;
+      }
+      .modal-wrap {
+        display: none;
+      }
+      .modal-wrap.open {
+        display: flex;
+      }
+      .dropdown-menu.show {
+        display: block !important;
+      }
+    </style>
+      <script src="../js/auth_check.js"></script>
+      
+</head>
+  <body class="bg-slate-100 dark:bg-slate-900 min-h-screen">
+    <!-- Top Navbar -->
+       <!-- Top Navbar -->
+   <header class="bg-[#001F4D] h-16 flex items-center justify-between px-6 text-white shadow sticky top-0 z-50">
+  <div class="flex items-center gap-4">
+    <button id="menuToggle" type="button" aria-label="Toggle sidebar" aria-controls="main-sidebar" aria-expanded="false"
+      class="text-white text-xl hover:text-amber-400 transition-colors lg:hidden">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <img src="../../assets/images/logo.png" class="w-10 h-10 rounded-full" alt="Marking Booster Logo" />
+    <h1 class="text-xl font-bold">MARKING BOOSTER</h1>
+  </div>
+  <div class="bg-white text-gray-700 px-4 py-2 rounded-full text-sm">
+    <i class="fa-regular fa-clock mr-1"></i>
+    <span id="currentDate"></span>
+  </div>
+</header>
+
+<!-- Mobile overlay (click to close sidebar) -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+<div class="flex">
+  <!-- Sidebar -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+ 
+<aside
+  id="main-sidebar"
+  aria-label="Primary"
+  class="w-[280px] shrink-0 bg-[#051E3D] fixed lg:sticky top-[64px] left-0 dark:text-gray-300
+         flex flex-col justify-between h-[calc(100vh-64px)] overflow-hidden shadow-xl
+         border-r border-slate-800 transition-transform duration-300 ease-in-out z-40
+         -translate-x-full lg:translate-x-0"
+>
+  <!-- Brand block -->
+  <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-700/40 relative shrink-0">
+    <div class="relative w-24 h-24 rounded-full border-2 border-white/20 p-1 bg-white flex items-center justify-center shadow-sm overflow-hidden">
+      <img src="../../assets/images/logo.png" class="w-full h-full rounded-full object-cover" alt="Marking Booster Logo" />
+      <button type="button" class="absolute bottom-0 right-1 bg-amber-500 text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs border border-[#051E3D]">
+        <i class="fa-solid fa-camera"></i>
+      </button>
+    </div>
+    <h2 class="mt-3 text-lg font-bold text-white tracking-wide">Marking Booster</h2>
+    <span class="mt-1 px-3 py-0.5 bg-amber-500 text-slate-950 font-bold text-[11px] uppercase tracking-wider rounded-md">Branch</span>
+  </div>
+ 
+  <!-- Scrollable nav (only this element scrolls; aside itself stays overflow-hidden) -->
+  <nav
+    id="sidebarNav"
+    class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1
+           [&::-webkit-scrollbar]:w-[5px]
+           [&::-webkit-scrollbar-track]:bg-transparent
+           [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded
+           dark:[&::-webkit-scrollbar-thumb]:bg-slate-800"
+  >
+ 
+    <a href="./dashboard.html" data-nav-link
+      class="flex items-center space-x-3 px-3 py-3 rounded-md hover:bg-slate-800/50 text-gray-300 hover:text-amber-400 transition-colors">
+      <i class="fa-solid fa-gauge-high text-lg w-5 text-center"></i>
+      <span class="font-medium text-sm">Dashboard</span>
+    </a>
+<!-- Administration -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-administration"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-user-gear text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Administration</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-administration" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./employees.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Employees</a>
+        <a href="./branch-users.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Users&amp;Areas</a>
+        <a href="./roles.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Roles &amp; Permissions</a>
+        <a href="./parties.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Parties</a>
+        <a href="./area-zones.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Area/Zones</a>
+
+      </div>
+    </div>
+ 
+    <!-- Inventory -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-inventory"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-boxes-stacked text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Inventory</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-inventory" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./brands.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Brands</a>
+        <a href="./category.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Categories</a>
+        <a href="./product.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Items</a>
+        <a href="./raw-materials.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Raw Materials</a>
+      </div>
+    </div>
+ 
+    <!-- Billing & Payments -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-billing"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-file-invoice-dollar text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Billing &amp; Payments</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-billing" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./counter-sale.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Sale</a>
+
+
+        <a href="./purchase.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Purchase</a>
+        <a href="./party_payment.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Payment</a>
+        <a href="./delete-invoice.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Delete Invoice</a>
+      </div>
+    </div>
+ 
+    <!-- Reports -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-reports"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-chart-line text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Reports</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-reports" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./party-invoices-detail.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Party Invoices Detail</a>
+        <a href="./monthly-sale-repot.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Monthly Sale Report</a>
+        <a href="./invoice-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Invoices Report</a>
+        <a href="./stock-audit-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Audit</a>
+        <a href="./stock-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Stock Report</a>
+        <a href="./customers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Customers Report</a>
+        <a href="./suppliers-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Suppliers Report</a>
+      </div>
+    </div>
+ 
+    <!-- Payroll & Accounts -->
+    <div class="relative">
+      <button type="button" data-dropdown-toggle aria-expanded="false" aria-controls="menu-payroll"
+        class="group w-full flex items-center justify-between px-3 py-3 rounded-md hover:bg-slate-800/50 aria-expanded:bg-slate-800/50 transition-colors">
+        <span class="flex items-center space-x-3 pointer-events-none select-none text-gray-300 group-hover:text-amber-400 group-aria-expanded:text-amber-400">
+          <i class="fa-solid fa-users-viewfinder text-lg w-5 text-center"></i>
+          <span class="font-medium text-sm">Payroll &amp; Accounts</span>
+        </span>
+        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-aria-expanded:text-amber-400 transition-transform duration-200 group-aria-expanded:rotate-90"></i>
+      </button>
+      <div id="menu-payroll" data-dropdown-menu role="group"
+        class="overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out pl-6">
+        <a href="./expenses.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Expenses</a>
+        <a href="./accounting-system.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Accounting System</a>
+        <a href="./balance-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Balance Sheet</a>
+        <a href="./generate-salary.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Generate Salary</a>
+        <a href="./salary-sheet.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Salary Sheet</a>
+        <a href="./attendance.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance</a>
+        <a href="./attendance-report.html" data-nav-link class="block px-4 py-3 border-l-4 border-transparent text-gray-300 hover:text-white hover:bg-slate-700 hover:border-yellow-400 transition-all duration-200">Attendance Report</a>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- Bottom controls -->
+  <div class="p-4 border-t border-slate-700/40 space-y-4 shrink-0">
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <i class="fa-solid fa-palette text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-white">Theme</span>
+      </div>
+      <!-- Pure Tailwind switch: peer-checked drives the knob + track color -->
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="theme-toggle" class="sr-only peer" aria-label="Toggle dark theme" />
+        <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white
+                    after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
+                    after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+      </label>
+    </div>
+    <button id="logoutBtn" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md flex items-center justify-center space-x-2 transition-colors">
+      <i class="fa-solid fa-power-off text-sm"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
+
+      <!-- MAIN -->
+      <main class="w-full px-4 py-5">
+        <!-- STAT CARDS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
+          <div class="stat-card stat-blue bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm p-5">
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Total Products
+            </p>
+            <p id="totalProducts" class="text-3xl font-bold text-gray-800 dark:text-white">0</p>
+          </div>
+          <div class="stat-card stat-green bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm p-5">
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Active Products
+            </p>
+            <p id="activeProducts" class="text-3xl font-bold text-gray-800 dark:text-white">0</p>
+          </div>
+          <div class="stat-card stat-yellow bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm p-5">
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Total Stock (Qty)
+            </p>
+            <p id="totalStockQty" class="text-3xl font-bold text-gray-800 dark:text-white">0</p>
+          </div>
+          <div class="stat-card stat-red bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm p-5">
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Out of Stock
+            </p>
+            <p id="outOfStock" class="text-3xl font-bold text-gray-800 dark:text-white">0</p>
+          </div>
+          <div class="stat-card stat-blue bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm p-5 sm:col-span-2 lg:col-span-1">
+            <p
+              class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Total Stock Value
+            </p>
+            <p id="totalStockValue" class="text-2xl font-bold text-gray-800 dark:text-white">0</p>
+          </div>
+        </div>
+
+        <!-- TABLE CARD -->
+        <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-sm overflow-hidden">
+          <div
+            class="flex flex-wrap justify-between items-center p-5 border-b dark:border-gray-700"
+          >
+            <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
+              Product List
+            </h2>
+            <button
+              onclick="openAddModal()"
+              class="bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-5 py-2 rounded font-medium text-sm"
+            >
+              + Add Product
+            </button>
+          </div>
+          <div class="p-5 border-b dark:border-gray-700">
+            <div class="relative max-w-xs">
+              <i
+                class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
+              ></i>
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Search product..."
+                onkeyup="filterTable()"
+                class="w-full pl-9 pr-3 py-2 border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2.5 outline-none text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+          </div>
+          <div class="overflow-x-auto px-5 pb-5">
+            <table class="w-full border dark:border-gray-700 text-sm hidden sm:table">
+              <thead class="bg-gray-50 dark:bg-gray-700 dark:text-white">
+                <tr>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left w-20">ID</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left w-16">Photo</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">Product</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">Category</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">Brand</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-left">Unit</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-right">Purchase</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-right">Sale</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-center">Stock</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-center">Status</th>
+                  <th class="border dark:border-gray-600 px-4 py-2.5 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="dark:text-gray-300 divide-y dark:divide-gray-700"></tbody>
+            </table>
+            <div
+              id="mobileCards"
+              class="sm:hidden divide-y divide-gray-100 dark:divide-gray-700"
+            ></div>
+          </div>
+          <p
+            id="noResults"
+            class="hidden text-center text-gray-400 py-8 text-sm"
+          >
+            No products found.
+          </p>
+        </div>
+      </main>
+    </div>
+    <footer class="text-center text-xs text-gray-400 py-5">
+      © 2026 | Powered by:
+      <span class="text-blue-500">chughtaisoftwares.com</span>
+    </footer>
+
+    <!-- ══════════════ ADD MODAL ══════════════ -->
+    <div
+      id="addModal"
+      class="modal-wrap fixed inset-0 bg-black/40 backdrop-blur-[1px] z-50 items-center justify-center p-4 overflow-y-auto"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden my-8">
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-t-xl shrink-0"
+        >
+          <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg flex items-center gap-2">
+            <i class="fas fa-box"></i> Product Entry
+          </h3>
+          <button
+            type="button"
+            onclick="closeModal('addModal')"
+            class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
+          >
+            ×
+          </button>
+        </div>
+        <form id="addProductForm" class="flex flex-col overflow-hidden flex-1">
+          <div class="px-6 py-5 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Product Name</label
+                >
+                <input
+                  type="text"
+                  name="product_name"
+                  required
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Product Code</label
+                >
+                <input
+                  type="text"
+                  name="product_code"
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                  placeholder="Unique SKU code"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                <select
+                  name="category"
+                  id="addCategorySelect"
+                  required
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition bg-white"
+                ></select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Brand</label>
+                <select
+                  name="brand"
+                  id="addBrandSelect"
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition bg-white"
+                >
+                  <option value="">-- Select Brand --</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Unit</label>
+                <input
+                  type="text"
+                  name="unit"
+                  required
+                  placeholder="e.g. Litre, Kg, Pcs"
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Purchase Price</label
+                >
+                <input
+                  type="number"
+                  step="0.01"
+                  name="purchase_price"
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Sale Price</label
+                >
+                <input
+                  type="number"
+                  step="0.01"
+                  name="sale_price"
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Minimum Stock</label
+                >
+                <input
+                  type="number"
+                  name="minimum_stock"
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Opening Stock</label
+                >
+                <input
+                  type="number"
+                  name="opening_stock"
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                <select
+                  name="status"
+                  class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition bg-white"
+                >
+                  <option value="Active" selected>Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Description</label
+              >
+              <textarea
+                name="description"
+                rows="2"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition resize-none"
+              ></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Product Image</label
+              >
+              <input
+                type="file"
+                name="product_image"
+                accept="image/*"
+                onchange="previewPhoto(this, 'previewImage')"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm bg-white cursor-pointer"
+              />
+              <img
+                id="previewImage"
+                class="hidden mt-3 w-20 h-20 rounded-lg object-cover border"
+              />
+            </div>
+          </div>
+          <div class="px-6 py-4 flex justify-end gap-3 border-t border-gray-100 dark:border-gray-700 shrink-0">
+            <p id="addFormMsg" class="hidden text-sm text-red-500 mb-2"></p>
+            <button
+              type="button"
+              onclick="closeModal('addModal')"
+              class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition shadow-sm"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-6 py-2.5 text-sm font-medium text-white bg-slate-900 dark:bg-slate-700 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-600 transition shadow-sm"
+            >
+              Save Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ══════════════ EDIT MODAL ══════════════ -->
+    <div
+      id="editModal"
+      class="modal-wrap fixed inset-0 bg-black/40 backdrop-blur-[1px] z-50 items-center justify-center p-4 overflow-y-auto"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden my-8">
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-t-xl shrink-0"
+        >
+          <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg flex items-center gap-2">
+            <i class="fas fa-pen-to-square"></i> Edit Product
+          </h3>
+          <button
+            onclick="closeModal('editModal')"
+            class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
+          >
+            ×
+          </button>
+        </div>
+        <div class="px-6 py-5 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+          <input type="hidden" id="eId" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Product Name</label
+              >
+              <input
+                id="eName"
+                type="text"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Product Code</label
+              >
+              <input
+                id="eCode"
+                type="text"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Category</label
+              >
+              <select
+                id="eCategory"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition bg-white"
+              ></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Brand</label
+              >
+              <select
+                id="eBrand"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition bg-white"
+              >
+                <option value="">-- Select Brand --</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Unit</label
+              >
+              <input
+                id="eUnit"
+                type="text"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Purchase Price</label
+              >
+              <input
+                id="ePurchase"
+                type="number"
+                step="0.01"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Sale Price</label
+              >
+              <input
+                id="eSale"
+                type="number"
+                step="0.01"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Minimum Stock</label
+              >
+              <input
+                id="eMinStock"
+                type="number"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Current Stock</label
+              >
+              <input
+                id="eCurrentStock"
+                type="number"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >Status</label
+              >
+              <select
+                id="eStatus"
+                class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition bg-white"
+              >
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >Description</label
+            >
+            <textarea
+              id="eDescription"
+              rows="2"
+              class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition resize-none"
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >Product Image</label
+            >
+            <input
+              id="ePhoto"
+              type="file"
+              accept="image/*"
+              onchange="previewPhoto('ePhoto', 'ePhotoPreview')"
+              class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm bg-white cursor-pointer"
+            />
+            <img
+              id="ePhotoPreview"
+              src=""
+              alt=""
+              class="hidden mt-2 w-16 h-16 rounded-lg object-cover border-2 border-blue-300"
+            />
+          </div>
+        </div>
+        <div class="px-6 py-4 flex gap-3 border-t border-gray-100 dark:border-gray-700 shrink-0">
+          <button
+            onclick="closeModal('editModal')"
+            class="flex-1 px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition shadow-sm"
+          >
+            Cancel
+          </button>
+          <button
+            onclick="updateProduct()"
+            class="flex-1 px-6 py-2.5 text-sm font-medium text-white bg-slate-900 dark:bg-slate-700 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-600 transition shadow-sm"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ DELETE MODAL ══════════════ -->
+    <div
+      id="deleteModal"
+      class="modal-wrap fixed inset-0 bg-black/40 backdrop-blur-[1px] z-50 items-center justify-center p-4 overflow-y-auto"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden my-8">
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-t-xl shrink-0"
+        >
+          <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg flex items-center gap-2">
+            <i class="fas fa-trash"></i> Delete Product
+          </h3>
+          <button
+            onclick="closeModal('deleteModal')"
+            class="text-gray-400 hover:text-red-500 transition-colors text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
+          >
+            ×
+          </button>
+        </div>
+        <div id="deleteContent" class="px-6 py-5 overflow-y-auto custom-scrollbar flex-1"></div>
+        <div class="px-6 pb-5 flex gap-3 shrink-0">
+          <button
+            onclick="confirmDelete()"
+            class="flex-1 px-6 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition shadow-sm flex items-center justify-center gap-2"
+          >
+            <i class="fas fa-trash"></i> Delete
+          </button>
+          <button
+            onclick="closeModal('deleteModal')"
+            class="flex-1 px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition shadow-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const PHOTO_BASE = "../../uploads/products/";
+
+      // ── Clock ──
+     
+      // ── Data ──
+      let products = [];
+      let categoryList = [];
+      let pendingDeleteId = null;
+
+      function loadCategoriesDropdown() {
+        fetch("../../action/category/get-category.php")
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data || data.length === 0) {
+              document.getElementById("addCategorySelect").innerHTML =
+                '<option value="">No categories available</option>';
+              document.getElementById("eCategory").innerHTML =
+                '<option value="">No categories available</option>';
+              return;
+            }
+            categoryList = data.filter((c) => c.is_active == 1);
+            if (categoryList.length === 0) {
+              document.getElementById("addCategorySelect").innerHTML =
+                '<option value="">No categories available</option>';
+              document.getElementById("eCategory").innerHTML =
+                '<option value="">No categories available</option>';
+              return;
+            }
+            const options = categoryList
+              .map((c) => `<option value="${c.id}">${c.name}</option>`)
+              .join("");
+            document.getElementById("addCategorySelect").innerHTML = options;
+            document.getElementById("eCategory").innerHTML = options;
+          })
+          .catch((err) => {
+            console.error("Error loading categories:", err);
+            document.getElementById("addCategorySelect").innerHTML =
+              '<option value="">Error loading categories</option>';
+            document.getElementById("eCategory").innerHTML =
+              '<option value="">Error loading categories</option>';
+          });
+      }
+
+      let brandList = [];
+      function loadBrandsDropdown() {
+        fetch("../../action/brands/get-brand.php")
+          .then((res) => res.json())
+          .then((data) => {
+            const placeholder = '<option value="">-- Select Brand --</option>';
+            if (!data || data.length === 0) {
+              document.getElementById("addBrandSelect").innerHTML =
+                placeholder + '<option value="" disabled>No brands available</option>';
+              document.getElementById("eBrand").innerHTML = placeholder;
+              return;
+            }
+            brandList = data.filter((b) => b.is_active == 1);
+            const options =
+              placeholder +
+              brandList.map((b) => `<option value="${b.id}">${b.name}</option>`).join("");
+            document.getElementById("addBrandSelect").innerHTML = options;
+            document.getElementById("eBrand").innerHTML = options;
+          })
+          .catch((err) => {
+            console.error("Error loading brands:", err);
+            document.getElementById("addBrandSelect").innerHTML =
+              '<option value="">Error loading brands</option>';
+            document.getElementById("eBrand").innerHTML =
+              '<option value="">Error loading brands</option>';
+          });
+      }
+
+      function loadProducts() {
+        fetch("../../action/products/get-product.php")
+          .then((res) => res.json())
+          .then((data) => {
+            products = data;
+            updateStats();
+            renderTable(products);
+          })
+          .catch((err) => {
+            console.error(err);
+            document.getElementById("noResults").classList.remove("hidden");
+          });
+      }
+
+      // ── Stats ──
+      function updateStats() {
+        document.getElementById("totalProducts").textContent = products.length;
+        document.getElementById("activeProducts").textContent = products.filter(
+          (p) => p.status === "Active",
+        ).length;
+        document.getElementById("totalStockQty").textContent = products
+          .reduce((s, p) => s + Number(p.current_stock || 0), 0)
+          .toLocaleString();
+        document.getElementById("outOfStock").textContent = products.filter(
+          (p) => Number(p.current_stock) <= 0,
+        ).length;
+        const stockValue = products.reduce(
+          (s, p) =>
+            s + Number(p.current_stock || 0) * Number(p.sale_price || 0),
+          0,
+        );
+        document.getElementById("totalStockValue").textContent =
+          "Rs. " + stockValue.toLocaleString();
+      }
+
+      // ── Modal helpers ──
+      function openModal(id) {
+        document.getElementById(id).classList.add("open");
+      }
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("open");
+      }
+
+      // ── Photo preview ──
+      function previewPhoto(input, previewId) {
+        const el =
+          typeof input === "string" ? document.getElementById(input) : input;
+        const file = el && el.files && el.files[0];
+        const preview = document.getElementById(previewId);
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.classList.remove("hidden");
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      function stockBadge(prod) {
+        const stock = Number(prod.current_stock);
+        const min = Number(prod.minimum_stock || 0);
+        if (stock <= 0) return `<span class="stock-out">Out of Stock</span>`;
+        if (min > 0 && stock <= min)
+          return `<span class="stock-low">${stock} (Low)</span>`;
+        return `<span class="stock-ok">${stock}</span>`;
+      }
+
+      function imgHtml(prod) {
+        if (prod.product_image)
+          return `<img src="${PHOTO_BASE}${prod.product_image}" class="w-10 h-10 rounded-lg object-cover border dark:border-gray-700"/>`;
+        return `<div class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-400 dark:text-gray-300"><i class="fas fa-box text-lg"></i></div>`;
+      }
+
+      // ── Render Table ──
+      function renderTable(data) {
+        const tbody = document.getElementById("tableBody");
+        const mobile = document.getElementById("mobileCards");
+        tbody.innerHTML = "";
+        mobile.innerHTML = "";
+        if (!data.length) {
+          document.getElementById("noResults").classList.remove("hidden");
+          return;
+        }
+        document.getElementById("noResults").classList.add("hidden");
+        data.forEach((p) => {
+          const purchase = Number(p.purchase_price || 0),
+            sale = Number(p.sale_price || 0);
+          const tr = document.createElement("tr");
+          tr.className = "border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors";
+          tr.innerHTML = `
+      <td class="px-5 py-3 text-gray-500 dark:text-gray-400 font-medium">#${p.id}</td>
+      <td class="px-5 py-3">${imgHtml(p)}</td>
+      <td class="px-5 py-3">
+        <p class="font-semibold text-gray-800 dark:text-gray-200">${p.product_name}</p>
+        ${p.product_code ? `<span class="text-xs text-gray-400 dark:text-gray-500">${p.product_code}</span>` : ""}
+      </td>
+      <td class="px-5 py-3"><span class="badge dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">${p.category}</span></td>
+      <td class="px-5 py-3 text-gray-600 dark:text-gray-400">${p.brand || "-"}</td>
+      <td class="px-5 py-3 text-gray-600 dark:text-gray-400">${p.unit}</td>
+      <td class="px-5 py-3 text-right text-gray-700 dark:text-gray-300">${purchase.toLocaleString()}</td>
+      <td class="px-5 py-3 text-right font-semibold text-gray-800 dark:text-white">${sale.toLocaleString()}</td>
+      <td class="px-5 py-3 text-center">${stockBadge(p)}</td>
+      <td class="px-5 py-3 text-center">
+        <span class="badge ${p.status === "Active" ? "text-green-600 border-green-200 dark:text-green-400 dark:border-green-900/50" : "text-red-500 border-red-200 dark:text-red-400 dark:border-red-900/50"} dark:bg-gray-700">${p.status}</span>
+      </td>
+      <td class="px-5 py-3 text-center">
+        <div class="flex items-center justify-center gap-3">
+          <button onclick="openEditModal(${p.id})" class="text-blue-500 hover:text-blue-700 text-lg" title="Edit"><i class="fas fa-pen-to-square"></i></button>
+          <button onclick="openDeleteModal(${p.id})" class="text-red-400 hover:text-red-600 text-lg" title="Delete"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>`;
+          tbody.appendChild(tr);
+
+          const card = document.createElement("div");
+          card.className = "p-4 flex items-start gap-3 border-b dark:border-gray-700";
+          card.innerHTML = `
+      <div class="flex-shrink-0">${imgHtml(p)}</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <p class="font-semibold text-gray-800 dark:text-gray-200 text-sm">${p.product_name}</p>
+          <span class="text-gray-400 dark:text-gray-500 text-xs">#${p.id}</span>
+        </div>
+        <div class="flex items-center gap-2 mt-1 flex-wrap">
+          <span class="badge text-xs dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">${p.category}</span>
+          <span class="text-xs text-gray-600 dark:text-gray-400 font-semibold">PKR ${sale.toLocaleString()}</span>
+          <span class="text-xs">${stockBadge(p)}</span>
+        </div>
+      </div>
+      <div class="flex gap-2 ml-2 flex-shrink-0">
+        <button onclick="openEditModal(${p.id})" class="text-blue-500 text-base"><i class="fas fa-pen-to-square"></i></button>
+        <button onclick="openDeleteModal(${p.id})" class="text-red-400 text-base"><i class="fas fa-trash"></i></button>
+      </div>`;
+          mobile.appendChild(card);
+        });
+      }
+
+      function filterTable() {
+        const q = document.getElementById("searchInput").value.toLowerCase();
+        renderTable(
+          products.filter(
+            (p) =>
+              p.product_name.toLowerCase().includes(q) ||
+              (p.product_code || "").toLowerCase().includes(q) ||
+              p.category.toLowerCase().includes(q) ||
+              (p.brand || "").toLowerCase().includes(q),
+          ),
+        );
+      }
+
+      // ── ADD ──
+      function openAddModal() {
+        document.getElementById("addProductForm").reset();
+        document.getElementById("previewImage").classList.add("hidden");
+        document.getElementById("addFormMsg").classList.add("hidden");
+        openModal("addModal");
+      }
+
+      document
+        .getElementById("addProductForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const form = e.target;
+          const msg = document.getElementById("addFormMsg");
+          const formData = new FormData(form);
+          fetch("../../action/products/add-product.php", {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.status) {
+                closeModal("addModal");
+                loadProducts();
+              } else {
+                msg.textContent = data.message || "Something went wrong";
+                msg.classList.remove("hidden");
+              }
+            })
+            .catch(() => {
+              msg.textContent = "Network error, please try again";
+              msg.classList.remove("hidden");
+            });
+        });
+
+      // ── EDIT ──
+      function openEditModal(id) {
+        const p = products.find((x) => x.id == id);
+        if (!p) return;
+        document.getElementById("eId").value = p.id;
+        document.getElementById("eName").value = p.product_name;
+        document.getElementById("eCode").value = p.product_code || "";
+        // Find category_id from category name
+        const cat = categoryList.find((c) => c.name === p.category);
+        document.getElementById("eCategory").value = cat ? cat.id : "";
+        const br = brandList.find((b) => b.name === p.brand);
+        document.getElementById("eBrand").value = br ? br.id : "";
+        document.getElementById("eUnit").value = p.unit;
+        document.getElementById("ePurchase").value = p.purchase_price || 0;
+        document.getElementById("eSale").value = p.sale_price || 0;
+        document.getElementById("eMinStock").value = p.minimum_stock || 0;
+        document.getElementById("eCurrentStock").value = p.current_stock || 0;
+        document.getElementById("eStatus").value = p.status;
+        document.getElementById("eDescription").value = p.description || "";
+        document.getElementById("ePhoto").value = "";
+        const prev = document.getElementById("ePhotoPreview");
+        if (p.product_image) {
+          prev.src = PHOTO_BASE + p.product_image;
+          prev.classList.remove("hidden");
+        } else {
+          prev.classList.add("hidden");
+        }
+        openModal("editModal");
+      }
+
+      function updateProduct() {
+        const id = document.getElementById("eId").value;
+        const fd = new FormData();
+        fd.append("id", id);
+        fd.append(
+          "product_name",
+          document.getElementById("eName").value.trim(),
+        );
+        fd.append(
+          "product_code",
+          document.getElementById("eCode").value.trim(),
+        );
+        fd.append("category", document.getElementById("eCategory").value);
+        fd.append("brand", document.getElementById("eBrand").value);
+        fd.append("unit", document.getElementById("eUnit").value.trim());
+        fd.append(
+          "purchase_price",
+          document.getElementById("ePurchase").value || 0,
+        );
+        fd.append("sale_price", document.getElementById("eSale").value || 0);
+        fd.append(
+          "minimum_stock",
+          document.getElementById("eMinStock").value || 0,
+        );
+        fd.append(
+          "current_stock",
+          document.getElementById("eCurrentStock").value || 0,
+        );
+        fd.append("status", document.getElementById("eStatus").value);
+        fd.append(
+          "description",
+          document.getElementById("eDescription").value.trim(),
+        );
+        const photoFile = document.getElementById("ePhoto").files[0];
+        if (photoFile) fd.append("product_image", photoFile);
+
+        fetch("../../action/products/update-product.php", {
+          method: "POST",
+          body: fd,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status) {
+              closeModal("editModal");
+              loadProducts();
+            } else alert(data.message || "Update failed");
+          })
+          .catch(() => alert("Network error, please try again"));
+      }
+
+      // ── DELETE ──
+      function openDeleteModal(id) {
+        const p = products.find((x) => x.id == id);
+        if (!p) return;
+        pendingDeleteId = id;
+        document.getElementById("deleteContent").innerHTML = `
+    <div class="flex items-center gap-3 mb-4 p-3 bg-red-50 dark:bg-red-950/20 rounded-xl border border-red-100 dark:border-red-900/40">
+      ${imgHtml(p)}
+      <div>
+        <p class="font-bold text-gray-800 dark:text-gray-200">${p.product_name}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">${p.category} &bull; #${p.id}</p>
+      </div>
+    </div>
+    <div class="space-y-2 text-sm dark:text-gray-300">
+      <div class="flex justify-between py-1.5 border-b dark:border-gray-700"><span class="text-gray-500 dark:text-gray-400">Sale Price</span><span class="font-medium">PKR ${Number(p.sale_price).toLocaleString()}</span></div>
+      <div class="flex justify-between py-1.5"><span class="text-gray-500 dark:text-gray-400">Current Stock</span><span class="font-medium">${p.current_stock}</span></div>
+    </div>
+    <div class="mt-4 p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-900/40">
+      <p class="text-red-600 dark:text-red-400 text-xs font-semibold text-center"><i class="fas fa-triangle-exclamation mr-1"></i>This action cannot be undone!</p>
+    </div>`;
+        openModal("deleteModal");
+      }
+
+      function confirmDelete() {
+        const fd = new FormData();
+        fd.append("id", pendingDeleteId);
+        fetch("../../action/products/delete-product.php", {
+          method: "POST",
+          body: fd,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status) {
+              closeModal("deleteModal");
+              loadProducts();
+            } else alert(data.message || "Delete failed");
+            pendingDeleteId = null;
+          })
+          .catch(() => {
+            alert("Network error, please try again");
+            pendingDeleteId = null;
+          });
+      }
+
+      // close modal on backdrop click
+      ["addModal", "editModal", "deleteModal"].forEach((id) => {
+        document.getElementById(id).addEventListener("click", function (e) {
+          if (e.target === this) closeModal(id);
+        });
+      });
+
+      loadCategoriesDropdown();
+      loadBrandsDropdown();
+      loadProducts();
+    </script>
+   <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ==========================
+    // Current Date
+    // ==========================
+    const currentDate = document.getElementById("currentDate");
+    if (currentDate) {
+        currentDate.textContent = new Date().toLocaleDateString("en-US", {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        });
+    }
+
+    // ==========================
+    // Sidebar Toggle
+    // ==========================
+    const menuToggle = document.getElementById("menuToggle");
+    const sidebar = document.getElementById("main-sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        sidebar.classList.add("translate-x-0");
+
+        if (overlay) {
+            overlay.classList.remove("hidden");
+        }
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove("translate-x-0");
+        sidebar.classList.add("-translate-x-full");
+
+        if (overlay) {
+            overlay.classList.add("hidden");
+        }
+    }
+
+    if (menuToggle && sidebar) {
+
+        // Mobile default hidden
+        if (window.innerWidth < 1024) {
+            sidebar.classList.add("-translate-x-full");
+        }
+
+        menuToggle.addEventListener("click", () => {
+
+            if (sidebar.classList.contains("-translate-x-full")) {
+                openSidebar();
+            } else {
+                closeSidebar();
+            }
+
+        });
+
+        if (overlay) {
+            overlay.addEventListener("click", closeSidebar);
+        }
+
+        window.addEventListener("resize", () => {
+
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.remove("-translate-x-full");
+                sidebar.classList.add("translate-x-0");
+
+                if (overlay) overlay.classList.add("hidden");
+            } else {
+                closeSidebar();
+            }
+
+        });
+
+    }
+
+    // ==========================
+    // Theme Toggle
+    // ==========================
+    const themeToggle = document.getElementById("theme-toggle");
+
+    if (themeToggle) {
+
+        themeToggle.addEventListener("change", function () {
+
+            document.documentElement.classList.toggle("dark");
+
+        });
+
+    }
+
+    // ==========================
+    // Dropdown
+    // ==========================
+    document.querySelectorAll(".dropdown-toggle").forEach(btn => {
+
+        btn.addEventListener("click", function (e) {
+
+            e.stopPropagation();
+
+            const menu = this.nextElementSibling;
+
+            document.querySelectorAll(".action-dropdown").forEach(d => {
+
+                if (d !== menu) d.classList.add("hidden");
+
+            });
+
+            menu.classList.toggle("hidden");
+
+        });
+
+    });
+
+    document.addEventListener("click", () => {
+
+        document.querySelectorAll(".action-dropdown").forEach(d => {
+
+            d.classList.add("hidden");
+
+        });
+
+    });
+
+    // ==========================
+    // Tabs
+    // ==========================
+    window.switchTab = function (tab) {
+
+        const customersTab = document.getElementById("customersTab");
+        const suppliersTab = document.getElementById("suppliersTab");
+        const pageTitle = document.getElementById("pageTitle");
+        const nameLabel = document.getElementById("nameLabel");
+        const partyType = document.getElementById("partyType");
+
+        if (tab === "customer") {
+
+            customersTab.className = "tab-active pb-3 transition-all duration-200";
+            suppliersTab.className = "tab-inactive pb-3 transition-all duration-200";
+
+            pageTitle.textContent = "Customers Directory";
+            nameLabel.textContent = "Customer Name *";
+
+            if (partyType) partyType.value = "customer";
+
+        } else {
+
+            suppliersTab.className = "tab-active pb-3 transition-all duration-200";
+            customersTab.className = "tab-inactive pb-3 transition-all duration-200";
+
+            pageTitle.textContent = "Suppliers Directory";
+            nameLabel.textContent = "Supplier Name *";
+
+            if (partyType) partyType.value = "supplier";
+
+        }
+
+        if (typeof loadParties === "function") {
+            loadParties(tab);
+        }
+
+    };
+
+    document.getElementById("customersTab")?.addEventListener("click", () => switchTab("customer"));
+    document.getElementById("suppliersTab")?.addEventListener("click", () => switchTab("supplier"));
+
+});
+</script>
+  </body>
+</html>
